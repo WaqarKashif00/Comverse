@@ -1,0 +1,21 @@
+<button mat-icon-button mat-dialog-close class="dialog-close">
+  <mat-icon>close</mat-icon>
+</button>
+<h2 mat-dialog-title>Job status</h2>
+<form action="" [formGroup]="applicatStatus">
+
+  <mat-form-field appearance="outline">
+    <mat-label>Select Status</mat-label>
+    <mat-select formControlName="status_slect">
+      <mat-option value="Shortlisted">Shortlisted</mat-option>
+      <mat-option value="Interviewed">Interviewed</mat-option>
+      <mat-option value="Hired">Hired</mat-option>
+      <mat-option value="Rejected">Rejected</mat-option>
+    </mat-select>
+  </mat-form-field>
+</form>
+
+<div mat-dialog-actions>
+  <button mat-stroked-button color="primary" mat-dialog-close>Cancel</button>
+  <button mat-flat-button color="primary" [disabled]="loading" (click)="jobPostingChangeStatus()">Save</button>
+</div>

@@ -1,0 +1,53 @@
+<button mat-icon-button mat-dialog-close class="dialog-close">
+    <mat-icon>close</mat-icon>
+</button>
+<h2 mat-dialog-title>SMS Template</h2>
+<mat-dialog-content class="mat-typography">
+    <form class="template" [formGroup]="messageTemplateForm">
+        <mat-form-field appearance="outline">
+            <mat-label>Title</mat-label>
+            <input matInput formControlName="title" />
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>Service Provider</mat-label>
+            <mat-select formControlName="service_provider">
+                <mat-option [value]="provider.id" *ngFor="let provider of provider_list">{{provider.title}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>Trigger</mat-label>
+            <mat-select formControlName="trigger" (selectionChange)="onTriggerChange($event)">
+                <mat-option [value]="item.value" *ngFor="let item of triggerList">{{item.label}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+        <div fxLayout="row">
+            <div class="active-status">
+                <mat-checkbox formControlName="is_active">Active</mat-checkbox>
+            </div>
+            <div class="active-status">
+                <mat-checkbox formControlName="restriction_on_sms">Restriction on SMS Numbers for SMS notification
+                </mat-checkbox>
+            </div>
+        </div>
+        <br />
+        <tags-input *ngIf="messageTemplateForm.get('restriction_on_sms').value == true"
+            label="Restricted Numbers (Commas Separated)" [showRemove]="true" [(value)]="restrictedNumberTags">
+        </tags-input>
+        <mat-form-field class="text-template" appearance="outline">
+            <mat-label>Message</mat-label>
+            <textarea matInput #textarea rows="8" cols="40" formControlName="message"></textarea>
+        </mat-form-field>
+ 
+        <p>Available paramters</p>
+        <div class="paramters">
+            <button  *ngFor="let item of paramterList" mat-stroked-button color="warn" (click)="addText(item)">{{item}}</button>
+        </div>
+
+    </form>
+</mat-dialog-content>
+<div mat-dialog-actions>
+
+    <button mat-stroked-button color="primary" mat-dialog-close>Cancel</button>
+    <button mat-flat-button color="primary" [disabled]="loading|| !messageTemplateForm.valid" (click)="onSave()">Save</button>
+</div>

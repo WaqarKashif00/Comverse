@@ -1,0 +1,35 @@
+@import "src/scss/variables.scss";
+
+.datatable {
+    .filters-row {
+        display: flex;
+        padding: 10px;
+
+        .mat-form-field{
+            padding: 0;
+            margin: 0 10px 20px 0;
+            width: auto;
+        }
+
+    }
+}
+
+.mat-header-cell{
+    padding: 0 8px;
+}
+.mat-cell {
+    padding: 0 8px;
+    > span{
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;
+    }
+}
+.empty-state {
+    text-align: center;
+    padding: 15px 0;
+    font-size: 16px;
+    color: rgba(0,0,0,0.45);
+}

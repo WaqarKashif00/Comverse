@@ -1,0 +1,30 @@
+<main id="main">
+    <mat-progress-bar class="page-loader" color="accent" mode="indeterminate" *ngIf="loading"></mat-progress-bar>
+    <div class="page-header" fxLayout="row" fxLayoutAlign="space-between center">
+        <h1>Brands</h1>
+
+        <div class="header-actions">
+            <a [routerLink]="['/', URLS.brands, URLS.add]" mat-flat-button color="primary">Create new</a>
+        </div>
+    </div>
+
+    <div class="page-container">
+        <mat-card class="table-wrapper-card">
+            <datatable 
+                [data]="brands"
+                [columns]="displayedColumns"
+                [pagination]="true"
+                [itemsPerPage]="pageSize"
+                [count]="totalCount"
+                [rowActions]="rowActions"
+                [searchable]="true"
+
+                (search)="onSearch($event)"
+                (cellClick)="onCellClick($event)"
+                (rowAction)="onRowAction($event)"
+                (page)="onPage($event)">
+            </datatable>
+        </mat-card>
+    </div>
+
+</main>

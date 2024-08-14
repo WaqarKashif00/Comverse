@@ -1,0 +1,112 @@
+<main id="main">
+    <mat-progress-bar class="page-loader" color="accent" mode="indeterminate" *ngIf="loading"></mat-progress-bar>
+    <div class="page-header" fxLayout="row" fxLayoutAlign="space-between center">
+        <div>
+            <button mat-icon-button aria-label="Go back" class="header-back-arrow" [routerLink]="['/',URLS.timeSlot]">
+                <mat-icon>arrow_back</mat-icon>
+            </button>
+            <h1>Create Delivery Time slot</h1>
+        </div>
+
+        <div class="header-actions">
+            <a [routerLink]="['/', URLS.timeSlot]" mat-stroked-button color="primary">Cancel</a>
+            <a mat-flat-button color="primary" [disabled]="loading || !createTimeSlotForm.valid" (click)="onSubmit()">Save</a>
+        </div>
+    </div>
+
+    <form [formGroup]="createTimeSlotForm" class="page-container">
+        <div fxLayout="row">
+            <div fxFlex="0 1 100%">
+                <mat-card>
+                    <div fxLayout="row">
+                        <div fxFlex="0 1 50%">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Title</mat-label>
+                                <input matInput formControlName="title" />
+                            </mat-form-field>
+                        </div>
+
+                        <div fxFlex="0 1 50%">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Day</mat-label>
+                                <mat-select multiple formControlName="day">
+                                    <mat-option value='monday'>Monday</mat-option>
+                                    <mat-option value='tuesday'>Tuesday</mat-option>
+                                    <mat-option value='wednesday'>Wednesday</mat-option>
+                                    <mat-option value='thursday'>Thursday</mat-option>
+                                    <mat-option value='friday'>Friday</mat-option>
+                                    <mat-option value='saturday'>Saturday</mat-option>
+                                    <mat-option value='sunday'>Sunday</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                    </div>
+
+                    <div fxLayout="row">
+                        <div fxFlex="0 1 50%">
+                            <mat-form-field appearance="outline">
+                                <mat-label>From</mat-label>
+                                <input matInput type="time" formControlName="from_time" />
+                            </mat-form-field>
+                        </div>
+
+
+                        <div fxFlex="0 1 50%">
+                            <mat-form-field appearance="outline">
+                                <mat-label>To</mat-label>
+                                <input matInput type="time" formControlName="to_time" />
+                            </mat-form-field>
+                        </div>
+                    </div>
+
+                    <div fxLayout="row">
+                        <div fxFlex="0 1 50%">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Cities</mat-label>
+                                <mat-select multiple formControlName="city">
+                                    <mat-option [value]=item.id *ngFor="let item of cityList">{{item.name}}</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </mat-card>
+
+                <mat-card *ngIf="createTimeSlotForm.get('slot_details').value" class="space">
+                    <h4>Time slots</h4>
+                    <ng-container *ngFor="let slotItems of createTimeSlotForm.get('slot_details')['controls']; let i = index;">
+                        <div [formGroup]="slotItems">
+                            <div fxLayout="row">
+                                <div fxFlex="0 1 33.333333%">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Slot Title</mat-label>
+                                        <input matInput formControlName="slot_title" />
+                                    </mat-form-field>
+                                </div>
+
+                                <div fxFlex="0 1 33.333333%">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Order Capacity</mat-label>
+                                        <input matInput type="number" min="0" formControlName="order_capacity" />
+                                    </mat-form-field>
+                                </div>
+                                <div fxFlex="0 1 33.333333%">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Day count</mat-label>
+                                        <input matInput type="number" min="0" formControlName="day_count" />
+                                    </mat-form-field>
+                                </div>
+                                <div>
+                                    <button mat-icon-button class="delete-time-slot-btn" color="warn"
+                                        (click)="removeTimeSlot(i)">
+                                        <mat-icon>close</mat-icon>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </ng-container>
+                </mat-card>
+            </div>
+        </div>
+    </form>
+    <button class="space" mat-stroked-button color="primary" (click)="addTimeSlot()">+ Add Time</button>
+</main>

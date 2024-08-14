@@ -1,0 +1,63 @@
+<main id="main">
+    <mat-progress-bar class="page-loader" color="accent" mode="indeterminate" *ngIf="loading"></mat-progress-bar>
+    <div class="page-header" fxLayout="row" fxLayoutAlign="space-between center">
+        <h1>Edit product group</h1>
+
+        <div class="header-actions">
+            <a [routerLink]="['/', URLS.productGroups]" mat-button color="primary">Cancel</a>
+            <button mat-flat-button color="primary" [disabled]="!productGroupForm.valid || loading" (click)="onSubmit()">Save</button>
+        </div>
+    </div>
+
+        <form [formGroup]="productGroupForm">
+            <div fxLayout="row">
+
+        <div fxFlex="0 1 66.66666">
+
+            <mat-card>
+                <div fxLayout="row">
+                    <div fxFlex="0 1 50%;">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Title</mat-label>
+                            <input matInput formControlName="title" />
+                            <mat-error *ngIf="productGroupForm.get('title').hasError('required')">Please give a title to your group.</mat-error>
+                        </mat-form-field>
+                    </div>
+
+                    <div fxFlex="0 1 50%">
+                        <mat-form-field appearance="outline">
+                            <mat-label>TAT</mat-label>
+                            <input matInput formControlName="tat" />
+                        </mat-form-field>
+                    </div>
+                </div>
+    
+
+                <div fxLayout="row">
+                    <div fxFlex="0 1 50%;" *ngIf="!is_vendor">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Vendor</mat-label>
+                            <mat-select formControlName="vendor">
+                                <mat-option *ngFor="let vendor of vendors" [value]="vendor.id">{{vendor.name}}</mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="productGroupForm.get('vendor').hasError('required')">Please select a vendor.</mat-error>
+                        </mat-form-field>
+                    </div>
+                </div>
+            </mat-card>
+        </div>
+
+        <div fxFlex="0 1 33.33333">
+            <mat-card>
+                <h4>Approval status</h4>
+                <div class="approval-status" fxLayout="row" >
+                    <p class="label" [class.success]="approvalStatus == 'Approved'" [class.warning]="approvalStatus == 'Disapproved'">Approval: {{approvalStatus}}</p>
+                    <mat-icon *ngIf="approvalStatus == 'Disapproved'" class="view-reason" (click)="onViewReason()">info</mat-icon>
+                </div>
+
+            </mat-card>
+        </div>
+    </div>
+
+        </form>
+</main>

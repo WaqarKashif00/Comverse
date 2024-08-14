@@ -1,0 +1,160 @@
+<main id="main">
+    <mat-progress-bar class="page-loader" color="accent" mode="indeterminate" *ngIf="loading"></mat-progress-bar>
+    <div class="page-header" fxLayout="row" fxLayoutAlign="space-between center">
+        <h1>Edit sub category</h1>
+
+        <div class="header-actions">
+            <a [routerLink]="['/', URLS.categories]" mat-stroked-button color="primary">Cancel</a>
+            <button mat-flat-button color="primary" (click)="onSubmit()" [disabled]="!categoryForm.valid || loading">Save</button>
+        </div>
+    </div>
+
+    <form [formGroup]="categoryForm">
+        <div fxLayout="row">
+            <div fxFlex="0 1 66.66666">
+                <mat-card>
+                    <h2>General Information</h2>
+    
+                    <mat-form-field appearance="outline">
+                        <mat-label>Category name</mat-label>
+                        <input matInput formControlName="name" />
+                        <mat-error *ngIf="categoryForm.get('name').hasError('required')">This field is required.</mat-error>
+                    </mat-form-field>
+    
+                    <quill-editor [modules]="editorModules" placeholder="Category description" formControlName="description"></quill-editor>
+                </mat-card>
+    
+                <mat-card>
+                    <h2>Meta data</h2>
+    
+                    <table class="meta-fields-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 20%">Field</th>
+                                <th>Value</th>
+                                <th style="width: 50px"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let metaDataGroup of categoryForm.get('meta_data')['controls']; let i = index">
+                                <ng-container [formGroup]="metaDataGroup">
+                                    <td>
+                                        <mat-form-field appearance="outline">
+                                            <input matInput formControlName="field" />
+                                        </mat-form-field>
+                                    </td>
+                                    <td>
+                                        <mat-form-field appearance="outline">
+                                            <input matInput formControlName="value" />
+                                        </mat-form-field>
+                                    </td>
+                                    <td>
+                                        <button mat-icon-button color="warn" (click)="deleteMetaField(i)"><mat-icon>delete</mat-icon></button>
+                                    </td>
+                                </ng-container>
+                            </tr>
+                        </tbody>
+                    </table>
+    
+                    <div class="text-right meta-fields-bottom">
+                        <button mat-button color="primary" (click)="addMetaField()">Add field</button>
+                    </div>
+                </mat-card>
+                <mat-card>
+                    <h2>Search Engine customization</h2>
+    
+                    <mat-form-field appearance="outline">
+                        <mat-label>Handle</mat-label>
+                        <input matInput formControlName="handle" />
+                        <mat-hint>If empty, the preview shows what will be auto generated.</mat-hint>
+                    </mat-form-field>
+    
+                    <mat-form-field appearance="outline">
+                        <mat-label>SEO title</mat-label>
+                        <input matInput formControlName="seo_title" />
+                        <mat-hint>If empty, the preview shows what will be auto generated.</mat-hint>
+                    </mat-form-field>
+    
+                    <mat-form-field appearance="outline">
+                        <mat-label>SEO description</mat-label>
+                        <textarea matInput formControlName="seo_description"></textarea>
+                        <mat-hint>If empty, the preview shows what will be auto generated.</mat-hint>
+                    </mat-form-field>
+    
+                    <mat-form-field appearance="outline">
+                        <mat-label>SEO keywords</mat-label>
+                        <input matInput formControlName="seo_keywords" />
+                        <mat-hint>If empty, the preview shows what will be auto generated.</mat-hint>
+                    </mat-form-field>
+                </mat-card>
+            </div>
+            <div fxFlex="0 1 33.33333">
+                <mat-card>
+                    <h2>Availability</h2>
+                    <mat-checkbox formControlName="is_active">Available online</mat-checkbox>
+
+                </mat-card>
+    
+                <mat-card>
+                    <h2>Commission</h2>
+                    <mat-form-field appearance="outline">
+                        <mat-label>Commission type</mat-label>
+                        <mat-select formControlName="commission_type">
+                          <mat-option value="percentage">Percentage</mat-option>
+                          <mat-option value="fixed">Fixed amount</mat-option>
+                        </mat-select>
+                      </mat-form-field>
+
+                      <mat-form-field appearance="outline">
+                        <mat-label>Commission value</mat-label>
+                        <input matInput type="number" formControlName="commission_value" />
+                        <span matSuffix *ngIf="categoryForm.get('commission_type').value === 'percentage'">%</span>
+                        <span matSuffix *ngIf="categoryForm.get('commission_type').value === 'fixed'">{{storeCurrency}}</span>
+                      </mat-form-field>
+                </mat-card>
+                <mat-card>
+                    <h2>Banner Desktop</h2>
+
+                    <mat-spinner class="file-upload-spinner" diameter="80" *ngIf="file_uploading"></mat-spinner>
+                    <img [src]="previewImageSrc" class="banner-preview-image" *ngIf="previewImageSrc" />
+                    <input type="file" class="banner-file-input" accept=".png, .jpg, .jpeg" #bannerFileInput (change)="bannerImageSelect($event)" />
+                    <div class="banner-file-actions">
+                        <button mat-button type="button" color="warn" *ngIf="previewImageSrc" (click)="removeBanner()"><mat-icon>delete</mat-icon></button>
+                        <button mat-button type="button" color="primary" (click)="bannerFileInput.click()" [disabled]="file_uploading">Upload image</button>
+                    </div>
+                    <p class="recommended-resolution">Recommended resolution: 1920x400</p>
+
+
+                    <h2>Banner Mobile</h2>
+
+                    <mat-spinner class="file-upload-spinner" diameter="80" *ngIf="mobile_file_uploading"></mat-spinner>
+                    <img [src]="previewMobileImageSrc" class="banner-preview-image" *ngIf="previewMobileImageSrc" />
+                    <input type="file" class="banner-file-input" accept=".png, .jpg, .jpeg" #mobilebannerFileInput (change)="mobileBannerImageSelect($event)" />
+                    <div class="banner-file-actions">
+                        <button mat-button type="button" color="warn" *ngIf="previewMobileImageSrc" (click)="removeMobileBanner()"><mat-icon>delete</mat-icon></button>
+                        <button mat-button type="button" color="primary" (click)="mobilebannerFileInput.click()" [disabled]="mobile_file_uploading">Upload image</button>
+                    </div>
+
+                    <p class="recommended-resolution">Recommended resolution: 1920x400</p>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Banner alt text</mat-label>
+                        <input matInput formControlName="alt_text"/>
+                      </mat-form-field>
+                </mat-card>
+                <mat-card>
+                    <h2>Thumbnail image</h2>
+
+                    <mat-spinner class="file-upload-spinner" diameter="80" *ngIf="thumbnail_uploading"></mat-spinner>
+                    <img [src]="previewThumbnailSrc" class="banner-preview-image" *ngIf="previewThumbnailSrc" />
+                    <input type="file" class="banner-file-input" accept=".png, .jpg, .jpeg" #thumbnailFileInput (change)="thumbnailImageSelect($event)" />
+                    <div class="banner-file-actions">
+                        <button mat-button type="button" color="warn" *ngIf="previewThumbnailSrc" (click)="removeThumbnail()"><mat-icon>delete</mat-icon></button>
+                        <button mat-button type="button" color="primary" (click)="thumbnailFileInput.click()" [disabled]="thumbnail_uploading">Upload image</button>
+                    </div>
+                    <p class="recommended-resolution">Recommended resolution: 340x490</p>
+                </mat-card>
+            </div>
+        </div>
+    </form>
+</main>

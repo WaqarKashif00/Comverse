@@ -1,0 +1,78 @@
+<button mat-icon-button mat-dialog-close class="dialog-close"><mat-icon>close</mat-icon></button>
+<h2 mat-dialog-title>Add Store Location</h2>
+<mat-dialog-content class="mat-typography">
+    <form [formGroup]="createLocatorForm">
+
+        <div fxLayout="column">
+            <mat-form-field  appearance="outline">
+                <mat-label>Store Title</mat-label>
+                <input matInput name="description" formControlName="title"/>
+                <mat-error *ngIf="createLocatorForm.get('title').hasError('required')">This field is
+                    required.</mat-error>
+                    <mat-error *ngIf="createLocatorForm.get('title').hasError('pattern')">Special characters can not be used.</mat-error>
+
+            </mat-form-field>
+            <mat-checkbox  formControlName="is_active">Active</mat-checkbox>
+        </div>
+
+        <div fxLayout="row">
+
+            <mat-form-field appearance="outline" class="give-margin">
+                <mat-label>Latitude</mat-label>
+                <input matInput type="number" min="0" name="description" formControlName="latitude"/>
+                <mat-error *ngIf="createLocatorForm.get('latitude').hasError('required')">This field is
+                    required.</mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+                <mat-label>Longitute</mat-label>
+                <input matInput type="number" min="0" name="description" formControlName="longitude"/>
+                <mat-error *ngIf="createLocatorForm.get('longitude').hasError('required')">This field is
+                    required.</mat-error>
+            </mat-form-field>
+        </div>
+        
+        <div fxLayout="row"  >
+            <mat-form-field appearance="outline">
+                <mat-label>Address</mat-label>
+                <input matInput name="description" formControlName="address"/>
+                <mat-error *ngIf="createLocatorForm.get('address').hasError('required')">This field is
+                    required.</mat-error>
+            </mat-form-field>
+        </div>
+        <div fxLayout="row" >
+
+            <mat-form-field appearance="outline" class="give-margin">
+                <mat-label>Province</mat-label>
+                <input matInput name="description" formControlName="province"/>
+                <mat-error *ngIf="createLocatorForm.get('province').hasError('required')">This field is
+                    required.</mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+                <mat-label>Area</mat-label>
+                <input matInput name="description" formControlName="area"/>
+                <mat-error *ngIf="createLocatorForm.get('area').hasError('required')">This field is
+                    required.</mat-error>
+            </mat-form-field>
+        </div>
+        <div fxLayout="row">
+            <mat-form-field appearance="outline" class="give-margin">
+                <mat-label>Zip code</mat-label>
+                <input matInput type="number" name="description" formControlName="zip_code" />
+                <mat-error *ngIf="createLocatorForm.get('zip_code').hasError('required')">This field is
+                    required.</mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="give-margin">
+                <mat-label>Contact Number</mat-label>
+                <input matInput  name="description" formControlName="contact" />
+                <mat-error *ngIf="createLocatorForm.get('contact').hasError('required')">This field is
+                    required.</mat-error>
+            </mat-form-field>
+        </div>
+    </form>
+
+</mat-dialog-content>
+<div mat-dialog-actions>
+    <button mat-stroked-button color="primary" mat-dialog-close>Cancel</button>
+    <button mat-flat-button color="primary" [disabled]="!createLocatorForm.valid || loading" (click)="onSubmit()">Add</button>
+</div>

@@ -1,0 +1,76 @@
+<button mat-icon-button mat-dialog-close class="dialog-close"><mat-icon>close</mat-icon></button>
+<h2 mat-dialog-title>Email Template</h2>
+<mat-dialog-content class="mat-typography">
+    <form class="template" [formGroup]="emailTemplateForm">
+        <mat-form-field appearance="outline">
+            <mat-label>Title</mat-label>
+            <input  matInput formControlName="title" />
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>Subject</mat-label>
+            <input  matInput formControlName="subject" />
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>Service Provider</mat-label>
+            <mat-select formControlName="service_provider">
+              <mat-option  [value]="provider.id" *ngFor="let provider of provider_list">{{provider.title}}</mat-option>
+            </mat-select>
+            <mat-error *ngIf="emailTemplateForm.get('service_provider').hasError('required')">Select service provider</mat-error>
+        </mat-form-field >
+        <mat-form-field appearance="outline">
+            <mat-label>Trigger</mat-label>
+            <mat-select formControlName="trigger" (selectionChange)="onTriggerChange($event)">
+                <mat-option [value]="item.value" *ngFor="let item of triggerList">{{item.label}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+        <div fxLayout="row">
+            <div class="active-status">
+                <mat-checkbox formControlName="is_active">Active</mat-checkbox>
+            </div>
+            <div class="active-status">
+                <mat-checkbox formControlName="allow_cc_email">Allow CC Email Address</mat-checkbox>
+            </div>
+            <div class="active-status">
+                <mat-checkbox formControlName="allow_bcc_email">Allow BCC Email Address</mat-checkbox>
+            </div>
+            <div class="active-status">
+                <mat-checkbox formControlName="restriction_on_email">Restriction on email</mat-checkbox>
+            </div>
+        
+        </div>
+        <br />
+        <tags-input *ngIf="emailTemplateForm.get('allow_cc_email').value == true"
+        label="CC Email Address (Commas Separated)"
+        [showRemove]="true"
+        [(value)]="emailCCTags">
+    </tags-input>
+        <br />
+
+        <tags-input *ngIf="emailTemplateForm.get('allow_bcc_email').value == true"
+        label="BCC Email Address (Commas Separated)"
+        [showRemove]="true"
+        [(value)]="emailBCCTags">
+    </tags-input>
+
+        <br />
+        <tags-input *ngIf="emailTemplateForm.get('restriction_on_email').value == true"
+        label="Exception Email (Commas Separated)"
+        [showRemove]="true"
+        [(value)]="emailRestrictedTags">
+    </tags-input>
+    <mat-form-field class="text-template" appearance="outline">
+        <mat-label>Template</mat-label>
+        <textarea #textarea matInput rows="5" cols="40" formControlName="template"></textarea>
+    </mat-form-field>
+    
+    <p>Available paramters</p>
+    <div class="paramters">
+        <button  *ngFor="let item of paramterList" mat-stroked-button color="warn" (click)="addText(item)">{{item}}</button>
+    </div>
+    </form>
+
+</mat-dialog-content>
+<div mat-dialog-actions>
+    <button mat-stroked-button color="primary" mat-dialog-close>Cancel</button>
+    <button mat-flat-button color="primary" [disabled]="loading || !emailTemplateForm.valid" (click)="onSave()">Save</button>
+</div>

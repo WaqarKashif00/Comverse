@@ -1,0 +1,300 @@
+<main id="main">
+    <mat-progress-bar class="page-loader" color="accent" mode="indeterminate" *ngIf="loading"></mat-progress-bar>
+    <div class="page-header" fxLayout="row" fxLayoutAlign="space-between center">
+        <div>
+            <button mat-icon-button aria-label="Go back" class="header-back-arrow" (click)="goBack()">
+                <mat-icon>arrow_back</mat-icon>
+            </button>
+            <h1> New Staff member</h1>
+        </div>
+        <!-- <h1>
+            <button mat-icon-button aria-label="Go back" class="header-back-arrow" (click)="goBack()">
+                <mat-icon>arrow_back</mat-icon>
+            </button>
+            New Staff member
+        </h1> -->
+
+        <div class="header-actions">
+            <button mat-stroked-button color="primary" (click)="goBack()">
+                Cancel
+            </button>
+            <button mat-flat-button color="primary" (click)="onSubmit()" [disabled]="!userForm.valid || loading">
+                Save
+            </button>
+        </div>
+    </div>
+
+    <div class="page-container">
+        <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+            <div class="settings-section">
+                <div fxLayout="row">
+                    <div fxFlex="0 1 33.333333%">
+                        <h2>Member detail</h2>
+                        <p>Give staff access to your store by sending them invitation.</p>
+                    </div>
+                    <div fxFlex="0 1 66.666666%">
+                        <mat-card>
+                            <div fxLayout="row">
+                                <div fxFlex="0 1 50%">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>First name</mat-label>
+                                        <input matInput name="first_name" formControlName="first_name" />
+                                        <mat-error *ngIf="userForm.get('first_name').hasError('required')">Enter first
+                                            name of user.</mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div fxFlex="0 1 50%">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Last name</mat-label>
+                                        <input matInput name="last_name" formControlName="last_name" />
+                                        <mat-error *ngIf="userForm.get('last_name').hasError('required')">Enter last
+                                            name of user.</mat-error>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div fxLayout="row">
+                                <div fxFlex="0 1 50%">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Email</mat-label>
+                                        <input matInput name="email" (keyup)="checkAfterDebounceEmail()"
+                                            formControlName="email" type="email" #email />
+                                        <mat-error *ngIf="userForm.get('email').hasError('required')">Enter the email
+                                            address.</mat-error>
+                                    </mat-form-field>
+                                    <p class="error-response">
+                                        {{
+                                        errorRespnse === "email already exist"
+                                        ? "Email already
+                                        exist"
+                                        : ""
+                                        }}
+                                    </p>
+                                </div>
+
+                                <div fxFlex="0 1 50%">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Username</mat-label>
+                                        <input matInput name="username" (keyup)="checkAfterDebounceUsername()"
+                                            formControlName="username" #username />
+                                        <mat-error *ngIf="userForm.get('username').hasError('required')">Enter the
+                                            username of user.</mat-error>
+                                    </mat-form-field>
+                                    <p class="error-response">
+                                        {{
+                                        errorResponseUserName === "username already exist"
+                                        ? "Username already exist"
+                                        : ""
+                                        }}
+                                    </p>
+                                </div>
+                            </div>
+                        </mat-card>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <div class="settings-section permissions">
+            <div fxLayout="row">
+                <div fxFlex="0 1 33.333333%">
+                    <h2>Permissions</h2>
+                    <p>
+                        Customer will have option to translate the website in these
+                        languages.
+                    </p>
+                </div>
+                <div fxFlex="0 1 66.666666%">
+                    <mat-card>
+                        <div fxLayout="row">
+                            <div fxFlex="0 1 70%">
+                                <div fxLayout="row">
+                                    <div fxLayout="column">
+                                        <mat-checkbox [(ngModel)]="userPermissions.dashboard">Dashboard</mat-checkbox>
+                                        <mat-checkbox (change)="customaizationCheck($event)"
+                                            [(ngModel)]="userPermissions.customization"
+                                            [class.active]="sideDrawer === 'customization'">Customization</mat-checkbox>
+                                        <mat-checkbox (change)="configurationCheck($event)"
+                                            [(ngModel)]="userPermissions.configuration"
+                                            [class.active]="sideDrawer === 'configuration'">Configuration</mat-checkbox>
+                                        <mat-checkbox (change)="productsCheck($event)"
+                                            [(ngModel)]="userPermissions.products"
+                                            [class.active]="sideDrawer === 'products'">Products</mat-checkbox>
+                                        <mat-checkbox [(ngModel)]="userPermissions.orders">Orders</mat-checkbox>
+                                        <mat-checkbox [(ngModel)]="userPermissions.vendor">Vendor</mat-checkbox>
+                                        <mat-checkbox [(ngModel)]="userPermissions.reports">Reporting</mat-checkbox>
+                                        <mat-checkbox (change)="discountCheck($event)"
+                                            [(ngModel)]="userPermissions.discounts"
+                                            [class.active]="sideDrawer === 'discount'">Discounts</mat-checkbox>
+                                        <mat-checkbox [(ngModel)]="userPermissions.customer">Customer</mat-checkbox>
+                                        <mat-checkbox [(ngModel)]="userPermissions.approvals">Approval</mat-checkbox>
+
+                                        <mat-checkbox (change)="featuredAppsCheck($event)"
+                                            [(ngModel)]="userPermissions.featured_apps"
+                                            [class.active]="sideDrawer === 'featured_apps'">Featured apps</mat-checkbox>
+
+
+                                    </div>
+                                    <div fxLayout="column">
+                                        <div class="space"></div>
+                                        <div fxLayout="row">
+                                            <mat-icon class="arrow-icon" (click)="stopPropagation($event)"
+                                                (click)="toggleDrawer('customization')"
+                                                [class.active]="sideDrawer === 'customization'">keyboard_arrow_right
+                                            </mat-icon>
+                                        </div>
+
+                                        <mat-icon class="arrow-icon" (click)="stopPropagation($event)"
+                                            (click)="toggleDrawer('configuration')"
+                                            [class.active]="sideDrawer === 'configuration'">keyboard_arrow_right
+                                        </mat-icon>
+
+                                        <mat-icon class="arrow-icon" (click)="stopPropagation($event)"
+                                            (click)="toggleDrawer('products')"
+                                            [class.active]="sideDrawer === 'products'">keyboard_arrow_right</mat-icon>
+
+                                        <div class="space"></div>
+                                        <div class="space"></div>
+                                        <div class="space"></div>
+
+                                        <mat-icon class="arrow-icon" (click)="stopPropagation($event)"
+                                            (click)="toggleDrawer('discount')"
+                                            [class.active]="sideDrawer === 'discount'">keyboard_arrow_right</mat-icon>
+
+                                        <div class="space"></div>
+                                        <div class="space"></div>
+
+                                        <mat-icon class="arrow-icon" (click)="stopPropagation($event)"
+                                            (click)="toggleDrawer('featured_apps')"
+                                            [class.active]="sideDrawer === 'featured_apps'">keyboard_arrow_right
+                                        </mat-icon>
+
+                                    </div>
+
+                                    <div class="sidenav-drawer" [class.show]="sideDrawer === 'products'"
+                                        *ngIf="sideDrawer == 'products'" (click)="stopPropagation($event)">
+                                        <mat-checkbox (change)="productsPermissionCheck($event)"
+                                            [(ngModel)]="userPermissions.product_list">All products
+                                        </mat-checkbox>
+                                        <mat-checkbox (change)="productsPermissionCheck($event)"
+                                            [(ngModel)]="userPermissions.product_groups">Product groups
+                                        </mat-checkbox>
+                                        <mat-checkbox (change)="productsPermissionCheck($event)"
+                                            [(ngModel)]="userPermissions.collections">Collections
+                                        </mat-checkbox>
+                                        <mat-checkbox (change)="productsPermissionCheck($event)"
+                                            [(ngModel)]="userPermissions.categories">Category structure
+                                        </mat-checkbox>
+                                        <mat-checkbox (change)="productsPermissionCheck($event)"
+                                            [(ngModel)]="userPermissions.brands">Brands</mat-checkbox>
+                                    </div>
+
+                                    <div class="sidenav-drawer" [class.show]="sideDrawer === 'customization'"
+                                        *ngIf="sideDrawer == 'customization'" (click)="stopPropagation($event)">
+                                        <mat-checkbox (change)="customizationPermissionCheck($event)"
+                                            [(ngModel)]="userPermissions.homepage">Homepage</mat-checkbox>
+                                        <mat-checkbox (change)="customizationPermissionCheck($event)"
+                                            [(ngModel)]="userPermissions.static_pages">Static pages
+                                        </mat-checkbox>
+                                        <mat-checkbox (change)="customizationPermissionCheck($event)"
+                                            [(ngModel)]="userPermissions.header">Header</mat-checkbox>
+                                        <mat-checkbox (change)="customizationPermissionCheck($event)"
+                                            [(ngModel)]="userPermissions.footer">Footer</mat-checkbox>
+                                        <mat-checkbox (change)="customizationPermissionCheck($event)"
+                                            [(ngModel)]="userPermissions.navigation">Navigation</mat-checkbox>
+                                        <mat-checkbox (change)="customizationPermissionCheck($event)"
+                                            [(ngModel)]="userPermissions.filters">Filters</mat-checkbox>
+                                    </div>
+
+                                    <div class="sidenav-drawer" [class.show]="sideDrawer === 'discount'"
+                                        *ngIf="sideDrawer == 'discount'" (click)="stopPropagation($event)">
+                                        <mat-checkbox (change)="discountPermissionCheck($event)"
+                                            [(ngModel)]="userPermissions.main_discounts">Discounts
+                                        </mat-checkbox>
+                                        <mat-checkbox (change)="discountPermissionCheck($event)"
+                                            [(ngModel)]="userPermissions.coupons">Coupons</mat-checkbox>
+                                    </div>
+
+                                    <div class="sidenav-drawer" [class.show]="sideDrawer === 'configuration'"
+                                        *ngIf="sideDrawer == 'configuration'" (click)="stopPropagation($event)">
+                                        <mat-checkbox (change)="configurationPermissionCheck($event)"
+                                            [(ngModel)]="userPermissions.store_setting">General info
+                                        </mat-checkbox>
+                                        <mat-checkbox (change)="configurationPermissionCheck($event)"
+                                            [(ngModel)]="userPermissions.user_management">User management
+                                        </mat-checkbox>
+                                        <mat-checkbox (change)="configurationPermissionCheck($event)"
+                                            [(ngModel)]="userPermissions.shipping_regions">Shipping regions
+                                        </mat-checkbox>
+                                        <mat-checkbox (change)="configurationPermissionCheck($event)"
+                                            [(ngModel)]="userPermissions.shipping_methods">Shipping methods
+                                        </mat-checkbox>
+                                        <mat-checkbox (change)="configurationPermissionCheck($event)"
+                                            [(ngModel)]="userPermissions.checkout_setting">Checkout settings
+                                        </mat-checkbox>
+
+                                        <mat-checkbox (change)="configurationPermissionCheck($event)"
+                                            [(ngModel)]="userPermissions.cache_settings">Cache settings
+                                        </mat-checkbox>
+                                        <mat-checkbox (change)="configurationPermissionCheck($event)"
+                                            [(ngModel)]="userPermissions.preferences">Preferences
+                                        </mat-checkbox>
+                                        <mat-checkbox (change)="configurationPermissionCheck($event)"
+                                            [(ngModel)]="userPermissions.payment_gateway">Payment gateway
+                                        </mat-checkbox>
+                                        <mat-checkbox (change)="configurationPermissionCheck($event)"
+                                            [(ngModel)]="userPermissions.sms_configurations">SMS Configurations
+                                        </mat-checkbox>
+                                        <mat-checkbox (change)="configurationPermissionCheck($event)"
+                                            [(ngModel)]="userPermissions.email_configurations">Email
+                                            Configurations
+                                        </mat-checkbox>
+
+                                        <mat-checkbox (change)="configurationPermissionCheck($event)"
+                                        [(ngModel)]="userPermissions.erp">ERP Configuration
+                                    </mat-checkbox>
+
+                                    <mat-checkbox (change)="configurationPermissionCheck($event)"
+                                    [(ngModel)]="userPermissions.multi_location">Multi Location
+                                    Configurations
+                                </mat-checkbox>
+
+                                <mat-checkbox (change)="configurationPermissionCheck($event)"
+                                [(ngModel)]="userPermissions.courier">Courier
+                                Configurations
+                            </mat-checkbox>
+                                    </div>
+
+
+                                    <div class="sidenav-drawer" [class.show]="sideDrawer === 'featured_apps'"
+                                        *ngIf="sideDrawer == 'featured_apps'" (click)="stopPropagation($event)">
+                                        <mat-checkbox (change)="featuredAppPermissionCheck($event)"
+                                            [(ngModel)]="userPermissions.sizechart">Size chart
+                                        </mat-checkbox>
+                                        <mat-checkbox (change)="featuredAppPermissionCheck($event)"
+                                            [(ngModel)]="userPermissions.wishlist">Wishlist
+                                        </mat-checkbox>
+                                        <mat-checkbox (change)="featuredAppPermissionCheck($event)"
+                                            [(ngModel)]="userPermissions.loyalty">Loyalty</mat-checkbox>
+                                        <mat-checkbox (change)="featuredAppPermissionCheck($event)"
+                                            [(ngModel)]="userPermissions.timeslot">Time Slots</mat-checkbox>
+                                        <mat-checkbox (change)="featuredAppPermissionCheck($event)"
+                                            [(ngModel)]="userPermissions.socialfeed">Social Feed</mat-checkbox>
+                                        <mat-checkbox (change)="featuredAppPermissionCheck($event)"
+                                            [(ngModel)]="userPermissions.job_posting">Job Posting</mat-checkbox>
+                                        <mat-checkbox (change)="featuredAppPermissionCheck($event)"
+                                            [(ngModel)]="userPermissions.storelocator">Store locator</mat-checkbox>
+                                        <mat-checkbox (change)="featuredAppPermissionCheck($event)"
+                                            [(ngModel)]="userPermissions.order_return">Order Rreturn</mat-checkbox>
+
+
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </mat-card>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>

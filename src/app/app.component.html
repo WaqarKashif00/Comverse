@@ -1,0 +1,3 @@
+<app-topbar *ngIf="this.authService.signedIn"></app-topbar>
+<app-sidenav *ngIf="this.authService.signedIn"></app-sidenav>
+<router-outlet></router-outlet>

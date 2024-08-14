@@ -1,0 +1,80 @@
+Alchemative Staging
+aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 242791332842.dkr.ecr.us-east-1.amazonaws.com
+docker build -t kees-angular-frontend .
+docker tag kees-angular-frontend:latest 242791332842.dkr.ecr.us-east-1.amazonaws.com/kees-angular-frontend:latest
+docker push 242791332842.dkr.ecr.us-east-1.amazonaws.com/kees-angular-frontend:latest
+aws ecs update-service --service kees-angular-frontend --cluster alche-shopify-cluster --force-new-deployment --region us-east-1
+
+
+KEES Production
+ng build -c kees
+aws ecr get-login-password --region us-east-1 --profile kees | docker login --username AWS --password-stdin 510219444800.dkr.ecr.us-east-1.amazonaws.com
+docker build -t kees-angular-frontend .
+docker tag kees-angular-frontend:latest 510219444800.dkr.ecr.us-east-1.amazonaws.com/kees-angular-frontend:latest
+docker push 510219444800.dkr.ecr.us-east-1.amazonaws.com/kees-angular-frontend:latest
+aws ecs update-service --service kees-angular-frontend --cluster kees --force-new-deployment --region us-east-1 --profile kees
+
+
+UAT Staging
+ng b -c staging
+aws ecr get-login-password --region us-east-1 --profile kees | docker login --username AWS --password-stdin 510219444800.dkr.ecr.us-east-1.amazonaws.com
+docker build -t uat-kees-angular-admin .
+docker tag uat-kees-angular-admin:latest 510219444800.dkr.ecr.us-east-1.amazonaws.com/uat-kees-angular-admin:latest
+docker push 510219444800.dkr.ecr.us-east-1.amazonaws.com/uat-kees-angular-admin:latest
+aws ecs update-service --service staging-kees-angular-admin --cluster kees --force-new-deployment --region us-east-1 --profile kees
+
+
+Comverse staging
+ng b -c production
+aws ecr get-login-password --region us-east-1 --profile ces | docker login --username AWS --password-stdin 570325721812.dkr.ecr.us-east-1.amazonaws.com
+docker build -t staging-comverse-admin-angular .
+docker tag staging-comverse-admin-angular:latest 570325721812.dkr.ecr.us-east-1.amazonaws.com/staging-comverse-admin-angular:latest
+docker push 570325721812.dkr.ecr.us-east-1.amazonaws.com/staging-comverse-admin-angular:latest
+aws ecs update-service --service staging-comverse-angular-admin --cluster ces-frontend-cluster --force-new-deployment --region us-east-1 --profile ces
+
+PCB Production
+ng b -c pcb
+aws ecr get-login-password --region us-east-1 --profile ces | docker login --username AWS --password-stdin 570325721812.dkr.ecr.us-east-1.amazonaws.com
+docker build -t pcb-admin-angular .
+docker tag pcb-admin-angular:latest 570325721812.dkr.ecr.us-east-1.amazonaws.com/pcb-admin-angular:latest
+docker push 570325721812.dkr.ecr.us-east-1.amazonaws.com/pcb-admin-angular:latest
+aws ecs update-service --service pcb-admin --cluster ces-frontend-cluster --force-new-deployment --region us-east-1 --profile ces
+
+
+Shams
+ng build -c shams
+aws ecr get-login-password --region us-east-1 --profile ces | docker login --username AWS --password-stdin 570325721812.dkr.ecr.us-east-1.amazonaws.com
+docker build -t shams-angular-admin .
+docker tag shams-angular-admin:latest 570325721812.dkr.ecr.us-east-1.amazonaws.com/shams-angular-admin:latest
+docker push 570325721812.dkr.ecr.us-east-1.amazonaws.com/shams-angular-admin:latest
+aws ecs update-service  --service  shams-angular-admin --cluster ces-cluster --force-new-deployment --region us-east-1 --profile ces
+
+
+Security Staging
+ng b -c security
+aws ecr get-login-password --region us-east-1 --profile ces | docker login --username AWS --password-stdin 570325721812.dkr.ecr.us-east-1.amazonaws.com
+docker build -t security-angular-admin-comverse .
+docker tag security-angular-admin-comverse:latest 570325721812.dkr.ecr.us-east-1.amazonaws.com/security-angular-admin-comverse:latest
+docker push 570325721812.dkr.ecr.us-east-1.amazonaws.com/security-angular-admin-comverse:latest
+aws ecs update-service --service security-admin-angular --cluster ces-cluster --force-new-deployment --region us-east-1 --profile ces
+
+
+
+Demo 
+ng b -c demo
+aws ecr get-login-password --region us-east-1 --profile ces | docker login --username AWS --password-stdin 570325721812.dkr.ecr.us-east-1.amazonaws.com
+docker build -t comverseglobal-angular-admin .
+docker tag comverseglobal-angular-admin:latest 570325721812.dkr.ecr.us-east-1.amazonaws.com/comverseglobal-angular-admin:latest
+docker push 570325721812.dkr.ecr.us-east-1.amazonaws.com/comverseglobal-angular-admin:latest
+aws ecs update-service --service comverseglobal-angular-admin --cluster ces-frontend-cluster --force-new-deployment --region us-east-1 --profile ces
+
+
+PCB-INTL
+
+ng b -c pcb-intl
+aws ecr get-login-password --region us-east-1 --profile ces | docker login --username AWS --password-stdin 570325721812.dkr.ecr.us-east-1.amazonaws.com
+docker build -t pcb-intl-admin .
+docker tag pcb-intl-admin:latest 570325721812.dkr.ecr.us-east-1.amazonaws.com/pcb-intl-admin:latest
+docker push 570325721812.dkr.ecr.us-east-1.amazonaws.com/pcb-intl-admin:latest
+aws ecs update-service --service pcb-intl-admin --cluster ces-frontend-cluster --force-new-deployment --region us-east-1 --profile ces
+

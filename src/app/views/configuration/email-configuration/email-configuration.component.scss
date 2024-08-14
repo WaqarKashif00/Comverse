@@ -1,0 +1,80 @@
+.field-hint {
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+.field-label {
+  margin-bottom: 5px;
+}
+.field-value {
+  margin-top: 5px;
+  margin-bottom: 10px;
+  color: rgba(0,0,0,0.59);
+}
+.mat-card-title{
+  font-size: 14px;
+
+}
+.mat-card-subtitle{
+  font-size: 12px;
+  margin: 0;
+}
+.mat-card-content{
+  margin-bottom: 15px;
+}
+.mat-card-title.link{
+  font-size: 14px;
+  text-decoration: underline;
+  cursor: pointer;
+}
+.mat-card-footer
+{
+  padding: 16px;
+  border-top: 1px solid;
+}
+.mat-form-field
+{
+  margin-top: 0;
+}
+.conditions-based-on{
+  .mat-radio-button{
+    margin-right: 15px;
+  }
+}
+
+.conditions .mat-form-field{
+  padding: 0 10px;
+}
+
+.condition-wrapper{
+  width: 100%;
+}
+.conditions{
+  display: flex;
+}
+.add-conditions{
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+}
+.sub-title{
+  font-size: 15px;
+}
+.mat-form-field-appearance-outline .mat-form-field-wrapper{
+  padding: 0;
+  margin: 0;
+}
+.rules{
+  background: #cccccc38;;
+  margin: 10px 0;
+  padding: 10px;
+}
+
+.title{
+  margin: 0 0 0px;
+  font-weight: 700;
+
+}
+
+.spacing{
+  margin-bottom: 12px
+}

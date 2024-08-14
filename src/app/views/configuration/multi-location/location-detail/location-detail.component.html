@@ -1,0 +1,44 @@
+<main id="main">
+    <mat-progress-bar class="page-loader" color="accent" mode="indeterminate" *ngIf="loading"></mat-progress-bar>
+    <div class="page-header" fxLayout="row" fxLayoutAlign="space-between center">
+        <div>
+            <button mat-icon-button aria-label="Go back" class="header-back-arrow" [routerLink]="['/' ,URLS.multiLocation,URLS.locations]">
+                <mat-icon>arrow_back</mat-icon>
+            </button>
+            <h1> {{name}}</h1>
+        </div>
+
+        <div class="header-actions">
+            <button mat-stroked-button color="primary" [routerLink]="['/' ,URLS.multiLocation,URLS.locations]">Cancel</button>
+            <button mat-flat-button color="primary">Edit Location</button>
+        </div>
+    </div>
+
+    <div class="page-container">
+        <mat-card class="table-wrapper-card">
+            <mat-tab-group>
+                <mat-tab label="Sub Location Groups">
+                    <div class="button-style" fxLayoutAlign="end">
+                        <a mat-stroked-button color="primary" (click)="AddSubLocationGroup()">
+                            +Add</a>
+                    </div>
+                    <datatable [data]="subLocationGroup" [columns]="columns" [pagination]="true" [count]="totalCount"
+                    [itemsPerPage]="pageSize" (page)="onPageChange($event)"
+                    [rowActions]="rowActions" (cellClick)="onCellClick($event)"(rowAction)="onRowAction($event)">
+                </datatable>
+                </mat-tab>
+                <mat-tab label="Sub Locations">
+                    <div class="button-style" fxLayoutAlign="end">
+                        <a mat-stroked-button color="primary" (click)="AddSubLocation()">
+                            +Add</a>
+                    </div>
+                    <datatable [data]="subLocation" [columns]="columnsSub" [pagination]="true" [count]="totalCountSubLocation"
+                    [itemsPerPage]="pageSizeSubLocation" (page)="onPageChangeSub($event)"
+                    [rowActions]="rowActionsSub" (rowAction)="onRowActionSub($event)">
+                </datatable>
+
+                </mat-tab>
+            </mat-tab-group>
+        </mat-card>
+    </div>
+</main>

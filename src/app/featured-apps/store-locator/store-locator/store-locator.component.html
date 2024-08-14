@@ -1,0 +1,82 @@
+<main id="main">
+    <mat-progress-bar class="page-loader" color="accent" mode="indeterminate" *ngIf="loading"></mat-progress-bar>
+    <div class="page-header" fxLayout="row" fxLayoutAlign="space-between center">
+        <div>
+            <button mat-icon-button aria-label="Go back" class="header-back-arrow" [routerLink]="['/',URLS.featuredApps]">
+                <mat-icon>arrow_back</mat-icon>
+            </button>
+            <h1>Store Locator</h1>
+        </div>
+
+        <div class="header-actions">
+            <a mat-flat-button color="primary" (click)="AddCities()">Add City</a>
+        </div>
+    </div>
+
+    <div class="page-container">
+        <div id="categories-wrapper" cdkDropList (cdkDropListDropped)="mainCitiesSort($event)">
+
+            <!-- Main cities -->
+            <ng-container *ngFor="let mainCities of cities; let i = index">
+                <mat-card class="category-title-wrapper" cdkDrag (click)="toggleMainCities(i)">
+                    <span>
+                        <mat-icon class="cat-drag-handle" cdkDragHandle (mousedown)="mainCitiesSort(i)">
+                            drag_indicator
+                        </mat-icon>
+                        <span class="category-name">{{mainCities.name}}</span>
+                    </span>
+
+                    <span>
+                        <button class="category-actions" mat-icon-button (click)="rowActionsToggleMain($event, mainCities.id, 'main')"
+                        [matMenuTriggerFor]="categoryActionsMenu">
+                            <mat-icon (click)="toggleCities(i)">more_vert</mat-icon>
+                        </button>
+                    </span>
+                </mat-card>
+
+                <div class="sub-categories" *ngIf="mainCities.open">
+                    <mat-progress-bar color="accent" mode="indeterminate" *ngIf="mainCities.loading">
+                    </mat-progress-bar>
+                    <p class="no-category" *ngIf="!mainCities.loading && mainCities.store_location.length === 0">No
+                        store
+                        location
+                        found.
+                    </p>
+
+                    <div class="sub-categories-wrapper" cdkDropList (cdkDropListDropped)="citiesSort($event, i)">
+                        <!-- Sub Categories -->
+                        <ng-container *ngFor="let storeLocation of mainCities.store_location; let j = index">
+                            <mat-card class="category-title-wrapper" cdkDrag (click)="toggleStoreLocation(i, j)">
+                                <span>
+                                  <mat-icon class="cat-drag-handle" cdkDragHandle (mousedown)="storeLocationDragStart(i, j)">drag_indicator</mat-icon>
+                                  <span class="category-name">{{storeLocation.title}}</span>
+                                </span>
+                
+                                <span>
+                                  <span class="label" [class.success]="storeLocation.is_active">{{storeLocation.is_active ? "Active" : "Inactive"}}</span>
+                                  <button
+                                    class="category-actions"
+                                    mat-icon-button
+                                    (click)="rowActionsToggle($event, storeLocation.id, storeLocation.is_active, 'sub')"
+                                    [matMenuTriggerFor]="categoryActionsMenu"><mat-icon (click)="toggleStoreLocation(i, j)">more_vert</mat-icon></button>
+                                </span>
+                              </mat-card>
+                        </ng-container>
+                        <a
+                        mat-stroked-button
+                        color="primary"
+                        class="add-category-button" (click)="AddLocator()">+ Add Store Location</a>
+                    </div>
+                </div>
+            </ng-container>
+        </div>
+    </div>
+</main>
+
+  <mat-menu #categoryActionsMenu="matMenu">
+    <ng-template matMenuContent>
+        <ng-container *ngFor="let action of citiesActions">
+            <button mat-menu-item (click)="onCitiesAction(action)">{{action}}</button>
+        </ng-container>
+    </ng-template>
+  </mat-menu>

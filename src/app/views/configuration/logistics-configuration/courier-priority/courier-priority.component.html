@@ -1,0 +1,92 @@
+<main id="main">
+  <mat-progress-bar class="page-loader" color="accent" mode="indeterminate" *ngIf="loading"></mat-progress-bar>
+  <div class="page-header" fxLayout="row" fxLayoutAlign="space-between center">
+    <div>
+      <button mat-icon-button aria-label="Go back" class="header-back-arrow"
+          [routerLink]="['/',URLS.logisticConfiguration]">
+          <mat-icon>arrow_back</mat-icon>
+      </button>
+      <h1>Local Courier Priority</h1>
+  </div>
+  </div>
+
+
+  <div fxLayout="row">
+    <div fxFlex="0 1 500px">
+      <div fxLayout="row" fxLayoutAlign="space-between center">
+        <div>
+          <h4>Default priority</h4>
+        </div>
+
+        <div>
+          <button mat-flat-button color="primary" (click)="saveDefaultPriority()">Save</button>
+        </div>
+
+      </div>
+
+      <div class="sections-list-wrapper">
+        <div class="sections-list" cdkDropList (cdkDropListDropped)="defaultSortChanged($event)">
+          <mat-card class="section-name-wrapper" cdkDrag *ngFor="let courier of defaultPriority; let i = index">
+            <span>
+              <mat-icon cdkDragHandle>drag_indicator</mat-icon> {{ courier.courier_name }}
+            </span>
+          </mat-card>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+    <div  fxLayout="row">
+      <div fxFlex="0 1 500px">
+        <div class="space" fxLayout="row" fxLayoutAlign="space-between center">
+          <div>
+            <h4>Advance courier priority</h4>
+          </div>
+  
+          <div>
+            <button mat-flat-button color="primary" [disabled]="!isValid" (click)="saveAdvancePriority()" >Save</button>
+          </div>
+  
+        </div>
+        <div  *ngFor="let item of advancePriorrity; let i = index">
+          <div class="courier-space" fxLayout="row">
+            <div fxFlex="0 1 100%">
+            <mat-form-field appearance="outline">
+              <mat-label>Cities</mat-label>
+              <mat-select [(ngModel)]="item.main_city_id" (selectionChange)="onChange($event,i)">
+                <mat-option [value]="city.id" *ngFor="let city of cities">{{city.name}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+            <div>
+              <button mat-icon-button class="delete-commission-btn" color="warn" (click)="onRemove(item.id,i)">
+                <mat-icon>close</mat-icon>
+              </button>
+            </div>
+        </div>
+        <p *ngIf="i == errorIndex">This city is already selected.</p>
+          <div class="sections-list-wrapper">
+            <div class="sections-list" cdkDropList (cdkDropListDropped)="advancePrioritySortChanged($event, i)">
+              <mat-card class="section-name-wrapper" cdkDrag
+                *ngFor="let courier of item.courier_priority; let j = index">
+                <span>
+                  <mat-icon cdkDragHandle>drag_indicator</mat-icon> {{ courier.courier_name }}
+                </span>
+
+              </mat-card>
+            </div>
+
+          </div>
+
+        </div>
+        <div class="space">
+          <button mat-flat-button color="primary"(click)="addNewCityPrioorirty()" >Add new</button>
+        </div>
+
+      </div>
+
+    </div>
+</main>

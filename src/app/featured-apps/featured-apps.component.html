@@ -1,0 +1,121 @@
+<main id="main">
+    <div class="page-header" fxLayout="row" fxLayoutAlign="space-between center">
+        <h1>Featured apps</h1>
+    </div>
+
+    <div class="settings-section">
+        <div class="content" fxLayout="row" fxLayout.xs="column">
+            <div class="settings-section-cards" fxLayout="row wrap" fxFlex="grow">
+                <div class="settings-section-card" fxFlex="0 1 25%" fxFlex.md="0 1 50%" fxFlex.sm="0 1 100%" *ngIf=" userPermissions.notifications && !is_vendor">
+                    <mat-card class="mat-elevation-z4" [routerLink]="['/', URLs.pushNotification]" >
+                        <mat-card-header>
+                            <div mat-card-avatar [inlineSVG]="'/assets/img/PushNotificationIcon.svg'"></div>
+                            <mat-card-title>Push notifications</mat-card-title>
+                            <mat-card-subtitle>Push notifcation will help you to manage your marketing campaigns.
+                            </mat-card-subtitle>
+                        </mat-card-header>
+                    </mat-card>
+                </div>
+
+                <div class="settings-section-card" fxFlex="0 1 25%" fxFlex.md="0 1 50%" fxFlex.sm="0 1 100%" *ngIf=" userPermissions.sizechart">
+                    <mat-card class="mat-elevation-z4" [routerLink]="['/', URLs.sizeChart]" >
+                        <mat-card-header>
+                            <div mat-card-avatar [inlineSVG]="'/assets/img/sizeChartIcon.svg'"></div>
+                            <mat-card-title>Size chart</mat-card-title>
+                            <mat-card-subtitle>Create and customize the size charts to show on your website.
+                            </mat-card-subtitle>
+                        </mat-card-header>
+                    </mat-card>
+                </div>
+
+                <div class="settings-section-card" fxFlex="0 1 25%" fxFlex.md="0 1 50%" fxFlex.sm="0 1 100%" *ngIf=" userPermissions.loyalty && !is_vendor" >
+                    <mat-card class="mat-elevation-z4" [routerLink]="['/', URLs.loyality]">
+                        <mat-card-header>
+                            <div mat-card-avatar class="Loyality" [inlineSVG]="'/assets/img/Loyality.svg'"></div>
+                            <mat-card-title>Loyalty</mat-card-title>
+                            <mat-card-subtitle>Reward your customers with points based on their spending patterns.
+                            </mat-card-subtitle>
+                        </mat-card-header>
+                    </mat-card>
+                </div>
+                <div class="settings-section-card" fxFlex="0 1 25%" fxFlex.md="0 1 50%" fxFlex.sm="0 1 100%"
+                    *ngIf="userPermissions.wishlist">
+                    <mat-card class="mat-elevation-z4" [routerLink]="['/', URLs.wishList]">
+                        <mat-card-header>
+                            <div mat-card-avatar class="Loyality" [inlineSVG]="'/assets/img/wishlistIcon.svg'">
+                            </div>
+                            <mat-card-title>Wishlists</mat-card-title>
+                            <mat-card-subtitle>Create your own personal wish lists based on trends.
+                            </mat-card-subtitle>
+                        </mat-card-header>
+                    </mat-card>
+                </div>
+
+                <div class="settings-section-card" fxFlex="0 1 25%" fxFlex.md="0 1 50%" fxFlex.sm="0 1 100%"
+                *ngIf="userPermissions.socialfeed">
+                <mat-card class="mat-elevation-z4" [routerLink]="['/', URLs.productSocialFeed]">
+                    <mat-card-header>
+                        <div mat-card-avatar class="Loyality" [inlineSVG]="'/assets/img/socialFeedIcon.svg'">
+                        </div>
+                        <mat-card-title>Product Social Feed</mat-card-title>
+                        <mat-card-subtitle>Customize new feeds and connect products on the admin panel with Facebook catalogues.
+                        </mat-card-subtitle>
+                    </mat-card-header>
+                </mat-card>
+            </div>
+                <div class="settings-section-card" fxFlex="0 1 25%" fxFlex.md="0 1 50%" fxFlex.sm="0 1 100%"
+                    *ngIf="userPermissions.storelocator">
+                    <mat-card class="mat-elevation-z4" [routerLink]="['/', URLs.storeLocator]">
+                        <mat-card-header>
+                            <div mat-card-avatar class="Loyality" [inlineSVG]="'/assets/img/locator.svg'">
+                            </div>
+                            <mat-card-title>Store Locator</mat-card-title>
+                            <mat-card-subtitle>Enables users to identify the nearest store of their desired outlet based on their current location.
+                            </mat-card-subtitle>
+                        </mat-card-header>
+                    </mat-card>
+                </div>
+
+                <div class="settings-section-card" fxFlex="0 1 25%" fxFlex.md="0 1 50%" fxFlex.sm="0 1 100%"
+                *ngIf="userPermissions.timeslot">
+                <mat-card class="mat-elevation-z4" [routerLink]="['/', URLs.timeSlot]">
+                    <mat-card-header>
+                        <!-- <mat-icon svgIcon="open_book"></mat-icon> -->
+                        <div mat-card-avatar class="Loyality" [inlineSVG]="'/assets/img/timeSlotsIcon.svg'">
+                        </div>
+                        <mat-card-title>Delivery Time slot</mat-card-title>
+                        <mat-card-subtitle>This feature enables the customer to indicate a  preferred date and time slot for the delivery of their product according to  their availability, leading to decreased number of missed & failed deliveries..
+                        </mat-card-subtitle>
+                    </mat-card-header>
+                </mat-card>
+            </div>
+                <div class="settings-section-card" fxFlex="0 1 25%" fxFlex.md="0 1 50%" fxFlex.sm="0 1 100%"
+                    *ngIf="userPermissions.order_return">
+                    <mat-card class="mat-elevation-z4" [routerLink]="['/', URLs.orderReturn]">
+                        <mat-card-header>
+                            <!-- <mat-icon svgIcon="open_book"></mat-icon> -->
+                            <div mat-card-avatar class="Loyality" [inlineSVG]="'/assets/img/locator.svg'">
+                            </div>
+                            <mat-card-title>Order Return</mat-card-title>
+                            <mat-card-subtitle>All details relevant to returned orders are mentioned here.
+                            </mat-card-subtitle>
+                        </mat-card-header>
+                    </mat-card>
+                </div>
+                <div class="settings-section-card" fxFlex="0 1 25%" fxFlex.md="0 1 50%" fxFlex.sm="0 1 100%"
+                    *ngIf="userPermissions.loyalty">
+                    <mat-card class="mat-elevation-z4" [routerLink]="['/', URLs.jobPosting]">
+                        <mat-card-header>
+                            <div mat-card-avatar class="Loyality" [inlineSVG]="'/assets/img/job-posting.svg'">
+                            </div>
+                            <mat-card-title>Jobs portal</mat-card-title>
+                            <mat-card-subtitle>Create job posting for hiring people based on their skills.
+                            </mat-card-subtitle>
+                        </mat-card-header>
+                    </mat-card>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+</main>

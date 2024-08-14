@@ -1,0 +1,30 @@
+.meta-fields-table {
+    width: 100%;
+
+    tr {
+        th {
+            border-bottom: 1px solid #e0e0e0;
+            text-align: left;
+        }
+        th, td {
+            padding: 12px;
+            vertical-align: middle;
+        }
+    }
+}
+.meta-fields-bottom {
+    margin-top: 12px;
+}
+.banner-file-input {
+    display: none;
+}
+.banner-preview-image {
+    max-height: 150px;
+    max-width: 100%;
+    border-radius: 5px;
+    display: block;
+    margin-bottom: 10px;
+}
+.recommended-resolution {
+    margin-top: 10px;
+}

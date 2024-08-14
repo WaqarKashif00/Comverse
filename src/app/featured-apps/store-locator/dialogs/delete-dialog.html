@@ -1,0 +1,11 @@
+<button mat-icon-button mat-dialog-close class="dialog-close"><mat-icon>close</mat-icon></button>
+<h2 *ngIf="data.type ==='sub'" mat-dialog-title>Delete Store Location</h2>
+<h2 *ngIf="data.type ==='main'" mat-dialog-title>Delete City</h2>
+<mat-dialog-content class="mat-typography">
+    <p *ngIf="data.type ==='sub'">Are you sure you want to delete: {{data.data.title}}?</p>
+    <p *ngIf="data.type ==='main'">Are you sure you want to delete: {{data.data.name}}?</p>
+</mat-dialog-content>
+<div mat-dialog-actions>
+    <button mat-stroked-button color="primary" mat-dialog-close>Cancel</button>
+    <button mat-flat-button color="warn" [disabled]="loading" (click)="deleteItem()">Delete</button>
+</div>

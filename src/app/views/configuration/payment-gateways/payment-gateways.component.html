@@ -1,0 +1,25 @@
+<main id="main">
+    <mat-progress-bar class="page-loader" color="accent" mode="indeterminate" *ngIf="loading"></mat-progress-bar>
+    <div class="page-header" fxLayout="row" fxLayoutAlign="space-between center">
+        <div>
+            <button mat-icon-button aria-label="Go back" class="header-back-arrow" [routerLink]="['/',URLS.configuration]">
+              <mat-icon>arrow_back</mat-icon>
+            </button>
+            <h1>Active Payment Gateways</h1>
+          </div>
+      
+          <div class="header-actions" fxLayout="row">
+            <button mat-flat-button color="primary" [routerLink]="['/',URLS.paymentGatewayForm]">Create new</button>
+          </div>
+    </div>
+
+
+    <div class="page-container">
+        <mat-card class="table-wrapper-card">
+            <datatable [data]="paymentGateways" [columns]="columns" [pagination]="true" [count]="totalCount"
+                [rowActions]="rowActions" (rowAction)="onRowAction($event)" [itemsPerPage]="pageSize"
+                (cellClick)="onCellClick($event)">
+            </datatable>
+        </mat-card>
+    </div>
+</main>

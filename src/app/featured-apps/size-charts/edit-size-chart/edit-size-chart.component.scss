@@ -1,0 +1,44 @@
+.active-status{
+    margin-bottom: 10px;
+}
+
+.space{
+    margin-top: 8px;    
+}
+
+.deleteButton{
+    align-items: center;
+    
+}
+.size-chart-container{
+    overflow: auto;
+}
+
+
+.field-container{
+    position: relative;
+    .button-space {
+        position: absolute;
+        top: 6px;
+        left: -40px
+    }
+    .deleteColumn{
+        position: absolute;
+        top: -35px;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+}
+
+.card-space{
+    margin-top: 18px
+}
+
+.size-chart-wrapper{
+    padding: 30px 0 0 30px;
+}
+
+.text-bold{
+    font-size: large;
+    font-weight: 500;
+}

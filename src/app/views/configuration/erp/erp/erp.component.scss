@@ -1,0 +1,32 @@
+.page-container{
+    [fxLayout= "row"]{
+        margin: 15px 0 0 0;
+    }
+}
+
+.save-button{
+    padding-bottom: 15px;
+    padding-right: 15px;
+
+}
+.add-button{
+    padding-top: 15px;
+    padding-left: 15px;
+}
+.mat-checkbox{
+    padding: 8px;
+}
+
+.mat-form-field+.mat-form-field {
+    margin-left: 8px;
+}
+.margin-1{
+    margin-bottom: 20px;
+}
+  
+.button-style{
+    padding: 10px 10px 0px 0px ;
+}
+.trggers-margin{
+    margin-left: 12px;
+}

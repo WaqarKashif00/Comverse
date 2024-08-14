@@ -1,0 +1,174 @@
+<main id="main">
+    <mat-progress-bar class="page-loader" color="accent" mode="indeterminate" *ngIf="loading"></mat-progress-bar>
+    <div class="page-header" fxLayout="row" fxLayoutAlign="space-between center">
+        <h1>Add variant</h1>
+
+        <div class="header-actions">
+            <a [routerLink]="['/', URLS.products, URLS.edit, productID]" mat-stroked-button color="primary">Cancel</a>
+            <button mat-flat-button color="primary" [disabled]="loading || !variantAvailable || !variantForm.valid" (click)="onSubmit()">Save</button>
+        </div>
+    </div>
+
+    <div class="page-container" [formGroup]="variantForm">
+        <mat-card>
+            <h2>Options</h2>
+
+            <mat-form-field appearance="outline" *ngFor="let option of productData.options; let i = index">
+                <mat-label>{{option.name}}</mat-label>
+                <input matInput formControlName="{{'option' + (i+1)}}" (change)="checkVariantAvailability()" />
+            </mat-form-field>
+
+            <p class="form-error" *ngIf="optionsError">{{optionsError}}</p>
+        </mat-card>
+
+        <mat-card *ngIf="!productData.is_multilocation">
+            <h2>Price</h2>
+
+            <div fxLayout="row wrap" *ngFor="let variantPricesGroup of variantForm.get('variant_prices')['controls']; let i = index">
+                <ng-container [formGroup]="variantPricesGroup">
+                    <div fxFlex="0 1 33.3333%">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Price</mat-label>
+                            <input matInput formControlName="price" type="number" />
+                            <span matSuffix>{{variantPrices[i].currency}}</span>
+                        </mat-form-field>
+                    </div>
+                    <div fxFlex="0 1 33.3333%">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Compare at price</mat-label>
+                            <input matInput formControlName="compare_at_price" type="number" />
+                            <span matSuffix>{{variantPrices[i].currency}}</span>
+                        </mat-form-field>
+                    </div>
+                    <div fxFlex="0 1 33.3333%">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Cost per item</mat-label>
+                            <input matInput formControlName="cost_per_item" type="number" />
+                            <span matSuffix>{{variantPrices[i].currency}}</span>
+                        </mat-form-field>
+                    </div>
+                </ng-container>
+            </div>
+        </mat-card>
+
+        <mat-card *ngIf="!productData.is_multilocation">
+            <h2>Inventory</h2>
+
+            <div fxLayout="row">
+                <div fxFlex="0 1 50%">
+                    <mat-form-field appearance="outline">
+                        <mat-label>SKU</mat-label>
+                        <input matInput formControlName="sku" />
+                        <mat-error *ngIf="variantForm.get('sku').hasError('required')">SKU is a required field.</mat-error>
+                    </mat-form-field>
+                </div>
+                <div fxFlex="0 1 50%">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Barcode</mat-label>
+                        <input matInput formControlName="barcode" />
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <div fxLayout="row" *ngFor="let variantPricesGroup of variantForm.get('variant_prices')['controls']; let i = index">
+                <ng-container [formGroup]="variantPricesGroup">
+                    <div fxFlex="0 1 50%" *ngFor="let variantInventoriesGroup of variantPricesGroup.get('variant_inventories')['controls']; let j = index">
+                        <ng-container [formGroup]="variantInventoriesGroup">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Quantity</mat-label>
+                                <input matInput type="number" formControlName="inventory_quantity" />
+                            </mat-form-field>
+                        </ng-container>
+                    </div>
+                </ng-container>
+            </div>
+        </mat-card>
+
+        <mat-card>
+            <h2>Weight</h2>
+
+            <div fxLayout="row">
+                <div fxFlex="0 1 50%">
+                    <mat-checkbox formControlName="is_physical" (change)="onPhysicalProductChange($event)">is a physical product.</mat-checkbox>
+                    <mat-form-field appearance="outline" style="margin-top: 20px" *ngIf="variantForm.get('is_physical').value">
+                        <mat-label>Weight</mat-label>
+                        <input matInput formControlName="weight" type="number" />
+                    </mat-form-field>
+                </div>
+            </div>
+        </mat-card>
+
+        <mat-card *ngIf="productData.is_multilocation">
+            <h2>SKU &amp; Barcode</h2>
+
+            <div fxLayout="row">
+                <div fxFlex="0 1 50%">
+                    <mat-form-field appearance="outline">
+                        <mat-label>SKU</mat-label>
+                        <input matInput formControlName="sku" />
+                        <mat-error *ngIf="variantForm.get('sku').hasError('required')">SKU is a required field.</mat-error>
+                    </mat-form-field>
+                </div>
+                <div fxFlex="0 1 50%">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Barcode</mat-label>
+                        <input matInput formControlName="barcode" />
+                    </mat-form-field>
+                </div>
+            </div>
+        </mat-card>
+
+        <mat-card *ngIf="productData.is_multilocation">
+            <h2>Location wise price and inventory</h2>
+
+            <div *ngFor="let variantPricesGroup of variantForm.get('variant_prices')['controls']; let i = index" class="variant-prices-wrapper">
+                <ng-container [formGroup]="variantPricesGroup">
+                    <h3>{{variantPrices[i].title}}</h3>
+
+                    <div fxLayout="row">
+                        <div fxFlex="1 1 auto">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Price</mat-label>
+                                <input matInput type="number" formControlName="price" />
+                                <span matSuffix>{{variantPrices[i].currency}}</span>
+                            </mat-form-field>
+                        </div>
+                        <div fxFlex="1 1 auto">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Compare at price</mat-label>
+                                <input matInput type="number" formControlName="compare_at_price" />
+                                <span matSuffix>{{variantPrices[i].currency}}</span>
+                            </mat-form-field>
+                        </div>
+                        <div fxFlex="1 1 auto">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Cost per item</mat-label>
+                                <input matInput type="number" formControlName="cost_per_item" />
+                                <span matSuffix>{{variantPrices[i].currency}}</span>
+                            </mat-form-field>
+                        </div>
+                    </div>
+
+                    <div *ngFor="let variantInventoriesGroup of variantPricesGroup.get('variant_inventories')['controls']; let j = index">
+                        <ng-container [formGroup]="variantInventoriesGroup">
+                            <div fxLayout="row">
+                                <div fxFlex="0 1 33.33333%" class="sublocations-wrapper">
+                                    <h4>{{variantPrices[i].sub_locations[j].title}}</h4>
+                                </div>
+                                <div fxFlex="0 1 33.33333%">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Quantity</mat-label>
+                                        <input matInput type="number" formControlName="inventory_quantity" />
+                                    </mat-form-field>
+                                </div>
+                            </div>
+
+                        </ng-container>
+                    </div>
+
+                </ng-container>
+
+            </div>
+        </mat-card>
+    </div>
+</main>

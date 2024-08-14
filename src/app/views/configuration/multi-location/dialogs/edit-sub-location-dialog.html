@@ -1,0 +1,72 @@
+<button mat-icon-button mat-dialog-close class="dialog-close"><mat-icon>close</mat-icon></button>
+<h2 mat-dialog-title>Edit Sub Location</h2>
+<mat-dialog-content class="mat-typography">
+    <form [formGroup]="subLocationForm">
+        <div fxLayout="row">
+            <div fxFlex="0 1 50%">
+                <mat-form-field  appearance="outline">
+                    <mat-label>Title</mat-label>
+                    <input matInput name="description" formControlName="title" />
+                </mat-form-field>
+            </div>
+            <div fxFlex="0 1 50%">
+
+                  <mat-form-field appearance="outline">
+                    <mat-label>Sub Location Group</mat-label>
+                    <mat-select formControlName="sub_location_group">
+                        <mat-option [value]="location.id" *ngFor="let location of subLocationGroupList">{{location.title}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                  
+            </div>
+        </div>
+        
+
+            <div fxLayout="row">
+               
+                <ng-container>
+
+                    <div fxFlex="0 1 50%">
+                           <!-- <mat-form-field appearance="outline">
+                            <mat-label>City</mat-label>
+                            <mat-select formControlName="city">
+                              <mat-option value="pak">Lahore</mat-option>
+                              <mat-option value="ind">Karachi</mat-option>
+                            </mat-select>
+                          </mat-form-field> -->
+                          <mat-form-field appearance="outline">
+                            <mat-label>City</mat-label>
+                            <mat-select formControlName="city">
+                                <mat-option [value]="citye.id" *ngFor="let citye of cityList">{{citye.name}}</mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                    </div>
+                </ng-container>
+                <div fxFlex="0 1 50%">
+                    <mat-form-field  appearance="outline">
+                        <mat-label>Zip Code</mat-label>
+                        <input type="number" matInput name="description" formControlName="zipcode" />
+                    </mat-form-field>
+                </div>
+            </div>
+        <div fxLayout="row">
+            <div fxFlex="0 1 50%">
+                <mat-checkbox class="example-margin" formControlName="is_warehouse">is warehouse</mat-checkbox>
+            </div>
+        </div>
+        <div fxLayout="row">
+            <div fxFlex="0 1 100%">
+                <mat-form-field  appearance="outline">
+                     <mat-label>Address</mat-label>
+                     <input matInput name="description" formControlName="address" />
+                 </mat-form-field>
+             </div>
+           
+        </div>
+    </form>
+
+</mat-dialog-content>
+<div mat-dialog-actions>
+    <button mat-stroked-button color="primary" mat-dialog-close>Cancel</button>
+    <button mat-flat-button color="primary" (click)="onSubmit()" [disabled]="!subLocationForm.valid || loading">Save</button>
+</div>

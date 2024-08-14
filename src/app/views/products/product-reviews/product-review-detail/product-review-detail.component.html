@@ -1,0 +1,21 @@
+<main id="main">
+    <mat-progress-bar class="page-loader" color="accent" mode="indeterminate" *ngIf="loading"></mat-progress-bar>
+    <div class="page-header" fxLayout="row" fxLayoutAlign="space-between center">
+      <div>
+        <button mat-icon-button aria-label="Go back" class="header-back-arrow" [routerLink]="['/',URLS.products, URLS.productsReviews]">
+          <mat-icon>arrow_back</mat-icon>
+        </button>
+        <h1>Reviews of {{productName}}</h1>
+      </div>
+    </div>
+  
+    <div class="page-container">
+      <mat-card class="table-wrapper-card">
+            <datatable [data]="productData" [columns]="columns" [pagination]="true"
+            [count]="totalCount" [rowActions]="rowActions"
+            [itemsPerPage]="pageLimit" [rowActions]="rowActions" (page)="onPage($event)" (rowAction)="onRowAction($event)">
+            </datatable>
+
+      </mat-card>
+    </div>
+  </main>

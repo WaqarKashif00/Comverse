@@ -1,0 +1,34 @@
+<main id="main">
+  <mat-progress-bar class="page-loader" color="accent" mode="indeterminate" *ngIf="loading"></mat-progress-bar>
+  <div class="page-header" fxLayout="row" fxLayoutAlign="space-between center">
+    <div>
+      <button mat-icon-button aria-label="Go back" class="header-back-arrow" [routerLink]="['/',URLS.wishList]">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      <h1>Wishlists Product</h1>
+    </div>
+  </div>
+
+  <div class="page-header" fxLayout="row">
+    <div fxFlex="0 1 24.66666%">
+      <mat-card>
+        <img mat-card-image src="{{productImage}}">
+        <mat-card-content>
+          <mat-card-title class="mat-card-font-size">{{productTitle}}</mat-card-title>
+          <mat-card-subtitle>{{productSKU}}</mat-card-subtitle>
+        </mat-card-content>
+        <mat-card-content>
+        </mat-card-content>
+      </mat-card>
+    </div>
+    <div fxFlex="0 1 75.66666%">
+      <h2>Intersted Customers</h2>
+
+      <mat-card class="table-wrapper-card">
+        <datatable [data]="wishListsProduct" [columns]="columns" [pagination]="true" [itemsPerPage]="pageSize"
+          [count]="totalCount" (page)="onPage($event)" (cellClick)="onCellClick($event)">
+        </datatable>
+      </mat-card>
+    </div>
+  </div>
+</main>

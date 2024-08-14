@@ -1,0 +1,53 @@
+<main id="main">
+  <mat-progress-bar class="page-loader" color="accent" mode="indeterminate" *ngIf="loading"></mat-progress-bar>
+  <div class="page-header" fxLayout="row" fxLayoutAlign="space-between center">
+      <h1>
+          <button mat-icon-button aria-label="Go back" (click)="goBack()" class="header-back-arrow">
+              <mat-icon>arrow_back</mat-icon>
+          </button>
+          SMS & Configurations
+      </h1>
+  </div>
+  <div class="page-container">
+      <div class="section-settings">
+          <div fxLayout="row">
+              <div  fxFlex="0 0 33.333333%">
+                  <mat-card-title>Delivery Content on triggers/events</mat-card-title>
+                  <mat-card-subtitle>Manage your events by sending a sms to your customers. </mat-card-subtitle>
+              </div>
+              <div fxFlex="1 1 50%">
+                  <mat-card>
+                      <mat-card-content>
+                          <mat-card-title>SMS Service Provider</mat-card-title>
+                          <mat-card-subtitle>Manage your service provider for sending messages.</mat-card-subtitle>
+                      </mat-card-content>
+                      <mat-card-content>
+                          <div fxLayout="row" fxLayoutAlign="space-between">
+                              <mat-card-title>Templates</mat-card-title>
+                              <mat-card-subtitle>Manage sms templates.</mat-card-subtitle>
+                              <mat-card-title class="link" (click)="manageTemplates()">Manage</mat-card-title>
+                          </div>
+                          <mat-card-subtitle>All Templates</mat-card-subtitle>
+                      </mat-card-content>
+                      <mat-card-content>
+                          <div fxLayout="row" fxLayoutAlign="space-between">
+                              <mat-card-title>Service Provider</mat-card-title>
+                              <mat-card-subtitle>Manage service provider accounts.</mat-card-subtitle>
+                              <mat-card-title class="link" (click)="manageProviders()">Manage</mat-card-title>
+                          </div>
+                          <mat-card-subtitle>All Service Providers</mat-card-subtitle>
+                      </mat-card-content>
+                      <mat-card-content>
+                        <div fxLayout="row" fxLayoutAlign="space-between">
+                            <mat-card-title>Logs</mat-card-title>
+                            <mat-card-subtitle>View SMS Logs.</mat-card-subtitle>
+                            <mat-card-title class="link" (click)="manageLogs()">View</mat-card-title>
+                        </div>
+                        <mat-card-subtitle>All SMS Logs</mat-card-subtitle>
+                    </mat-card-content>
+                  </mat-card>
+              </div>
+          </div>
+      </div>
+  </div>
+</main>

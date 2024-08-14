@@ -1,0 +1,130 @@
+<main id="main">
+    <mat-progress-bar class="page-loader" color="accent" mode="indeterminate" *ngIf="loading"></mat-progress-bar>
+    <div class="page-header" fxLayout="row" fxLayoutAlign="space-between center">
+        <div>
+            <button mat-icon-button aria-label="Go back" class="header-back-arrow" [routerLink]="['/',URLS.sizeChart]">
+                <mat-icon>arrow_back</mat-icon>
+            </button>
+            <h1> Edit size chart</h1>
+        </div>
+
+        <div class="header-actions">
+            <a [routerLink]="['/',URLS.sizeChart]" mat-stroked-button color="primary">Cancel</a>
+            <button mat-flat-button color="primary" [disabled]="loading || !editSizeChartForm.valid"
+                (click)="onSubmit()">Save</button>
+        </div>
+    </div>
+
+    <form [formGroup]="editSizeChartForm">
+        <div fxLayout="row">
+            <div fxFlex="0 1 66.66666%">
+                <mat-card>
+                    <div fxLayout="row">
+                        <div fxFlex="0 1 50%">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Title</mat-label>
+                                <input matInput formControlName="title" />
+                                <mat-error *ngIf="editSizeChartForm.get('title').hasError('required')">This field is required.</mat-error>
+                                <mat-error *ngIf="editSizeChartForm.get('title').hasError('pattern')">Special characters can not be used.</mat-error>
+                            </mat-form-field>
+                        </div>
+
+                    </div>
+
+                    <div fxLayout="row">
+                        <div class="active-status">
+                            <mat-checkbox formControlName="is_active">Active</mat-checkbox>
+                        </div>
+                        <div class="active-status">
+                            <mat-checkbox (change)="onDefaultSetting()" formControlName="default_setting">Default setting</mat-checkbox>
+                        </div>
+                    </div>
+
+                    <div fxLayout="row">
+                        <div class="active-status">
+                            <mat-checkbox formControlName="first_row_heading">First row heading</mat-checkbox>
+                        </div>
+                        <div class="active-status">
+                            <mat-checkbox formControlName="first_column_heading">First column heading</mat-checkbox>
+                        </div>
+                    </div>
+                    <ng-container>
+                        <div class="space" fxLayout="row">
+                            <div class="color-box" fxFlex="0 1 50%">
+                                <input class="color-picker" type="color" formControlName="header_bg_color" matInput />
+                                <mat-label class="color-box-text">Header background color</mat-label>
+                            </div>
+
+                            <div class="color-box" fxFlex="0 1 50%">
+                                <input class="color-picker" type="color" formControlName="grid_header_color" matInput />
+                                <mat-label class="color-box-text">Grid header color</mat-label>
+                            </div>
+                        </div>
+
+                        <div class="space" fxLayout="row">
+                            <div class="color-box" fxFlex="0 1 50%">
+                                <input class="color-picker" type="color" formControlName="grid_bg_color" matInput />
+                                <mat-label class="color-box-text">Grid background color</mat-label>
+                            </div>
+
+                            <div class="color-box" fxFlex="0 1 50%">
+                                <input class="color-picker" type="color" formControlName="grid_text_color" matInput />
+                                <mat-label class="color-box-text">Header text color</mat-label>
+                            </div>
+                        </div>
+
+                        <div class="space" fxLayout="row">
+                            <div class="color-box" fxFlex="0 1 50%">
+                                <input class="color-picker" type="color" formControlName="border_color" matInput />
+                                <mat-label class="color-box-text">Border color</mat-label>
+                            </div>
+                        </div>
+                    </ng-container>
+                </mat-card>
+            </div>
+        </div>
+
+        <div class="card-space" fxLayout="row">
+            <div fxFlex="0 1 100%">
+                <mat-card class="size-chart-container">
+                    <div fxLayout="row">
+                        <div>
+                            <button mat-flat-button color="primary" (click)="addRow()">
+                                Add row
+                            </button>
+                        </div>
+                        <div>
+                            <button mat-flat-button color="primary" (click)="addColumn()">
+                                Add column
+                            </button>
+                        </div>
+                    </div>
+                    <div class="size-chart-wrapper" fxLayout="column">
+                        <div fxFlex="0 1 100%" fxLayout="row"
+                            *ngFor="let chartRow of editSizeChartForm.get('chart')['controls']; let i = index">
+                            <div class="space" fxFlex="0 1 150px"
+                                *ngFor="let chartColumn of chartRow.get('values')['controls']; let j = index">
+                                <div class="field-container" [formGroup]="chartColumn">
+                                    <button class="deleteColumn" mat-icon-button
+                                        *ngIf="i == 0 && chartRow.get('values').length != 1" (click)="deleteColumn(j)">
+                                        <mat-icon>close</mat-icon>
+                                    </button>
+                                    <button class="button-space" mat-icon-button
+                                        *ngIf="j == 0 && editSizeChartForm.get('chart').length != 1"
+                                        (click)="deleteRow(i)">
+                                        <mat-icon>close</mat-icon>
+                                    </button>
+
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Text</mat-label>
+                                        <input [class.text-bold]="((editSizeChartForm.get('first_row_heading').value == true && i==0) || (editSizeChartForm.get('first_column_heading').value == true && j==0))"  matInput formControlName="column" />
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </mat-card>
+            </div>
+        </div>
+    </form>
+</main>

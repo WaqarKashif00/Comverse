@@ -1,0 +1,69 @@
+<main id="main">
+    <mat-progress-bar class="page-loader" color="accent" mode="indeterminate" *ngIf="loading"></mat-progress-bar>
+    <div class="page-header" fxLayout="row" fxLayoutAlign="space-between center">
+        <div>
+            <button mat-icon-button aria-label="Go back" class="header-back-arrow"
+                [routerLink]="['/',URLS.featuredApps]">
+                <mat-icon>arrow_back</mat-icon>
+            </button>
+            <h1>Delivery Time slot</h1>
+        </div>
+
+        <div class="header-actions">
+            <a [routerLink]="['/', URLS.timeSlot, URLS.createTimeSlot]" mat-flat-button color="primary">Create new</a>
+        </div>
+    </div>
+
+    <div class="page-container">
+        <mat-card class="table-wrapper-card">
+            <mat-tab-group>
+                <mat-tab label="Time Slots">
+                    <datatable [data]="timeSlots" [columns]="columns" [pagination]="true" [count]="totalCount"
+                        [itemsPerPage]="pageSize" [rowActions]="rowActions" (page)="onPageChange($event)"
+                        (cellClick)="onCellClick($event)" (rowAction)="onRowAction($event)">
+                    </datatable>
+                </mat-tab>
+
+                <mat-tab label="Setting">
+                    <form class="setting-form" [formGroup]="timeSlotSettingForm">
+                        <div fxLayout="row">
+                            <div fxFlex="0 1 50%">
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Off day</mat-label>
+                                    <mat-select multiple formControlName="day">
+                                        <mat-option [value]='item.value' *ngFor="let item of daysArray">{{item.title}}</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+
+                            <div fxFlex="0 1 50%">
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Day count</mat-label>
+                                    <input matInput type="number" min="0" formControlName="day_count" />
+                                </mat-form-field>
+                            </div>
+
+
+                        </div>
+                        <div fxLayout="row">
+                            <mat-checkbox class="space" formControlName="enable_slots">Enable slots</mat-checkbox>
+                        </div>
+                        <div class="message-row" fxLayout="row" fxLayoutAlign="space-between">
+                            <div fxFlex="0 1 50%">
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Message</mat-label>
+                                    <textarea rows="5" formControlName="message" matInput
+                                        placeholder="Write your message"></textarea>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="save-button" fxLayoutAlign="end">
+                            <a mat-flat-button [disabled]="loading || !timeSlotSettingForm.valid" (click)="onSubmit()"
+                                color="primary">Save</a>
+                        </div>
+                    </form>
+                </mat-tab>
+            </mat-tab-group>
+        </mat-card>
+    </div>
+</main>

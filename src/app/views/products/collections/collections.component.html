@@ -1,0 +1,36 @@
+<main id="main">
+    <mat-progress-bar class="page-loader" color="accent" mode="indeterminate" *ngIf="loading"></mat-progress-bar>
+    <div class="page-header" fxLayout="row" fxLayoutAlign="space-between center">
+        <h1>Collections</h1>
+
+        <div class="header-actions">
+            <button mat-stroked-button color="primary" *ngIf="collectionSelection.hasValue()" [matMenuTriggerFor]="bulkActionsMenu">Bulk actions <mat-icon>arrow_drop_down</mat-icon></button>
+            <mat-menu #bulkActionsMenu="matMenu">
+                <ng-template matMenuContent>
+                    <button mat-menu-item (click)="bulkChangeStatus()">Change active status</button>
+                    <button mat-menu-item (click)="bulkChangeApprovalStatus()">Change approval status</button>
+                    <button mat-menu-item (click)="bulkDeleteCollections()">Delete</button>
+                </ng-template>
+            </mat-menu>
+
+            <a [routerLink]="['/', URLS.collections, URLS.add]" mat-flat-button color="primary">Create new</a>
+        </div>
+    </div>
+
+    <mat-card class="table-wrapper-card">
+        <datatable [data]="collections"
+                    [columns]="displayedColumns"
+                    [selectable]="true"
+                    [(selection)]="collectionSelection"
+                    [searchColumns]="searchColumns"
+                    [rowActions]="rowActions"
+                    [searchable]="true"
+                    [filters]="filtersArray"
+
+                    (search)="onSearch($event)"
+                    (filter)="onFilter($event)"
+                    (cellClick)="onCellClick($event)"
+                    (rowAction)="onRowAction($event)">
+        </datatable>
+    </mat-card>
+</main>

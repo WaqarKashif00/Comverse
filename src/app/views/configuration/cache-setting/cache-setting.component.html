@@ -1,0 +1,103 @@
+<main id="main">
+  <mat-progress-bar class="page-loader" color="accent" mode="indeterminate" *ngIf="loading"></mat-progress-bar>
+  <div class="page-header" fxLayout="row" fxLayoutAlign="space-between center">
+    <div>
+      <button mat-icon-button aria-label="Go back" class="header-back-arrow" [routerLink]="['/',URLS.configuration]">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      <h1>Cache Settings</h1>
+    </div>
+
+    <div class="header-actions" fxLayout="row">
+      <button mat-flat-button color="primary" [disabled]="loading || !sendCacheSettingForm.valid"
+        (click)="onSubmit()">Save Settings
+      </button>
+      <button mat-flat-button color="primary" [matMenuTriggerFor]="saveMenu">Clear Cache <mat-icon>expand_more
+        </mat-icon>
+      </button>
+    </div>
+  </div>
+
+  <form class="page-container" [formGroup]="sendCacheSettingForm">
+    <div class="settings-section">
+      <div fxLayout="row">
+        <div fxFlex="0 1 33.333333%">
+          <h2>Enable Cache</h2>
+          <p>Enable cache for diffrent parts of your web page and customize cache as per your interests or liking.</p>
+        </div>
+        <div fxFlex="1 1 auto">
+          <mat-card>
+            <div fxLayout="column">
+              <p>
+                <mat-checkbox class="bold" formControlName="enable_cache">Enable Cache</mat-checkbox>
+              </p>
+              <ng-container *ngIf="sendCacheSettingForm.get('enable_cache').value == true">
+                <p fxLayout="column">
+                  <mat-checkbox formControlName="homepage_enable">HomePage</mat-checkbox>
+                  <mat-checkbox formControlName="header_enable">Header</mat-checkbox>
+                  <mat-checkbox formControlName="footer_enable">Footer</mat-checkbox>
+                  <mat-checkbox formControlName="pages_enable">Static Pages</mat-checkbox>
+                </p>
+              </ng-container>
+            
+            </div>
+            <!-- <div fxLayout="column">
+              <p>
+                <mat-checkbox formControlName="enable_cache">Enable Cache</mat-checkbox>
+              </p>
+              <p>
+                <mat-checkbox formControlName="homepage_enable">HomePage</mat-checkbox>
+              </p>
+              <p>
+                <mat-checkbox formControlName="header_enable">Header</mat-checkbox>
+              </p>
+              <p>
+                <mat-checkbox formControlName="footer_enable">Footer</mat-checkbox>
+              </p>
+              <p>
+                <mat-checkbox formControlName="pages_enable">Static Pages</mat-checkbox>
+              </p>
+            </div> -->
+          </mat-card>
+        </div>
+      </div>
+    </div>
+
+    <div class="settings-section">
+      <div fxLayout="row">
+        <div fxFlex="0 1 33.333333%">
+          <h2>Clear Cache</h2>
+          <p>Cache saves some information from websites in its cache and cookies. Clearing them fixes certain problems, like loading or formatting issues on sites.</p>
+        </div>
+        <div fxFlex="1 1 auto">
+          <mat-card>
+            <div fxLayout="column">
+              <p>
+                <mat-checkbox class="bold" formControlName="auto_reset">Enable Auto Clear</mat-checkbox>
+              </p>
+              <ng-container *ngIf="sendCacheSettingForm.get('auto_reset').value == true">
+
+                <p fxLayout="column" >
+                  <mat-checkbox formControlName="homepage_reset">HomePage</mat-checkbox>
+                  <mat-checkbox formControlName="header_reset">Header</mat-checkbox>
+                  <mat-checkbox formControlName="header_reset">Header</mat-checkbox>
+                  <mat-checkbox formControlName="footer_reset">Footer</mat-checkbox>
+                  <mat-checkbox formControlName="pages_reset">Static Pages</mat-checkbox>
+                </p>
+              </ng-container>
+            </div>
+          </mat-card>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <mat-menu #saveMenu="matMenu">
+    <button mat-menu-item (click)="clearCache('')">Auto Clear</button>
+    <button mat-menu-item (click)="clearCache('homepage')">Clear Homepage</button>
+    <button mat-menu-item (click)="clearCache('header')">Clear Header</button>
+    <button mat-menu-item (click)="clearCache('footer')">Clear Footer</button>
+    <button mat-menu-item (click)="clearCache('pages')">Clear Staticpages</button>
+  </mat-menu>
+
+</main>

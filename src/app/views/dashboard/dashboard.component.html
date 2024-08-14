@@ -1,0 +1,245 @@
+<main id="main">
+    <mat-progress-bar class="page-loader" color="accent" mode="indeterminate" *ngIf="loading"></mat-progress-bar>
+    <div id="dashboard-cards">
+        <div fxLayout="row">
+            <div fxFlex="0 1 25%">
+                <mat-card>
+                    <h4 >Total Revenue</h4>
+                    <p class="dashboard-card-value">
+                        <mat-icon color="primary">inbox</mat-icon> {{totalSale | currency: storeCurrency + ' '}}
+                    </p>
+                </mat-card>
+            </div>
+            <div fxFlex="0 1 25%">
+                <mat-card>
+                    <h4 >Net Sales</h4>
+                    <p class="dashboard-card-value">
+                        <mat-icon color="primary">payments</mat-icon> {{netSale | currency: storeCurrency + ' '}}
+                    </p>
+                </mat-card>
+            </div>
+
+            <div fxFlex="0 1 50%">
+                <mat-card>
+                    <h4>Filter by date range</h4>
+                    <div fxLayout="row" >
+                        <div fxFlex="0 1 50%" class="date-filter" >
+                            <mat-form-field   appearance="outline">
+                                <mat-label>start date</mat-label>
+                                <input type="date" (change)="dateFilter()" [(ngModel)]="start_date" matInput />
+                            </mat-form-field>
+                        </div>
+
+                        <div fxFlex="0 1 50%" class="date-filter"  >
+                            <mat-form-field    appearance="outline">
+                                <mat-label>end date</mat-label>
+                                <input type="date" (change)="dateFilter()" [(ngModel)]="end_date" matInput />
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </mat-card>
+            </div>
+        </div>
+
+        <div class="card-row" fxLayout="row">
+            <div fxFlex="0 1 25%">
+                <mat-card>
+                    <h4 > Avg Basket Analysis</h4>
+                    <div fxLayoutAlign="space-between" fxLayout="row">
+                        <div fxLayout="column">
+                            <h4 class="card-value">{{average_basket_size}}</h4>
+                            <p class="card-text">Basket size</p>
+                        </div>
+
+                        <div fxLayout="column">
+                            <h4 class="card-value">{{average_basket_value}}</h4>
+                            <p class="card-text">Basket Value</p>
+                        </div>
+                    </div>
+                </mat-card>
+            </div>
+
+            <div fxFlex="0 1 75%">
+                <mat-card>
+                    <h4 >Order Analysis</h4>
+                    <div fxLayoutAlign="space-between" fxLayout="row">
+                        <div fxLayout="column">
+                            <h4 class="card-value">{{total_orders}}</h4>
+                            <p class="card-text">Total Orders</p>
+                        </div>
+
+                        <div fxLayout="column">
+                            <h4 class="card-value">{{canceled_orders_count}}</h4>
+                            <p class="card-text">Total Cancelled</p>
+                        </div>
+
+                        <div fxLayout="column">
+                            <h4 class="card-value">{{returned_orders_count}}</h4>
+                            <p class="card-text">Total Returned</p>
+                        </div>
+                    </div>
+                </mat-card>
+            </div>
+
+            <div *ngIf="!is_vendor" fxFlex="0 1 25%">
+                <mat-card>
+                    <mat-form-field class="vendor-field" appearance="outline">
+                        <mat-label>Vendor</mat-label>
+                        <mat-select [value]="defaultSelected" (selectionChange)="onVendorChange($event)">
+                            <mat-option [value]="defaultSelected">All</mat-option>
+                            <mat-option [value]="vendor.id" *ngFor="let vendor of vendors">{{vendor.name}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </mat-card>
+            </div>
+        </div>
+        <div class="card-row" fxLayout="row">
+            <div fxFlex="0 1 50%">
+                <mat-card>
+                    <h4 >General Analysis</h4>
+                    <div fxLayoutAlign="space-between" fxLayout="row">
+                        <div *ngIf="vendorID =='' && !is_vendor" fxLayout="column">
+                            <h4 class="card-value">{{total_vendor_count}}</h4>
+                            <p class="card-text">Total Vendors</p>
+                        </div>
+
+                        <div fxLayout="column">
+                            <h4 class="card-value">{{total_collections_count}}</h4>
+                            <p class="card-text">Total Collections</p>
+                        </div>
+
+
+                        <div fxLayout="column">
+                            <h4 class="card-value">{{total_product_group_count}}</h4>
+                            <p class="card-text">Total Product Groups</p>
+                        </div>
+                    </div>
+                </mat-card>
+            </div>
+
+            <div fxFlex="0 1 50%">
+                <mat-card>
+                    <h4 >Product Analysis</h4>
+                    <div fxLayoutAlign="space-between" fxLayout="row">
+                        <div fxLayout="column">
+                            <h4 class="card-value">{{total_products_count}}</h4>
+                            <p class="card-text">Total Products</p>
+                        </div>
+
+                        <div fxLayout="column">
+                            <h4 class="card-value">{{total_active_products_count}}</h4>
+                            <p class="card-text">Total Active Products</p>
+                        </div>
+
+                        <div fxLayout="column">
+                            <h4 class="card-value">{{total_inactive_products_count}}</h4>
+                            <p class="card-text">Total Unactive Products</p>
+                        </div>
+                    </div>
+                </mat-card>
+            </div>
+        </div>
+
+        <div *ngIf="vendorID !=''" class="card-row" fxLayout="row">
+            <div fxFlex="0 1 100%">
+                <mat-card>
+                    <h4 >Vendor Sales Analysis</h4>
+                    <div fxLayoutAlign="space-between" fxLayout="row">
+                          <div fxLayout="column">
+                            <h4 class="card-value">{{total_vendor_orders}}</h4>
+                            <p class="card-text">Total vendor orders</p>
+                        </div>
+
+
+                        <div fxLayout="column">
+                            <h4 class="card-value">{{total_value}}</h4>
+                            <p class="card-text">Total value</p>
+                        </div>
+
+                        <div fxLayout="column">
+                            <h4 class="card-value">{{paid_value}}</h4>
+                            <p class="card-text">Total Paid value</p>
+                        </div>
+
+                        <div fxLayout="column">
+                            <h4 class="card-value">{{pending_value}}</h4>
+                            <p class="card-text">Total Pending Value</p>
+                        </div>
+
+                        <div fxLayout="column">
+                            <h4 class="card-value">{{commission_value}}</h4>
+                            <p class="card-text">Commission</p>
+                        </div>
+                    </div>
+                </mat-card>
+            </div>
+        </div>
+
+        <div class="card-row" fxLayout="row">
+            <div #containerRef fxFlex="0 1 50%">
+                <mat-card [class.emptyChart]="!soldItemLengthCheck" fxFlex="0 1 100%">
+                    <div #containerRef>
+                        <h4 >Top 10 Sold Items</h4>
+                        <ngx-charts-pie-chart *ngIf="soldItemLengthCheck" [results]="topSolditems" [scheme]="'natural'"
+                            [legendTitle]="'Product Sale Report'"  [view]="[containerRef.offsetWidth , 300]"
+                            [gradient]="false" [labels]="true">
+                            <ng-template #tooltipTemplate let-model="model">
+                                <p>{{model.name}}</p>
+                                <p>{{model.value}}%</p>
+                              </ng-template>
+                        </ngx-charts-pie-chart>
+                    </div>
+                    <h2 class="emptyChartError" fxLayoutAlign="center center" *ngIf="!soldItemLengthCheck">No data found</h2>
+
+                </mat-card>
+
+            </div>
+            <div fxFlex="0 1 50%">
+                <mat-card [class.emptyChart]="!saleByCityLengthCheck" fxFlex="0 1 100%">
+                    <div  #containerRef2>
+                        <h4 >Sale by Cities</h4>
+                        <ngx-charts-bar-vertical *ngIf="saleByCityLengthCheck" [view]="[containerRef2.offsetWidth, 300]" [results]="saleByCity"
+                            [scheme]="'cool'"  [xAxis]="true" [yAxis]="true"
+                            [gradient]="true">
+                        </ngx-charts-bar-vertical>
+                    </div>
+                    <h2 class="emptyChartError" fxLayoutAlign="center center" *ngIf="!saleByCityLengthCheck">No data found</h2>
+
+                </mat-card>
+
+            </div>
+        </div>
+
+        <div class="card-row" fxLayout="row">
+            <div #containerRef fxFlex="0 1 50%">
+                <mat-card [class.emptyChart]="!saleByCategoryLengthCheck" fxFlex="0 1 100%">
+                    <div #containerRef3>
+                        <h4 >Sale by Category</h4>
+                        <ngx-charts-bar-horizontal *ngIf="saleByCategoryLengthCheck" [view]="[containerRef3.offsetWidth , 300]" [results]="saleByCategory"
+                            [scheme]="'natural'" [xAxisLabel]="'Products'" 
+                            [yAxisLabel]="'Sale'" [xAxis]="true" [yAxis]="true" [gradient]="true">
+                        </ngx-charts-bar-horizontal>
+                    </div>
+                    <h2 class="emptyChartError" fxLayoutAlign="center center" *ngIf="!saleByCategoryLengthCheck">No data found</h2>
+                </mat-card>
+            </div>
+
+            <div #containerRef fxFlex="0 1 50%">
+                <mat-card [class.emptyChart]="!lastMonthSalesLengthCheck" fxFlex="0 1 100%">
+                    <div #containerRef4>
+                        <h4 >Last month sales</h4>
+                        <ngx-charts-bar-vertical *ngIf="lastMonthSalesLengthCheck" [view]="[containerRef4.offsetWidth, 300]" [roundEdges]="false" [results]="lastMonthSales"
+                            [scheme]="'nightLights'"  [xAxis]="true" [yAxis]="true" [gradient]="false">
+                            <ng-template #tooltipTemplate let-model="model">
+                                <p>Day {{model.name}}</p>
+                                <p>{{model.value}}</p>
+                              </ng-template>
+                        </ngx-charts-bar-vertical>
+                    </div>
+                    <h2 class="emptyChartError" fxLayoutAlign="center center" *ngIf="!lastMonthSalesLengthCheck">No data found</h2>
+                </mat-card>
+            </div>
+        </div>
+    </div>
+</main>

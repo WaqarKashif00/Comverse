@@ -1,0 +1,76 @@
+<main id="main">
+    <mat-progress-bar class="page-loader" color="accent" mode="indeterminate" *ngIf="loading"></mat-progress-bar>
+    <div class="page-header" fxLayout="row" fxLayoutAlign="space-between center">
+        <h1>Store Setting</h1>
+
+        <div class="header-actions">
+            <a [routerLink]="['/', URLS.configuration]" mat-stroked-button color="primary">Cancel</a>
+            <button mat-flat-button color="primary" [disabled]="loading" (click)="onSave()">Save</button>
+        </div>
+    </div>
+    <div class="page-container">
+
+        <form [formGroup]="storeSettingForm">
+            <div fxLayout="row">
+                <div fxFlex="0 1 66.666666%">
+                    <mat-card>
+                        <div fxLayout="row">
+                            <div fxFlex="0 1 50%">
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Commission Type</mat-label>
+                                    <mat-select formControlName="commission_type">
+                                        <mat-option value="vendor_wise">Vendor wise</mat-option>
+                                        <mat-option value="category_wise">Category wise</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+
+                            <div fxFlex="0 1 50%">
+                                <tags-input label="Domains" [showRemove]="true" [(value)]="domains"></tags-input>
+
+                            </div>
+
+                        </div>
+                        <div fxLayout="row">
+                            <div fxFlex="0 1 50%">
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Unique Identifier</mat-label>
+                                    <mat-select formControlName="unique_identifier">
+                                        <mat-option value="sku">SKU</mat-option>
+                                        <mat-option value="barcode">Barcode</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+
+                            <div fxFlex="0 1 50%">
+                                <mat-checkbox formControlName="development">Development</mat-checkbox>
+                            </div>
+                        </div>
+
+                        <div fxLayout="row">
+                            <div fxFlex="0 1 50%">
+                                <mat-checkbox formControlName="search_by_image">Search by Image</mat-checkbox>
+
+                            </div>
+
+                            <div fxFlex="0 1 50%">
+                                <mat-checkbox formControlName="vendor_wise_fulfillment">Vendor wise fullfilment</mat-checkbox>
+                            </div>
+                        </div>
+
+                        <div class="space" fxLayout="row">
+                            <div fxFlex="0 1 50%">
+                                <mat-checkbox formControlName="multi_location">Multi Location</mat-checkbox>
+
+                            </div>
+
+                            <div fxFlex="0 1 50%">
+                                <mat-checkbox formControlName="vendor_wise_erp">Vendor wise ERP</mat-checkbox>
+                            </div>
+                        </div>
+                    </mat-card>
+                </div>
+            </div>
+        </form>
+    </div>
+</main>

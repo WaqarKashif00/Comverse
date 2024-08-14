@@ -1,0 +1,25 @@
+<main id="main">
+    <mat-progress-bar class="page-loader" color="accent" mode="indeterminate" *ngIf="loading"></mat-progress-bar>
+    <div class="page-header" fxLayout="row" fxLayoutAlign="space-between center">
+        <div>
+            <button mat-icon-button aria-label="Go back" class="header-back-arrow"
+                [routerLink]="['/',URLS.multiLocation]">
+                <mat-icon>arrow_back</mat-icon>
+            </button>
+            <h1> Locations</h1>
+        </div>
+
+        <div class="header-actions">
+            <a mat-flat-button color="primary" [routerLink]="['/', URLS.multiLocation, URLS.createLocation]">Add Location</a>
+        </div>
+    </div>
+
+    <div class="page-container">
+        <mat-card class="table-wrapper-card">
+            <datatable [data]="locationList" [columns]="columns" [pagination]="true" [count]="totalCount"
+                [itemsPerPage]="pageSize" (page)="onPageChange($event)"
+                [rowActions]="rowActions" (rowAction)="onRowAction($event)" (cellClick)="onCellClick($event)">
+            </datatable>
+        </mat-card>
+    </div>
+</main>

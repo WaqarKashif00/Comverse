@@ -1,0 +1,24 @@
+<main id="main">
+  <mat-progress-bar class="page-loader" color="accent" mode="indeterminate" *ngIf="loading"></mat-progress-bar>
+  <div class="page-header" fxLayout="row" fxLayoutAlign="space-between center">
+    <h1>
+        Email Template
+    </h1>  
+    <div class="header-actions">
+          <a (click)="navigateToEmailConfiguration()" mat-stroked-button color="primary">Back</a>
+          <a (click)="onCreate()" mat-flat-button color="primary">Create new</a>
+      </div>
+  </div>
+
+  <div class="page-container">
+      <mat-card class="table-wrapper-card">
+          <datatable [data]="template_list"
+          [columns]="columns"
+          [rowActions]="rowActions"
+           
+          (page)="onPageChange($event)"
+          (rowAction)="onRowAction($event)">
+          </datatable>
+      </mat-card>
+  </div>
+</main>

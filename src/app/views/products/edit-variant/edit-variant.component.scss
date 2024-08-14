@@ -1,0 +1,8 @@
+.sublocations-wrapper {
+    padding-left: 20px;
+}
+.variant-prices-wrapper {
+    & + .variant-prices-wrapper {
+        margin-top: 50px;
+    }
+}

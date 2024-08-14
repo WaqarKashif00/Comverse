@@ -1,0 +1,42 @@
+<mat-card>
+  <div fxLayout="row">
+    <div fxFlex="0 1 50%">
+      <h4>Desktop banner</h4>
+
+      <image-selector
+        [multiple]="false"
+        [(files)]="data.desktop_img"
+        valueType="url"
+      ></image-selector>
+
+    </div>
+
+    <div fxFlex="0 1 50%">
+      <h4>Mobile banner</h4>
+
+      <image-selector
+        [multiple]="false"
+        [(files)]="data.mobile_img"
+        valueType="url"
+      ></image-selector>
+    </div>
+  </div>
+
+      <div fxLayout="row">
+        <div fxFlex="0 1 50%">
+          <mat-form-field appearance="outline">
+            <mat-label>Banner alt text</mat-label>
+            <input matInput [(ngModel)]="data.single_banner_text_alt" />
+          </mat-form-field>
+      
+        </div>
+      
+        <div fxFlex="0 1 50%">
+          <mat-form-field appearance="outline">
+            <mat-label>Link</mat-label>
+            <input matInput [(ngModel)]="data.link" />
+          </mat-form-field>
+      
+        </div>
+      </div>
+</mat-card>

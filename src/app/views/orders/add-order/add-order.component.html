@@ -1,0 +1,179 @@
+<main id="main">
+    <mat-progress-bar class="page-loader" color="accent" mode="indeterminate" *ngIf="loading"></mat-progress-bar>
+    <div class="page-header" fxLayout="row" fxLayoutAlign="space-between center">
+        <h1>New Order</h1>
+
+        <div class="header-actions">
+            <a [routerLink]="['/', URLS.orders]" mat-stroked-button color="primary">Cancel</a>
+            <button mat-flat-button color="primary" [disabled]="!lineitemsForm.valid || lineitemsForm.get('lineitems')['controls'].length < 1" (click)="onSubmit()">Save</button>
+        </div>
+    </div>
+
+    <div fxLayout="row">
+        <div fxFlex="0 1 50%">
+            <mat-card>
+                <h3>Order details</h3>
+
+                <variant-selector
+                    (addItems)="onAddItems($event)"
+                ></variant-selector>
+                <div class="order-lineitems" *ngIf="lineitemsForm.get('lineitems')['controls'].length">
+                    <div class="lineitem-wrapper" *ngFor="let lineitemGroup of lineitemsForm.get('lineitems')['controls']; let i = index">
+                        <ng-container [formGroup]="lineitemGroup">
+                            <div class="lineitem-productdata">
+                                <img [src]="lineitemGroup.get('image').value ? lineitemGroup.get('image').value : '/assets/img/placeholder-image.png'" />
+                                <div>
+                                    <span class="product-name">{{lineitemGroup.get('product_name').value}}</span>
+                                    <span class="variant_info">{{lineitemGroup.get('vendor_name').value}}<br>{{lineitemGroup.get('variant_title').value == "Default Title" ? "" : lineitemGroup.get('variant_title').value }}</span>
+                                </div>
+
+                            </div>
+                            <div class="lineitem-price-qty">
+                                
+                                {{lineitemGroup.get('price').value}} {{storeCurrency}} x <input type="number" class="lineitem-qty" min="1" formControlName="qty" (keydown)="onQtyKeydown($event)" (change)="onQtyChange()" />                                
+                            </div>
+
+                            <div class="lineitem-subtotal">
+                                <span>{{lineitemGroup.get('price').value * lineitemGroup.get('qty').value}} {{storeCurrency}}</span><br>
+                                <div class="shipping-container">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Shipping</mat-label>
+                                        <input matInput placeholder="shipping" type="number" (change)="updateTotals()"  formControlName="shipping_amount"/>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div>
+                                <button mat-icon-button color="warn" (click)="deleteLineItem(i)"><mat-icon>delete</mat-icon></button>
+                            </div>
+
+
+
+                        </ng-container>
+                    </div>
+                </div>
+                <div *ngIf="!lineitemsForm.get('lineitems')['controls'].length">
+                    <p class="no-lineitems">Browse products to add in the order.</p>
+                </div>
+
+                <div class="lineitems-total" *ngIf="lineitemsForm.get('lineitems')['controls'].length">
+                    <div fxLayout="row" fxLayoutAlign="space-between">
+                        <div>
+                            <span>Subtotal</span>
+                        </div>
+                        <div>
+                            <span>{{subTotal}} {{storeCurrency}}</span>
+                        </div>
+                    </div>
+                    <div fxLayout="row" fxLayoutAlign="space-between">
+                        <div>
+                            <span>Shipping</span>
+                        </div>
+                        <div>
+                            <span>{{totalShipping}} {{storeCurrency}}</span>
+                        </div>
+                    </div>
+                    <div fxLayout="row" fxLayoutAlign="space-between" class="lineitems-total-row">
+                        <div>
+                            <span>Total</span>
+                        </div>
+                        <div>
+                            <span>{{grandTotal}} {{storeCurrency}}</span>
+                        </div>
+                    </div>
+                </div>
+            </mat-card>
+
+            <mat-card>
+                <h3>Payment detail</h3>
+
+                <div fxLayout="row" fxLayoutAlign="space-between">
+                    <div>
+                        <span [class]="'label ' + (paymentStatus === 'Paid' ? 'success' : 'warning')" *ngIf="paymentStatus">Payment: {{paymentStatus}}</span>
+                    </div>
+                    <div>
+                        <button mat-stroked-button color="primary" (click)="changePaymentStatus('Pending')" *ngIf="paymentStatus !== 'Pending'" style="margin-right: 10px">Mark as Pending</button>
+                        <button mat-flat-button color="primary" (click)="changePaymentStatus('Paid')" *ngIf="paymentStatus !== 'Paid'">Mark as Paid</button>
+                    </div>
+                </div>
+            </mat-card>
+        </div>
+        <div fxFlex="0 1 50%">
+            <mat-card>
+                <div class="card-section">
+                    <h3>Add customer</h3>
+    
+                    <ng-select [items]="customers | async"
+                        bindLabel="first_name"
+                        bindValue="id"
+                        [trackByFn]="trackByFn"
+                        [minTermLength]="2"
+                        [loading]="customersLoading"
+                        [typeahead]="customerInput"
+                        [(ngModel)]="selectedCustomer"
+                    >
+                        <ng-template ng-label-tmp let-item="item">
+                            <div class="customer-dropdown-label">
+                                <span class="customer-name">{{item.first_name}} {{item.last_name}}</span>
+                                <span class="customer-email">{{item.email}}</span>
+                            </div>
+                        </ng-template>
+                        <ng-template ng-option-tmp let-item="item">
+                            <div class="customer-dropdown-label">
+                                <span class="customer-name">{{item.first_name}} {{item.last_name}}</span>
+                                <span class="customer-email">{{item.email}}</span>
+                            </div>
+                        </ng-template>
+                    </ng-select>
+                </div>
+                <div class="card-section">
+                    <div fxLayout="row" fxLayoutAlign="space-between">
+                        <div>
+                            <h3>Shipping address</h3>
+                        </div>
+                        <div>
+                            <button mat-button color="primary" (click)="onShippingAddress()">{{shippingAddress ? "Edit" : "Add address"}}</button>
+                        </div>
+                    </div>
+                    <p *ngIf="!shippingAddress">No address assigned.</p>
+                    <div *ngIf="shippingAddress">
+                        <p>{{shippingAddress.first_name}} {{shippingAddress.last_name}}</p>
+                        <p>{{shippingAddress.apartment}}, {{shippingAddress.address}}</p>
+                        <p>{{shippingAddress.city}} {{shippingAddress.postal_code}}, {{shippingAddress.country}}</p>
+                        <p>{{shippingAddress.phone}}</p>
+                    </div>
+                </div>
+                <div class="card-section">
+                    <div fxLayout="row" fxLayoutAlign="space-between">
+                        <div>
+                            <h3>Billing address</h3>
+                        </div>
+                        <div>
+                            <button mat-button color="primary" (click)="onBillingAddress()">{{billingAddress ? "Edit" : "Add address"}}</button>
+                        </div>
+                    </div>
+                    <p *ngIf="!billingAddress">No address assigned.</p>
+                    <div *ngIf="billingAddress">
+                        <p>{{billingAddress.first_name}} {{billingAddress.last_name}}</p>
+                        <p>{{billingAddress.apartment}}, {{billingAddress.address}}</p>
+                        <p>{{billingAddress.city}} {{billingAddress.postal_code}}, {{billingAddress.country}}</p>
+                        <p>{{billingAddress.phone}}</p>
+                    </div>
+                </div>
+            </mat-card>
+
+            <mat-card>
+                <h3>Add note</h3>
+
+                <mat-form-field appearance="outline">
+                    <textarea rows="5" matInput placeholder="Create note" [(ngModel)]="notes"></textarea>
+                </mat-form-field>
+            </mat-card>
+
+            <mat-card>
+                <h3>Add tags</h3> 
+
+                <tags-input [(value)]="tags"></tags-input>
+            </mat-card>
+        </div>
+    </div>
+</main>

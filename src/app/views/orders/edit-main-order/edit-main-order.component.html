@@ -1,0 +1,215 @@
+<main id="main">
+    <mat-progress-bar class="page-loader" color="accent" mode="indeterminate" *ngIf="loading"></mat-progress-bar>
+    <div class="page-header" fxLayout="row" fxLayoutAlign="space-between center">
+        <h1>Edit Order {{orderTitle}}</h1>
+
+        <div class="header-actions">
+            <a [routerLink]="['/', URLS.orders]" mat-stroked-button color="primary">Cancel</a>
+            <button mat-stroked-button color="primary" [matMenuTriggerFor]="actionsMenu">More actions</button>
+            <button mat-flat-button color="primary" (click)="onSubmit()">Save</button>
+        </div>
+    </div>
+
+    <div fxLayout="row">
+        <div fxFlex="0 1 60%">
+            <mat-card class="order-details">
+                <div fxLayout="row" fxLayoutAlign="space-between">
+                    <div>
+                        <h3>Order details</h3>
+                        <p class="order-number">Order No. {{orderNumber}}</p>
+                        <div *ngIf="orderStatus == 'Cancelled'">
+                            <span
+                                [class]="'label ' + (orderStatus === 'Cancelled' ? 'success' : 'warning')">{{orderStatus}}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="order-lineitems">
+                    <div class="lineitem-wrapper" [class.deleted]="lineitem.deleted"
+                        *ngFor="let lineitem of lineitems;">
+                        <div class="lineitem-productdata">
+                            <img
+                                [src]="lineitem.product_image ? lineitem.product_image : '/assets/img/placeholder-image.png'" />
+                            <div>
+                                <span class="product-name">{{lineitem.product_title}}</span>
+                                <span class="variant_info">{{lineitem.vendor}}<br>{{lineitem.variant_title !== "Default
+                                    Title" ? lineitem.variant_title : ""}}</span>
+                            </div>
+                        </div>
+                        <div class="lineitem-price-qty">
+                            {{lineitem.price}} {{storeCurrency}} x {{lineitem.quantity}}
+                        </div>
+                        <div class="lineitem-subtotal">
+                            <span>{{lineitem.subtotal}} {{storeCurrency}}</span>
+                            <div> Shipping: {{lineitem.shipping_amount}}</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="fulfillent-status">
+                    <div fxLayout="row" fxLayoutAlign="space-between">
+                        <div>
+                            <span class="label" [class.success]="fulfillmentStatus === 'Fulfilled'"
+                                [class.warning]="fulfillmentStatus === 'Partially Fulfilled'">{{fulfillmentStatus}}</span>
+                        </div>
+                        <div *ngIf="orderStatus !== 'Cancelled'">
+                            <button mat-flat-button color="primary" (click)="fullfilmentStatus('Fulfilled')"
+                                *ngIf="fulfillmentStatus !== 'Fulfilled'">Mark as Fulfilled</button>
+                            <button mat-stroked-button color="primary" (click)="fullfilmentStatus('Unfulfilled')"
+                                *ngIf="fulfillmentStatus !== 'Unfulfilled'" style="margin-left: 10px">Mark as
+                                Unfulfilled</button>
+                        </div>
+                    </div>
+                </div>
+            </mat-card>
+
+            <mat-card class="order-financial-details">
+                <div fxLayout="row" fxLayoutAlign="space-between">
+                    <div>
+                        <span>Subtotal</span>
+                    </div>
+                    <div>
+                        <span>{{subTotal}} {{storeCurrency}}</span>
+                    </div>
+                </div>
+                <div fxLayout="row" fxLayoutAlign="space-between">
+                    <div>
+                        <span>Shipping</span>
+                    </div>
+                    <div>
+                        <span>{{totalShipping}} {{storeCurrency}}</span>
+                    </div>
+                </div>
+                <div fxLayout="row" fxLayoutAlign="space-between" class="lineitems-total-row">
+                    <div>
+                        <span>Total</span>
+                    </div>
+                    <div>
+                        <span>{{grandTotal}} {{storeCurrency}}</span>
+                    </div>
+                </div>
+                <div fxLayout="row" fxLayoutAlign="space-between" *ngIf="paidAmount > 0">
+                    <div>
+                        <span>Paid amount</span>
+                    </div>
+                    <div>
+                        <span>{{paidAmount}} {{storeCurrency}}</span>
+                    </div>
+                </div>
+                <div class="payment-status">
+                    <div fxLayout="row" fxLayoutAlign="space-between">
+                        <div>
+                            <span class="label" [class.success]="paymentStatus === 'Paid'"
+                                [class.warning]="paymentStatus === 'Partially Paid'">Payment: {{paymentStatus}}</span>
+                        </div>
+                        <div *ngIf="orderStatus !== 'Cancelled'">
+                            <button mat-flat-button color="primary" (click)="paymentStatusCheck('Paid')"
+                                *ngIf="paymentStatus !== 'Paid'">Mark as Paid</button>
+                        </div>
+                    </div>
+                </div>
+            </mat-card>
+
+            <div fxLayout="row" fxLayoutAlign="space-between center">
+                <h2 style="margin-top: 20px">Child orders</h2>
+                <div>
+                    <a mat-stroked-button color="primary"
+                        [routerLink]="['/', URLS.orders, URLS.addChildOrder, orderID]">Add child order</a>
+                </div>
+            </div>
+            <mat-card class="table-wrapper-card">
+                <datatable [data]="childOrders" [columns]="childOrderColumns" (cellClick)="onCellClick($event)">
+                </datatable>
+            </mat-card>
+
+            <order-timeline [orderId]="orderID"></order-timeline>
+        </div>
+        <div fxFlex="0 1 40%">
+            <mat-card *ngIf="!isCancelled">
+                <h3>Status</h3>
+
+                <mat-form-field appearance="outline">
+                    <mat-select [(ngModel)]="orderStatus">
+                        <mat-option value="Open">Open</mat-option>
+                        <mat-option value="Accepted">Accepted</mat-option>
+                        <mat-option value="In Process">In Process</mat-option>
+                        <mat-option value="Shipped">Shipped</mat-option>
+                        <mat-option value="Partial Shipped">Partial Shipped</mat-option>
+                        <mat-option value="Delivered">Delivered</mat-option>
+                        <mat-option value="Returned">Returned</mat-option>
+                        <mat-option value="Refunded">Refunded</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </mat-card>
+
+            <mat-card>
+                <div class="card-section" *ngIf="customer">
+                    <h3>Customer detail</h3>
+                    <a [routerLink]="['/', URLS.customers, URLS.edit, customer.id]"
+                        target="_blank">{{customer.name}}</a>
+                </div>
+                <div class="card-section" *ngIf="customer">
+                    <h3>Contact information</h3>
+                    <p><a href="mailto: {{customer.email}}">{{customer.email}}</a></p>
+                    <p>{{customer.phone}}</p>
+                </div>
+                <div class="card-section">
+                    <div fxLayout="row" fxLayoutAlign="space-between">
+                        <div>
+                            <h3>Shipping Address</h3>
+                        </div>
+                        <div>
+                            <button mat-button color="primary" (click)="onShippingAddress()">{{shippingAddress ? "Edit"
+                                : "Add address"}}</button>
+                        </div>
+                    </div>
+
+                    <p *ngIf="!shippingAddress">No address assigned.</p>
+                    <div *ngIf="shippingAddress">
+                        <p>{{shippingAddress.first_name}} {{shippingAddress.last_name}}</p>
+                        <p>{{shippingAddress.apartment ? shippingAddress.apartment + ", " :
+                            ""}}{{shippingAddress.address}}</p>
+                        <p>{{shippingAddress.city}} {{shippingAddress.postal_code}}, {{shippingAddress.country}}</p>
+                        <p>{{shippingAddress.phone}}</p>
+                    </div>
+                </div>
+                <div class="card-section">
+                    <div fxLayout="row" fxLayoutAlign="space-between">
+                        <div>
+                            <h3>Billing Address</h3>
+                        </div>
+                        <div>
+                            <button mat-button color="primary" (click)="onBillingAddress()">{{billingAddress ? "Edit" :
+                                "Add address"}}</button>
+                        </div>
+                    </div>
+
+                    <p *ngIf="!billingAddress">No address assigned.</p>
+                    <div *ngIf="billingAddress">
+                        <p>{{billingAddress.first_name}} {{billingAddress.last_name}}</p>
+                        <p>{{billingAddress.apartment ? billingAddress.apartment + ", " : ""}}{{billingAddress.address}}
+                        </p>
+                        <p>{{billingAddress.city}} {{billingAddress.postal_code}}, {{billingAddress.country}}</p>
+                        <p>{{billingAddress.phone}}</p>
+                    </div>
+                </div>
+            </mat-card>
+            <mat-card>
+                <h3>Notes</h3>
+                <mat-form-field appearance="outline">
+                    <textarea rows="4" matInput placeholder="Add note" [(ngModel)]="notes"></textarea>
+                </mat-form-field>
+            </mat-card>
+
+            <mat-card>
+                <h3>Tags</h3>
+                <tags-input [(value)]="tags"></tags-input>
+            </mat-card>
+        </div>
+    </div>
+
+    <mat-menu #actionsMenu="matMenu">
+        <button mat-menu-item (click)="downloadInvoice()">Download invoice</button>
+        <button mat-menu-item (click)="refundOrder()" *ngIf="paidAmount > grandTotal">Refund</button>
+        <button mat-menu-item *ngIf="orderStatus !== 'Cancelled'" (click)="onCancelOrder()">Cancel order</button>
+    </mat-menu>
+</main>

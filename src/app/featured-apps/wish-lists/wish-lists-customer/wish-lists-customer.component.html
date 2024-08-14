@@ -1,0 +1,23 @@
+<main id="main">
+  <mat-progress-bar class="page-loader" color="accent" mode="indeterminate" *ngIf="loading"></mat-progress-bar>
+  <div class="page-header" fxLayout="row" fxLayoutAlign="space-between center">
+    <div>
+      <button mat-icon-button aria-label="Go back" class="header-back-arrow" [routerLink]="['/',URLS.wishList]">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      <h1>Wishlists Customer Products</h1>
+    </div>
+  </div>
+  <div class="page-container">
+    <div class="page-header" fxLayout="column">
+      <h2 class="margin">{{name}}</h2>
+      <p class="opacity">{{email}}</p>
+    </div>
+
+    <mat-card class="table-wrapper-card">
+      <datatable [data]="productData" [columns]="columns" [pagination]="true"
+      [count]="totalCount" (page)="onPage($event)" [itemsPerPage]="pageLimit" (cellClick)="onCellClick($event)">
+      </datatable>
+    </mat-card>
+  </div>
+</main>

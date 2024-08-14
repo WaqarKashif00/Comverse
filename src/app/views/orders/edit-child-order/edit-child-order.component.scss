@@ -1,0 +1,26 @@
+.card-section {
+    &+.card-section {
+        margin: 20px -16px 0;
+        padding: 20px 16px 0;
+        border-top: 1px solid #ddd;
+    }
+}
+
+.lineitem-wrapper {
+    &.deleted {
+
+        .product-name,
+        .lineitem-subtotal {
+            text-decoration: line-through;
+        }
+    }
+
+    .lineitem-qty {
+        margin-left: 2px;
+    }
+}
+
+
+.shipping-container {
+    width: 90px;
+}

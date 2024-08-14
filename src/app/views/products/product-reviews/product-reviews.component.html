@@ -1,0 +1,28 @@
+<main id="main">
+    <mat-progress-bar class="page-loader" color="accent" mode="indeterminate" *ngIf="loading"></mat-progress-bar>
+    <div class="page-header" fxLayout="row" fxLayoutAlign="space-between center">
+      <div>
+        <h1>Customer Reviews</h1>
+      </div>
+    </div>
+  
+    <div class="page-container">
+      <mat-card class="table-wrapper-card">
+        <mat-tab-group>
+          <mat-tab label="Product Wise">
+            <datatable [data]="productWiseData" [columns]="columns" [pagination]="true"
+            [searchable]="true" [count]="totalCount" [itemsPerPage]="pageLimit"  
+            (page)="onPage($event)"  (cellClick)="onCellClick($event)" (search)="onSearch($event)">
+            </datatable>
+          </mat-tab>
+  
+          <mat-tab label="Latest Reviews">
+            <datatable [data]="latestReviewData" [columns]="columnsLatestReview" [pagination]="true"  [searchable]="true"
+            [rowActions]="rowActions" [filters]="filters" [itemsPerPage]="pageLimitLatestReviews" [count]="totalLatestReviewCount"  (page)="onPageCustomers($event)"
+            (filter)="onFilter($event)" (rowAction)="onRowAction($event)" (search)="onSearchLatestReview($event)" >
+            </datatable>
+          </mat-tab>
+        </mat-tab-group>
+      </mat-card>
+    </div>
+  </main>

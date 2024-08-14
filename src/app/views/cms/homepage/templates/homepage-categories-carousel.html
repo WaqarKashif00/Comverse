@@ -1,0 +1,38 @@
+<mat-card>
+    <mat-form-field appearance="outline">
+        <mat-label>Title</mat-label>
+        <input matInput pattern ="/^[^!`';<>={}~\$\(\)\*\\\?\[\]\^\|]+$/" [(ngModel)]="data.title" />
+    </mat-form-field>
+</mat-card>
+
+<h4 style="margin-top: 20px">Categories ({{data.categories.length}}/5)</h4>
+
+<div
+    cdkDropList
+    (cdkDropListDropped)="sortChanged($event)"
+>
+    <mat-card *ngFor="let category of data.categories; let i = index" cdkDrag>
+        <div fxLayout="row" fxLayoutAlign="space-between center" style="margin-bottom: 20px">
+            <div>
+                <mat-icon cdkDragHandle class="sort-handle">expand</mat-icon>
+            </div>
+            <div>
+                <button mat-icon-button color="warn" (click)="removeCategory(i)">
+                    <mat-icon>delete</mat-icon>
+                </button>
+            </div>
+        </div>
+        <mat-form-field appearance="outline">
+            <mat-label>Name</mat-label>
+            <input matInput pattern ="/^[^!`';<>={}~\$\(\)\*\\\?\[\]\^\|]+$/" [(ngModel)]="category.name" />
+        </mat-form-field>
+
+        <h4>Categeory</h4>
+        <p>{{category.category_name}}</p>
+        <button mat-stroked-button color="primary" (click)="changeCategory(category, i)">Change category</button>
+    </mat-card>
+
+    <mat-card *ngIf="data.categories.length < 5">
+        <button mat-stroked-button color="primary" (click)="addCategory()">+ Add Category</button>
+    </mat-card>
+</div>

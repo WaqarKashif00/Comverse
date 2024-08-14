@@ -1,0 +1,89 @@
+<main id="main">
+  <mat-progress-bar class="page-loader" color="accent" mode="indeterminate" *ngIf="loading"></mat-progress-bar>
+  <div class="page-header" fxLayout="row" fxLayoutAlign="space-between center">
+    <div>
+      <button mat-icon-button aria-label="Go back" class="header-back-arrow" [routerLink]="['/',URLS.paymentGateways]">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      <h1 *ngIf="!paymentGatewayId">Add Payment Gateway</h1>
+      <h1 *ngIf="paymentGatewayId">Edit Payment Gateway</h1>
+    </div>
+
+    <div class="header-actions" fxLayout="row">
+      <a [routerLink]="['/',URLS.paymentGateways]" mat-stroked-button color="primary">Cancel</a>
+      <button mat-flat-button color="primary" [disabled]="!paymentGatewayForm.valid" (click)="onSubmit()">Save</button>
+    </div>
+  </div>
+
+  <div class="page-container">
+    <form [formGroup]="paymentGatewayForm">
+      <div fxLayout="row">
+        <div fxFlex="0 1 66.6666%">
+          <mat-card>
+            <div fxLayout="row">
+              <div fxFlex="0 1 50%">
+                <mat-form-field appearance="outline">
+                  <mat-label>Payment gateway</mat-label>
+                  <mat-select formControlName="type" (selectionChange)="onGatewayTypeChange($event)">
+                    <mat-option value='manual'>Manual</mat-option>
+                    <mat-option [value]=item.value *ngFor="let item of gatewayType">
+                      {{item.name}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+
+              <div *ngIf="paymentGatewayId" class="active-checkbox" fxFlex="0 1 50%">
+                <mat-checkbox formControlName="is_active">Active</mat-checkbox>
+              </div>
+            </div>
+            <div *ngIf="paymentGatewayForm.get('type').value !== 'manual'" class="space" fxLayout="row">
+              <div fxFlex="0 1 50%">
+                <mat-checkbox formControlName="test_mode">Test mode</mat-checkbox>
+              </div>
+
+
+            </div>
+
+            <ng-container *ngIf="paymentGatewayForm.get('type').value === 'manual'">
+              <div fxLayout="row">
+                <mat-form-field appearance="outline">
+                  <mat-label>Title</mat-label>
+                  <input matInput formControlName="title" />
+                </mat-form-field>
+              </div>
+              <div fxLayout="row">
+                <mat-form-field appearance="outline">
+                  <mat-label>Description</mat-label>
+                  <textarea rows="5" formControlName="description" matInput
+                    placeholder="Write the description"></textarea>
+                </mat-form-field>
+              </div>
+            </ng-container>
+            <div *ngIf="paymentGatewayForm.get('type').value !== 'manual'" fxLayout="row wrap">
+
+              <div *ngIf="paymentGatewayForm.get('type').value" fxFlex="0 1 50%">
+                <mat-form-field appearance="outline">
+                  <mat-label>Name</mat-label>
+                  <input matInput formControlName="gateway_name" />
+                </mat-form-field>
+              </div>
+
+              <ng-container [formGroup]="paymentGatewayForm.get('credentials')">
+
+                <div [ngSwitch]="item.type" *ngFor="let item of fields" fxFlex="0 1 50%">
+                  <mat-form-field *ngSwitchCase="'text'" appearance="outline">
+                    <mat-label>{{item.label}}</mat-label>
+                    <input matInput formControlName={{item.name}} />
+                  </mat-form-field>
+                  <div *ngSwitchCase="'boolean'">
+                    <mat-checkbox class="dynamic-checkbox" formControlName={{item.name}}>{{item.label}}</mat-checkbox>
+                  </div>
+                </div>
+              </ng-container>
+            </div>
+          </mat-card>
+        </div>
+      </div>
+    </form>
+  </div>
+</main>

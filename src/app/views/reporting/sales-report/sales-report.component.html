@@ -1,0 +1,78 @@
+<main id="main">
+    <mat-progress-bar class="page-loader" color="accent" mode="indeterminate" *ngIf="loading"></mat-progress-bar>
+    <div class="page-header" fxLayout="row" fxLayoutAlign="space-between center">
+        <h1> Sales Report</h1>
+    </div>
+    <div class="page-container">
+        <mat-card>
+            <div class="page-header" fxLayout="row">
+                <div fxFlex="0 1 60%" fxLayoutGap="17px">
+                    <div fxFlex="0 1 50%">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Start date</mat-label>
+                            <input matInput (change)="onDateParameter()" type="date" [(ngModel)]="start_date" />
+                        </mat-form-field>
+                    </div>
+
+                    <div fxFlex="0 1 50%">
+                        <mat-form-field appearance="outline">
+                            <mat-label>End date</mat-label>
+                            <input matInput type="date" (change)="onDateParameter()" [(ngModel)]="end_date" />
+                        </mat-form-field>
+                    </div>
+                </div>
+
+                <div fxFlex="0 1 30%">
+                    <ng-select [items]="fieldsArray" bindLabel="title" [(ngModel)]="default_columns" multiple="true"
+                        (change)="onFieldSelected($event)" [compareWith]="compareData" placeholder="Columns"
+                        [trackByFn]="trackByFn">
+                        <ng-template ng-label-tmp let-item="item">
+                            <div class="customer-dropdown-label">
+                                <span class="customer-name">{{item.title}}
+                                </span>
+                            </div>
+                        </ng-template>
+                        <ng-template ng-option-tmp let-item="item">
+                            <div class="customer-dropdown-label">
+                                <span class="customer-name">{{item.title}}
+                                </span>
+                            </div>
+                        </ng-template>
+                    </ng-select>
+                </div>
+
+                <div class="space" fxLayout="row">
+                    <div>
+                        <a mat-stroked-button color="primary" (click)="onSet()">Generate Report</a>
+                    </div>
+                    <div>
+                        <button mat-stroked-button color="primary" (click)="onExportReport()"> Export</button>
+                    </div>
+                </div>
+            </div>
+        </mat-card>
+
+        <mat-card class="table-wrapper-card">
+            <mat-tab-group>
+                <mat-tab label="Sale Reports">
+                    <datatable [data]="salesReport" [columns]="columns" [pagination]="true" [count]="totalCount"
+                        [itemsPerPage]="pageSize" (page)="onPageChange($event)">
+                    </datatable>
+                </mat-tab>
+
+                <mat-tab label="Default Columns">
+                    <div class="filed-list" fxLayout="row wrap">
+                        <div *ngFor="let field of fieldsArray" fxFlex="0 1 50%">
+                            <mat-checkbox [checked]="isColumnSelected(field)" (change)="onColumnChange($event, field)">
+                                {{field.title}}</mat-checkbox>
+                        </div>
+                    </div>
+
+                    <div class="save-button">
+                        <button mat-flat-button color="primary" (click)="onSave()">Save</button>
+                    </div>
+                </mat-tab>
+            </mat-tab-group>
+        </mat-card>
+    </div>
+</main>

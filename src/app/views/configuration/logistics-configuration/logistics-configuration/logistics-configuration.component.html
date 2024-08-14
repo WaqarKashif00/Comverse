@@ -1,0 +1,73 @@
+<main id="main">
+    <mat-progress-bar class="page-loader" color="accent" mode="indeterminate" *ngIf="loading"></mat-progress-bar>
+    <div class="page-header" fxLayout="row" fxLayoutAlign="space-between center">
+        <h1>
+            <button mat-icon-button aria-label="Go back"  class="header-back-arrow">
+                <mat-icon [routerLink]="['/',URLS.configuration]">arrow_back</mat-icon>
+            </button>
+            Logistics Configuration
+        </h1>
+    </div>
+
+
+    <div class="page-container">
+        <div class="section-settings">
+            <div fxLayout="row">
+                <div  fxFlex="0 0 33.333333%">
+                    <mat-card-title>Logistic settings for courier</mat-card-title>
+                    <mat-card-subtitle>Manage how your customers receive their orders. Learn more about <a href="">delivery methods</a> </mat-card-subtitle>
+                </div>
+                <div fxFlex="1 1 50%">
+                    <mat-card>
+                        <mat-card-content>
+                            <div fxLayout="row" fxLayoutAlign="space-between">
+                                <mat-card-title>Courier integrations</mat-card-title>
+                                <mat-card-title class="link" [routerLink]="[URLS.courierIntegration]">Manage couriers</mat-card-title>
+                            </div>
+                            <mat-card-subtitle>Courier integrations allows you to integrate your store with multiple courier companies so that ordet fulfillment can be processed seamlessly.</mat-card-subtitle>
+                        </mat-card-content>
+
+                        <mat-card-content *ngIf="!is_vendor">
+                            <div fxLayout="row" fxLayoutAlign="space-between">
+                                <mat-card-title>Automation</mat-card-title>
+                                <mat-card-title class="link" [routerLink]="[URLS.courierAutomation]">Manage automation</mat-card-title>
+                            </div>
+                            <mat-card-subtitle> Automation allows you to apply automation to the system minimizing the manual work. </mat-card-subtitle>
+
+                        </mat-card-content>
+
+                        <mat-card-content *ngIf="!is_vendor">
+                            <div fxLayout="row" fxLayoutAlign="space-between">
+                                <mat-card-title>Courier Invoice Settings</mat-card-title>
+                                <mat-card-title class="link" [routerLink]="[URLS.courierInvoiceSetting]">Manage invoice settings</mat-card-title>
+                            </div>
+                            <mat-card-subtitle> Invoice settings allows you to apply settings to courier invoice generation. </mat-card-subtitle>
+
+                        </mat-card-content>
+
+                        <mat-card-content *ngIf="!is_vendor">
+                            <div fxLayout="row" fxLayoutAlign="space-between">
+                                <mat-card-title>Courier Priority</mat-card-title>
+                            </div>
+                            <mat-card-subtitle>This option allows you to set courier services priority with respect to city, 
+                                so you can set one or multiple courier services checked as a city priority. </mat-card-subtitle>
+                                <div fxLayoutAlign="end" fxLayoutGap="15px">
+                                    <div>
+                                        <mat-card-title class="link"[routerLink]="[URLS.courierPriority]">Manage local priority</mat-card-title>
+                                    </div>
+                                    <div>
+                                        <mat-card-title class="link"[routerLink]="[URLS.internationalCourierPriority]">Manage International priority</mat-card-title>
+                                    </div>
+                                </div>
+                        </mat-card-content>
+                        
+
+                        
+
+                    </mat-card>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</main>

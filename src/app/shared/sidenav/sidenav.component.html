@@ -1,0 +1,137 @@
+<div id="side-nav" (click)="stopPropagation($event)">
+    <nav>
+        <ul>
+            <li *ngIf="userPermissions.dashboard">
+                <a [routerLink]="'/' + Urls.home" routerLinkActive="active">
+                    <span class="link-icon" [inlineSVG]="'/assets/img/HomeIcon.svg'"></span>Dashboard
+                </a>
+            </li>
+            <li *ngIf="!is_vendor && userPermissions.customization">
+                <a (click)="toggleDrawer('customization')" [class.active]="sideDrawer === 'customization'">
+                    <span class="link-icon" [inlineSVG]="'/assets/img/CustomizationIcon.svg'"></span>Customization
+                </a>
+            </li>
+            <li *ngIf="userPermissions.products">
+                <a (click)="toggleDrawer('products')" [class.active]="sideDrawer === 'products'">
+                    <span class="link-icon" [inlineSVG]="'/assets/img/ProductsIcon.svg'"></span>Products
+                </a>
+            </li>
+            <li *ngIf="userPermissions.orders">
+                <a (click)="toggleDrawer('orders')" [class.active]="sideDrawer === 'orders'">
+                    <span class="link-icon" [inlineSVG]="'/assets/img/OrdersIcon.svg'"></span>Orders
+                </a>
+            </li>
+            <li *ngIf="!is_vendor && userPermissions.vendor">
+                <a [routerLink]="['/', Urls.vendors]" routerLinkActive="active">
+                    <span class="link-icon" [inlineSVG]="'/assets/img/VendorsIcon.svg'"></span>Vendors
+                </a>
+            </li>
+            <li *ngIf="!is_vendor && userPermissions.approvals">
+                <a [routerLink]="['/', Urls.contentApproval]" routerLinkActive="active">
+                    <span class="link-icon"  [inlineSVG]="'/assets/img/ApprovalIcon.svg'"></span>Content approval
+                </a>
+            </li>
+            <li *ngIf="!is_vendor && userPermissions.customer">
+                <a [routerLink]="['/', Urls.customers]" routerLinkActive="active">
+                    <span class="link-icon" [inlineSVG]="'/assets/img/CustomersIcon.svg'"></span>Customers
+                </a>
+            </li>
+            <li *ngIf="!is_vendor && userPermissions.discounts">
+                <a (click)="toggleDrawer('discount')" [class.active]="sideDrawer === 'discount'">
+                    <span class="link-icon" [inlineSVG]="'/assets/img/DiscountsIcon.svg'"></span>Discounts
+                </a>
+            </li>
+
+            <li *ngIf="is_vendor && userPermissions.discounts">
+                <a [routerLink]="'/' + Urls.discounts" routerLinkActive="active">
+                    <span class="link-icon" [inlineSVG]="'/assets/img/DiscountsIcon.svg'"></span>Discounts
+                </a>
+            </li>
+
+            <li>
+                <a [routerLink]="'/' + Urls.featuredApps" routerLinkActive="active">
+                    <span class="link-icon" [inlineSVG]="'/assets/img/FeaturedAppsIcon.svg'"></span>Featured apps
+                </a>
+            </li>
+            
+            <li *ngIf="!is_vendor && userPermissions.reports">
+                <a (click)="toggleDrawer('reporting')" [class.active]="sideDrawer === 'reporting'">
+                    <span class="link-icon" [inlineSVG]="'/assets/img/OrdersIcon.svg'"></span>Reporting
+                </a>
+            </li>
+            <li *ngIf="userPermissions.configuration">
+                <a [routerLink]="'/' + Urls.configuration" routerLinkActive="active">
+                    <span class="link-icon" [inlineSVG]="'/assets/img/SettingsIcon.svg'"></span>Configuration
+                </a>
+            </li>
+
+
+            <li *ngIf="is_vendor">
+                <a [routerLink]="'/'+ Urls.shipping" routerLinkActive="active">
+                    <span class="link-icon" [inlineSVG]="'/assets/img/ShippingIcon.svg'"></span>Shipping
+                </a>
+            </li>
+            <li *ngIf="is_vendor">
+                <a [routerLink]="['/', Urls.vendors, Urls.edit, authService.user.vendor_id]" routerLinkActive="active">
+                    <span class="link-icon" [inlineSVG]="'/assets/img/VendorsIcon.svg'"></span>Vendor profile
+                </a>
+            </li>
+        </ul>
+    </nav>
+</div>
+<div class="sidenav-drawer" [class.show]="sideDrawer === 'products'" (click)="stopPropagation($event)">
+    <h4 class="sidenav-title">Products</h4>
+    <nav>
+        <ul>
+            <li *ngIf="userPermissions.product_list" (click)="closeDrawer()"><a [routerLink]="['/', Urls.products]" routerLinkActive="active">All products</a></li>
+            <li *ngIf="userPermissions.product_groups" (click)="closeDrawer()"><a [routerLink]="['/', Urls.productGroups]" routerLinkActive="active">Product groups</a></li>
+            <li *ngIf="userPermissions.collections" (click)="closeDrawer()"><a [routerLink]="'/' + Urls.collections" routerLinkActive="active">Collections</a></li>
+            <li *ngIf="!is_vendor  && userPermissions.categories" (click)="closeDrawer()"><a [routerLink]="'/' + Urls.categories" routerLinkActive="active">Category structure</a></li>
+            <li *ngIf="!is_vendor && userPermissions.brands" (click)="closeDrawer()"><a [routerLink]="'/' + Urls.brands" routerLinkActive="active">Brands</a></li>
+            <li *ngIf="!is_vendor && userPermissions.brands" (click)="closeDrawer()"><a [routerLink]="['/' , Urls.products, Urls.productsReviews]" routerLinkActive="active">Customer Reviews</a></li>
+        </ul>
+    </nav>
+</div>
+
+<div class="sidenav-drawer" [class.show]="sideDrawer === 'orders'" (click)="stopPropagation($event)">
+    <h4 class="sidenav-title">Orders</h4>
+    <nav>
+        <ul>
+            <li (click)="closeDrawer()"><a [routerLink]="['/', Urls.orders]" routerLinkActive="active">All orders</a></li>
+            <li (click)="closeDrawer()"><a [routerLink]="['/', Urls.draftOrders]" routerLinkActive="active">Draft orders</a></li>
+            <li (click)="closeDrawer()"><a [routerLink]="['/', Urls.orderLogs]" routerLinkActive="active">ERP Orders logs</a></li>
+        </ul>
+    </nav>
+</div>
+<div class="sidenav-drawer" [class.show]="sideDrawer === 'customization'" (click)="stopPropagation($event)">
+    <h4 class="sidenav-title">Customization</h4>
+    <nav>
+        <ul>
+            <li *ngIf="userPermissions.homepage" (click)="closeDrawer()"><a [routerLink]="['/', Urls.homepage]" routerLinkActive="active">Homepage</a></li>
+            <li *ngIf="userPermissions.static_pages" (click)="closeDrawer()"><a [routerLink]="['/', Urls.pages]" routerLinkActive="active">Pages</a></li>
+            <li *ngIf="userPermissions.header" (click)="closeDrawer()"><a [routerLink]="['/', Urls.headerCustomization]" routerLinkActive="active">Header</a></li>
+            <li *ngIf="userPermissions.footer" (click)="closeDrawer()"><a [routerLink]="['/', Urls.footerCustomization]" routerLinkActive="active">Footer</a></li>
+            <li *ngIf="userPermissions.navigation" (click)="closeDrawer()"><a [routerLink]="['/', Urls.navigations]" routerLinkActive="active">Navigation</a></li>
+            <li *ngIf="userPermissions.filters" (click)="closeDrawer()"><a [routerLink]="['/', Urls.filters]" routerLinkActive="active">Filters</a></li>
+        </ul>
+    </nav>
+</div>
+
+<div class="sidenav-drawer" [class.show]="sideDrawer === 'discount'" (click)="stopPropagation($event)">
+    <h4 class="sidenav-title">Discounts</h4>
+    <nav>
+        <ul>
+            <li *ngIf="userPermissions.main_discounts" (click)="closeDrawer()"><a [routerLink]="['/' + Urls.discounts]" routerLinkActive="active">Discounts</a></li>
+            <li *ngIf="userPermissions.coupons" (click)="closeDrawer()"><a [routerLink]="['/', Urls.coupons]" routerLinkActive="active">Coupons</a></li>
+        </ul>
+    </nav>
+</div>
+<div class="sidenav-drawer" [class.show]="sideDrawer === 'reporting'" (click)="stopPropagation($event)">
+    <h4 class="sidenav-title">Reporting</h4>
+    <nav>
+        <ul>
+            <li *ngIf="userPermissions.main_discounts" (click)="closeDrawer()"><a [routerLink]="['/' + Urls.salesRporting]" routerLinkActive="active">Sales Report</a></li>
+            <li *ngIf="userPermissions.main_discounts" (click)="closeDrawer()"><a [routerLink]="['/', Urls.salesRportSetting]" routerLinkActive="active">Scheduler Settings</a></li>
+        </ul>
+    </nav>
+</div>

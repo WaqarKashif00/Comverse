@@ -1,0 +1,27 @@
+<button mat-icon-button mat-dialog-close class="dialog-close"><mat-icon>close</mat-icon></button>
+<h2 mat-dialog-title>Transfer ownership</h2>
+<mat-dialog-content class="mat-typography">
+    <p>The new store owner will be able to:</p>
+    <ul>
+        <li>Remove you from the store or change your permissions</li>
+        <li>View or edit credit card and banking information</li>
+        <li>Pause or close the store</li>
+    </ul>
+    <h4>New store owner information</h4>
+    <form>
+        <mat-form-field appearance="outline">
+            <mat-label>Transfer to user</mat-label>
+            <mat-select [disabled]="loading" [(ngModel)]="transferId" name="id">
+                <ng-container *ngFor="let user of this.data.users">
+                    <mat-option [value]="user.id" *ngIf="!user.is_owner">{{user.first_name}} ({{user.email}})</mat-option>
+                </ng-container>
+            </mat-select>
+        </mat-form-field>
+
+        <p class="form-error">{{formError}}</p>
+    </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-stroked-button color="primary" mat-dialog-close cdkFocusInitial>Cancel</button>
+    <button mat-flat-button color="primary" [disabled]="loading || !transferId" (click)="transferOwnership()">Transfer ownership</button>
+</mat-dialog-actions>

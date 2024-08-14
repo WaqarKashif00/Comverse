@@ -1,0 +1,24 @@
+.product-variants-table-wrapper {
+    overflow-x: auto;
+}
+.product-variants-edit-table {
+    width: 100%;
+
+    th, td {
+        text-align: left;
+        padding: 8px;
+    }
+    tbody {
+        td {
+            border-top: 1px solid #ddd;
+        }
+    }
+}
+
+.approval-status{
+    margin-top: 10px;
+    margin-left: 1.8px;
+}
+.view-reason{
+    cursor: pointer;
+}

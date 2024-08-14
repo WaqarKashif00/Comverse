@@ -1,0 +1,220 @@
+<main id="main">
+    <div class="page-header" fxLayout="row" fxLayoutAlign="space-between center">
+        <h1>Configurations</h1>
+    </div>
+
+    <div class="settings-section">
+        <div class="content" fxLayout="row" fxLayout.xs="column">
+            <!-- <h2 class="settings-section-heading" fxFlex="25%">Miscellaneous</h2> -->
+            <div class="settings-section-cards" fxLayout="row wrap" fxFlex="grow">
+                <div class="settings-section-card" fxFlex="0 1 25%" fxFlex.md="0 1 50%" fxFlex.sm="0 1 100%"
+                    *ngIf="userPermissions.store_setting">
+                    <mat-card class="mat-elevation-z4" (click)="goToSettings('generalInformation')">
+                        <mat-card-header>
+                            <div mat-card-avatar [inlineSVG]="'/assets/img/InformationIcon.svg'"></div>
+                            <mat-card-title>General Information</mat-card-title>
+                            <mat-card-subtitle>Configurate your email address from which all automatic emails will be
+                                sent to your customers.</mat-card-subtitle>
+                        </mat-card-header>
+                    </mat-card>
+                </div>
+                <!-- <div class="settings-section-card" fxFlex="0 1 25%">
+                    <mat-card>
+                        <mat-card-header>
+                            <div mat-card-avatar [inlineSVG]="'/assets/img/MailIcon.svg'"></div>
+                            <mat-card-title>Store Languages</mat-card-title>
+                            <mat-card-subtitle>Manage the languages your customers see on your store.</mat-card-subtitle>
+                        </mat-card-header>
+                    </mat-card>
+                </div> -->
+                <div class="settings-section-card" fxFlex="0 1 25%" fxFlex.md="0 1 50%" fxFlex.sm="0 1 100%"
+                    *ngIf="userPermissions.user_management">
+                    <mat-card class="mat-elevation-z4" (click)="goToSettings('userManagement')">
+                        <mat-card-header>
+                            <div mat-card-avatar [inlineSVG]="'/assets/img/UserIcon.svg'"></div>
+                            <mat-card-title>User Management</mat-card-title>
+                            <mat-card-subtitle>Manage the users of your store and also set the permission level for each
+                                user according to their roles.</mat-card-subtitle>
+                        </mat-card-header>
+                    </mat-card>
+                </div>
+
+
+                <!-- <div class="settings-section-card" fxFlex="0 1 25%">
+                    <mat-card>
+                        <mat-card-header>
+                            <div mat-card-avatar [inlineSVG]="'/assets/img/MailIcon.svg'"></div>
+                            <mat-card-title>Checkout</mat-card-title>
+                            <mat-card-subtitle>Customize your online store checkout process.</mat-card-subtitle>
+                        </mat-card-header>
+                    </mat-card>
+                </div> -->
+                <!-- <div class="settings-section-card" fxFlex="0 1 25%">
+                    <mat-card (click)="goToSettings('tax')">
+                        <mat-card-header>
+                            <div mat-card-avatar [inlineSVG]="'/assets/img/MailIcon.svg'"></div>
+                            <mat-card-title>Tax</mat-card-title>
+                            <mat-card-subtitle>Manage how your store charges taxes.</mat-card-subtitle>
+                        </mat-card-header>
+                    </mat-card>
+                </div> -->
+                <div class="settings-section-card" fxFlex="0 1 25%" fxFlex.md="0 1 50%" fxFlex.sm="0 1 100%"
+                    *ngIf="userPermissions.shipping_regions">
+                    <mat-card class="mat-elevation-z4" (click)="goToSettings('shippingRegions')">
+                        <mat-card-header>
+                            <div mat-card-avatar class="shipping_regions"
+                                [inlineSVG]="'/assets/img/ShippingRegionsIcon.svg'"></div>
+                            <mat-card-title>Shipping regions</mat-card-title>
+                            <mat-card-subtitle>Manage the list of countries and their respective cities to show in
+                                shipping condition.</mat-card-subtitle>
+                        </mat-card-header>
+                    </mat-card>
+                </div>
+
+                <div class="settings-section-card" fxFlex="0 1 25%" fxFlex.md="0 1 50%" fxFlex.sm="0 1 100%"
+                    *ngIf="userPermissions.shipping_methods">
+                    <mat-card class="mat-elevation-z4" (click)="goToSettings('shipping')">
+                        <mat-card-header>
+                            <div mat-card-avatar [inlineSVG]="'/assets/img/ShippingIcon.svg'"></div>
+                            <mat-card-title>Shipping methods</mat-card-title>
+                            <mat-card-subtitle>Manage shipping settings and rates on your store to manage your shipments
+                                according to your created zones.</mat-card-subtitle>
+                        </mat-card-header>
+                    </mat-card>
+                </div>
+
+                <div class="settings-section-card" fxFlex="0 1 25%" fxFlex.md="0 1 50%" fxFlex.sm="0 1 100%"
+                    *ngIf="userPermissions.checkout_setting">
+                    <mat-card class="mat-elevation-z4" (click)="goToSettings('checkoutCustomization')">
+                        <mat-card-header>
+                            <div mat-card-avatar class="shipping_regions"
+                                [inlineSVG]="'/assets/img/CheckoutSettingIcon.svg'"></div>
+                            <mat-card-title>Checkout settings</mat-card-title>
+                            <mat-card-subtitle>Customize your checkout settings to enable or disable the fields
+                                according to your business needs.</mat-card-subtitle>
+                        </mat-card-header>
+                    </mat-card>
+                </div>
+                <div class="settings-section-card" fxFlex="0 1 25%" fxFlex.md="0 1 50%" fxFlex.sm="0 1 100%"
+                    *ngIf="userPermissions.cache_settings">
+                    <mat-card class="mat-elevation-z4" (click)="goToSettings('cacheSetting')">
+                        <mat-card-header>
+                            <div mat-card-avatar class="shipping_regions" [inlineSVG]="'/assets/img/cache.svg'"></div>
+                            <mat-card-title>Cache settings</mat-card-title>
+                            <mat-card-subtitle>Customize your Cache settings to enable or disable the fields
+                                according to your business needs.</mat-card-subtitle>
+                        </mat-card-header>
+                    </mat-card>
+                </div>
+                <div class="settings-section-card" fxFlex="0 1 25%" fxFlex.md="0 1 50%" fxFlex.sm="0 1 100%"
+                    *ngIf="userPermissions.preferences">
+                    <mat-card class="mat-elevation-z4" (click)="goToSettings('preferences')">
+                        <mat-card-header>
+                            <div mat-card-avatar class="shipping_regions" [inlineSVG]="'/assets/img/preferences-com.svg'"></div>
+                            <mat-card-title>Preferences</mat-card-title>
+                            <mat-card-subtitle>Customize your Preferences settings to enable or disable the fields
+                                according to your business needs.</mat-card-subtitle>
+                        </mat-card-header>
+                    </mat-card>
+                </div>
+
+                <div class="settings-section-card" fxFlex="0 1 25%" fxFlex.md="0 1 50%" fxFlex.sm="0 1 100%"
+                *ngIf="userPermissions.payment_gateway">
+                <mat-card class="mat-elevation-z4" (click)="goToSettings('paymentGateways')">
+                    <mat-card-header>
+                        <div mat-card-avatar class="shipping_regions" [inlineSVG]="'/assets/img/paymentGatewayIcon.svg'"></div>
+                        <mat-card-title>Payment gateway</mat-card-title>
+                        <mat-card-subtitle>Configure your payment gateways by activating or deactivating existing ones or adding new gateways to the system.</mat-card-subtitle>
+                    </mat-card-header>
+                </mat-card>
+            </div>
+
+                <div class="settings-section-card" fxFlex="0 1 25%" fxFlex.md="0 1 50%" fxFlex.sm="0 1 100%" *ngIf="userPermissions.sms_configurations">
+                    <mat-card class="mat-elevation-z4" (click)="goToSettings('smsConfiguration')">
+                        <mat-card-header>
+                            <div mat-card-avatar class="shipping_regions" [inlineSVG]="'/assets/img/SMSIcon.svg'"></div>
+                            <mat-card-title>SMS Configurations</mat-card-title>
+                            <mat-card-subtitle>Configure your sms settings using template and trigger the fields according to your business needs.</mat-card-subtitle>
+                        </mat-card-header>
+                    </mat-card>
+                </div>
+
+                <div class="settings-section-card" fxFlex="0 1 25%" fxFlex.md="0 1 50%" fxFlex.sm="0 1 100%" *ngIf="userPermissions.email_configurations">
+                    <mat-card class="mat-elevation-z4" (click)="goToSettings('emailConfiguration')">
+                        <mat-card-header>
+                            <div mat-card-avatar class="shipping_regions" [inlineSVG]="'/assets/img/MailIcon.svg'"></div>
+                            <mat-card-title>Email Configurations</mat-card-title>
+                            <mat-card-subtitle>Configure your email settings using template and trigger the fields according to your business needs.</mat-card-subtitle>
+                        </mat-card-header>
+                    </mat-card>
+                </div>
+                <div class="settings-section-card" fxFlex="0 1 25%" fxFlex.md="0 1 50%" fxFlex.sm="0 1 100%" *ngIf="userPermissions.erp">
+                    <mat-card class="mat-elevation-z4" (click)="goToSettings('erp')">
+                        <mat-card-header>
+                            <div mat-card-avatar class="shipping_regions" [inlineSVG]="'/assets/img/erp.svg'"></div>
+                            <mat-card-title>ERP Configuration</mat-card-title>
+                            <mat-card-subtitle>Configure your ERP settings using template and trigger the fields according to your business needs.</mat-card-subtitle>
+                        </mat-card-header>
+                    </mat-card>
+                </div>
+
+
+                <div class="settings-section-card" fxFlex="0 1 25%" fxFlex.md="0 1 50%" fxFlex.sm="0 1 100%" *ngIf="userPermissions.multi_location">
+                    <mat-card class="mat-elevation-z4" (click)="goToSettings('multiLocation')">
+                        <mat-card-header>
+                            <div mat-card-avatar class="shipping_regions" [inlineSVG]="'/assets/img/MailIcon.svg'"></div>
+                            <mat-card-title>Multi Location</mat-card-title>
+                            <mat-card-subtitle>Configure your email settings using template and trigger the fields according to your business needs.</mat-card-subtitle>
+                        </mat-card-header>
+                    </mat-card>
+                </div>
+                <div class="settings-section-card" fxFlex="0 1 25%" fxFlex.md="0 1 50%" fxFlex.sm="0 1 100%" *ngIf="userPermissions.courier">
+                    <mat-card class="mat-elevation-z4" (click)="goToSettings('logisticConfiguration')">
+                        <mat-card-header>
+                            <div mat-card-avatar class="shipping_regions" [inlineSVG]="'/assets/img/MailIcon.svg'"></div>
+                            <mat-card-title>Logistics Configurations</mat-card-title>
+                            <mat-card-subtitle>Logistics Configuration lets you define different logistics related functionality throughout the business application module for all the local and international logistic systems..</mat-card-subtitle>
+                        </mat-card-header>
+                    </mat-card>
+                </div>
+
+                <div class="settings-section-card" fxFlex="0 1 25%" fxFlex.md="0 1 50%" fxFlex.sm="0 1 100%">
+                    <mat-card class="mat-elevation-z4" (click)="goToSettings('storeSetting')">
+                        <mat-card-header>
+                            <div mat-card-avatar class="shipping_regions" [inlineSVG]="'/assets/img/MailIcon.svg'"></div>
+                            <mat-card-title>Store Setting</mat-card-title>
+                            <mat-card-subtitle>Store setting for user</mat-card-subtitle>
+                        </mat-card-header>
+                    </mat-card>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- <div class="settings-section">
+        <div class="content" fxLayout="row" fxLayout.xs="column">
+            <h2 class="settings-section-heading" fxFlex="25%">Communication</h2>
+            <div class="settings-section-cards" fxLayout="row wrap" fxFlex="grow">
+                <div class="settings-section-card" fxFlex="0 1 25%">
+                    <mat-card>
+                        <mat-card-header>
+                            <div mat-card-avatar [inlineSVG]="'/assets/img/MailIcon.svg'"></div>
+                            <mat-card-title>Email</mat-card-title>
+                            <mat-card-subtitle>Configurate your email address from which all automatic emails will be sent to your customers.</mat-card-subtitle>
+                        </mat-card-header>
+                    </mat-card>
+                </div>
+                <div class="settings-section-card" fxFlex="0 1 25%">
+                    <mat-card>
+                        <mat-card-header>
+                            <div mat-card-avatar [inlineSVG]="'/assets/img/MailIcon.svg'"></div>
+                            <mat-card-title>Files</mat-card-title>
+                            <mat-card-subtitle>Configurate your email address from which all automatic emails will be sent to your customers.</mat-card-subtitle>
+                        </mat-card-header>
+                    </mat-card>
+                </div>
+            </div>
+        </div>
+    </div> -->
+</main>

@@ -1,0 +1,15 @@
+<button mat-icon-button mat-dialog-close class="dialog-close">
+  <mat-icon>close</mat-icon>
+</button>
+<h2 *ngIf="data.action ==='Deactivate'" mat-dialog-title>Deactivate job</h2>
+<h2 *ngIf="data.action ==='Activate'" mat-dialog-title>Activate job</h2>
+<mat-dialog-content class="mat-typography">
+  <p *ngIf="data.action ==='Deactivate'">Are you sure you want to Deactivate: {{data.jobPosting.job_title}}?</p>
+  <p *ngIf="data.action ==='Activate'">Are you sure you want to Activate : {{data.jobPosting.job_title}}?</p>
+</mat-dialog-content>
+
+<div mat-dialog-actions>
+  <button mat-stroked-button color="primary" mat-dialog-close>Cancel</button>
+  <button *ngIf="data.action ==='Activate'" mat-flat-button color="primary" [disabled]="loading" (click)="changeStatus()">Activate</button>
+  <button *ngIf="data.action ==='Deactivate'" mat-flat-button color="primary" [disabled]="loading" (click)="changeStatus()">Deactivate</button>
+</div>

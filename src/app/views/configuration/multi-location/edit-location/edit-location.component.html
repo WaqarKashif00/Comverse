@@ -1,0 +1,113 @@
+<main id="main">
+    <mat-progress-bar class="page-loader" color="accent" mode="indeterminate" *ngIf="loading"></mat-progress-bar>
+    <div class="page-header" fxLayout="row" fxLayoutAlign="space-between center">
+        <div>
+            <button mat-icon-button aria-label="Go back" class="header-back-arrow" [routerLink]="['/',URLS.multiLocation ,URLS.locations]">
+                <mat-icon>arrow_back</mat-icon>
+            </button>
+            <h1> Edit Location</h1>
+        </div>
+
+        <div class="header-actions">
+            <button mat-stroked-button color="primary" [routerLink]="['/',URLS.multiLocation ,URLS.locations]">
+                Cancel
+            </button>
+            <button mat-flat-button color="primary" (click)="onSubmit()">
+                Save
+            </button>
+        </div>
+    </div>
+    <form class="page-container" [formGroup]="locationForm">
+        <div fxLayout="row">
+            <div fxFlex="0 1 100%">
+                <mat-card>
+                    <div fxLayout="row">
+                        <div fxFlex="0 1 50%">
+                            <mat-checkbox class="example-margin">is default</mat-checkbox>
+                        </div>
+                        <div fxFlex="0 1 50%">
+                            <mat-checkbox class="example-margin" formControlName="is_active">Active</mat-checkbox>
+                        </div>
+                    </div>
+                    <div fxLayout="row" class="space">
+                        <div fxFlex="0 1 33.333333%">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Title</mat-label>
+                                <input matInput formControlName="title"/>
+                            </mat-form-field>
+                        </div>
+                        <div fxFlex="0 1 33.333333%">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Country</mat-label>
+                                <mat-select formControlName="country">
+                                    <mat-option [value]="country.id" *ngFor="let country of countriList">{{country.name}}</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                        <div fxFlex="0 1 33.333333%">
+                            <mat-form-field appearance="outline">
+                              <mat-label>Default Currency</mat-label>
+                              <mat-select formControlName="default_currency">
+                                  <mat-option [value]="currency.id" *ngFor="let currency of defaultCurrencyList">{{currency.title}}</mat-option>
+                              </mat-select>
+                          </mat-form-field>
+                      </div>
+                    </div>
+                    <div fxLayout="row">
+                     
+                        <div fxFlex="0 1 50%">
+                            <mat-checkbox class="example-margin" formControlName="serve_in_multiple_country">is serving multiple countries</mat-checkbox>
+
+                            <!-- <mat-checkbox class="example-margin" formControlName="serve_in_multiple_country">is serving multiple countries</mat-checkbox> -->
+
+                        </div>
+                    </div>
+                    <ng-container *ngIf="locationForm.get('serve_in_multiple_country').value ===true">
+
+                        <div fxLayout="column">
+                            <ng-container *ngIf="locationForm.get('multi_country_serving').value">
+                                <!-- <h4  class="space">The Countries wise Rate </h4> -->
+                                <ng-container *ngFor="let location of locationForm.get('multi_country_serving')['controls']; let i = index;">
+                                    <div [formGroup]="location">
+                                        <div fxLayout="row">
+                                            <div fxFlex="0 1 33.333333%">
+                                                <mat-form-field appearance="outline">
+                                                    <mat-label>Country</mat-label>
+                                                    <mat-select formControlName="country">
+                                                        <mat-option [value]="country.id" *ngFor="let country of countriList">{{country.name}}</mat-option>
+                                                    </mat-select>
+                                                </mat-form-field>
+                                            </div>
+                                            <div fxFlex="0 1 33.333333%">
+                                                <mat-form-field appearance="outline">
+                                                    <mat-label>Default Currency</mat-label>
+                                                    <mat-select formControlName="currency">
+                                                        <mat-option [value]="currency.id" *ngFor="let currency of defaultCurrencyList">{{currency.title}}</mat-option>
+                                                    </mat-select>
+                                                </mat-form-field>
+                                            </div>
+                                            <div fxFlex="0 1 33.333333%">
+                                                <mat-form-field appearance="outline">
+                                                    <mat-label>Conversion Rate</mat-label>
+                                                    <input type="number" matInput  formControlName="conversion_rate"/>
+                                                </mat-form-field>
+                                            </div>
+                                            <div>
+                                                <button mat-icon-button class="delete-commission-btn" color="warn" (click)="removeLocation(i)">
+                                                    <mat-icon>close</mat-icon>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </ng-container>
+                            </ng-container>
+                            <div class="save-button">
+                                <button class="space" mat-stroked-button color="primary" (click)="addConvertionRate()">+ Add Country</button>
+                            </div>
+                        </div>
+                    </ng-container>
+                </mat-card>
+            </div>
+        </div>
+    </form>
+</main>

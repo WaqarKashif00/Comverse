@@ -1,0 +1,79 @@
+<main id="main">
+    <mat-progress-bar class="page-loader" color="accent" mode="indeterminate" *ngIf="loading"></mat-progress-bar>
+    <div class="page-header" fxLayout="row" fxLayoutAlign="space-between center">
+        <h1>Edit Brand</h1>
+
+        <div class="header-actions">
+            <a [routerLink]="['/', URLS.brands, URLS]" mat-stroked-button color="primary">Cancel</a>
+            <button mat-flat-button color="primary" [disabled]="!brandForm.valid || loading" (click)="onSubmit()">Save</button>
+        </div>
+    </div>
+
+    <div [formGroup]="brandForm" class="page-container">
+        <mat-card >
+            <mat-form-field appearance="outline">
+                <mat-label>Name</mat-label>
+                <input matInput formControlName="name" />
+                <mat-error *ngIf="brandForm.get('name').hasError('required')">Please enter a name of brand.</mat-error>
+            </mat-form-field>
+
+            <div fxLayout="row">
+                <div fxFlex="0 1 50%">
+                    <h3>Logo image</h3>
+
+                    <mat-spinner class="file-upload-spinner" diameter="80" *ngIf="logo_uploading"></mat-spinner>
+                    <img [src]="previewLogoImageSrc" class="banner-preview-image" *ngIf="previewLogoImageSrc" />
+                    <input type="file" class="banner-file-input" accept=".png, .jpg, .jpeg" #logoFileInput (change)="logoImageSelect($event)" />
+                    <div class="banner-file-actions">
+                        <button mat-button type="button" color="warn" *ngIf="previewLogoImageSrc" (click)="removeLogo()"><mat-icon>delete</mat-icon></button>
+                        <button mat-button type="button" color="primary" (click)="logoFileInput.click()" [disabled]="logo_uploading">Upload image</button>
+                    </div>
+                </div>
+                <div fxFlex="0 1 50%">
+                    <h3>Banner image</h3>
+
+                    <mat-spinner class="file-upload-spinner" diameter="80" *ngIf="banner_uploading"></mat-spinner>
+                    <img [src]="previewBannerImageSrc" class="banner-preview-image" *ngIf="previewBannerImageSrc" />
+                    <input type="file" class="banner-file-input" accept=".png, .jpg, .jpeg" #bannerFileInput (change)="bannerImageSelect($event)" />
+                    <div class="banner-file-actions">
+                        <button mat-button type="button" color="warn" *ngIf="previewBannerImageSrc" (click)="removeBanner()"><mat-icon>delete</mat-icon></button>
+                        <button mat-button type="button" color="primary" (click)="bannerFileInput.click()" [disabled]="banner_uploading">Upload image</button>
+                    </div>
+                </div>
+            </div>
+        </mat-card>
+        <mat-card>
+            <h4>Categories</h4>
+            <category-selector [(value)]="selected_categories" valueType="object.id" [multiple]="true"
+                (valueChange)=onCategorySelection($event)></category-selector>
+        </mat-card>
+        <mat-card>
+            <h2>Search Engine customization</h2>
+
+            <mat-form-field appearance="outline">
+                <mat-label>Handle</mat-label>
+                <input matInput formControlName="handle" />
+                <mat-hint>If empty, the preview shows what will be auto generated.</mat-hint>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+                <mat-label>SEO title</mat-label>
+                <input matInput formControlName="seo_title" />
+                <mat-hint>If empty, the preview shows what will be auto generated.</mat-hint>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+                <mat-label>SEO description</mat-label>
+                <textarea matInput formControlName="seo_description"></textarea>
+                <mat-hint>If empty, the preview shows what will be auto generated.</mat-hint>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+                <mat-label>SEO keywords</mat-label>
+                <input matInput formControlName="seo_keywords" />
+                <mat-hint>If empty, the preview shows what will be auto generated.</mat-hint>
+            </mat-form-field>
+        </mat-card>
+    </div>
+
+</main>

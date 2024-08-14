@@ -1,0 +1,23 @@
+<mat-form-field appearance="outline">
+    <mat-label>{{label}}</mat-label>
+    <mat-chip-list #chipsList>
+        <mat-chip
+            *ngFor="let chip of value"
+            [removable]="removable"
+            (removed)="removeChip(i)">
+                {{chip}}
+                <mat-icon matChipRemove *ngIf="removable && showRemove">close</mat-icon>
+            </mat-chip>
+
+        <input
+            [placeholder]="placeholder"
+            #chipsInput
+            [formControl]="inputFormControl"
+            [matChipInputFor]="chipsList"
+            [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+            (matChipInputTokenEnd)="addChip($event)">
+            <mat-error class="tags-input" *ngIf="inputFormControl.invalid">Special characters cannot be entered.</mat-error>
+    </mat-chip-list>
+
+</mat-form-field>
+

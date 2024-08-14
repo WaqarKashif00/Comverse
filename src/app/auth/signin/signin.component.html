@@ -1,0 +1,34 @@
+<div id="auth-wrapper">
+    <img class="logo" [src]="logo_img" />
+    <mat-card>
+        <mat-card-content>
+            <h1 class="text-center" *ngIf="!isVendorPortal">Login to {{clientName}}</h1>
+            <h1 class="text-center" *ngIf="isVendorPortal">Login to {{clientName}} seller portal</h1>
+            <form [formGroup]="signinForm" (ngSubmit)="onSubmit()">
+                <mat-form-field appearance="outline">
+                    <mat-label>Username or email address</mat-label>
+                    <input matInput name="username_or_email" formControlName="username_or_email">
+                    <mat-error *ngIf="signinForm.get('username_or_email').hasError('required')">Enter your username or email address.</mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>Password</mat-label>
+                    <input matInput type="password" name="password" formControlName="password">
+                    <mat-error *ngIf="signinForm.get('password').hasError('required')">Enter your password.</mat-error>
+                </mat-form-field>
+
+                <div fxLayout="row">
+                    <div fxFlex="0 1 50%">
+                        <!-- <mat-checkbox>Remember me</mat-checkbox> -->
+                        <a [routerLink]="'/' + URLs.forgotPassword">Forgot Password?</a>
+                    </div>
+                    <div fxFlex="0 1 50%" class="text-right">
+                    </div>
+                </div>
+                <p class="form-error" *ngIf="formError">{{ formError }}</p>
+                <re-captcha *ngIf="showRecaptcha" formControlName="recaptcha"></re-captcha>
+                <button mat-flat-button color="primary" class="button-block" type="submit" [disabled]="loading || !signinForm.valid">Log in</button>
+            </form>
+        </mat-card-content>
+    </mat-card>
+</div>

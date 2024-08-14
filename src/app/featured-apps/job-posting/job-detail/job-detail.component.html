@@ -1,0 +1,64 @@
+<main id="main">
+    <mat-progress-bar class="page-loader" color="accent" mode="indeterminate" *ngIf="loading"></mat-progress-bar>
+    <div class="page-header" fxLayout="row" fxLayoutAlign="space-between center">
+        <div>
+            <button mat-icon-button aria-label="Go back" class="header-back-arrow"
+                [routerLink]="['/',URLS.jobPosting]">
+                <mat-icon>arrow_back</mat-icon>
+            </button>
+            <h1> Job Detail</h1>
+        </div>
+
+        <div class="header-actions">
+            <a mat-flat-button color="primary" (click)="onClick()">Edit
+                 job</a>
+        </div>
+    </div>
+
+    <mat-card class="card-bottom-space">
+        <div fxLayout="row">
+            <div fxFlex="0 0 20%">
+
+                <h4 class="margin-bottom">Job ID</h4>
+                <p class="font-size">{{job_id}}</p>
+            </div>
+            <div fxFlex="0 0 20%">
+
+                <h4 class="margin-bottom">Job title</h4>
+                <p class="font-size">{{job_title}}</p>
+            </div>
+            <div fxFlex="0 0 22%">
+
+                <h4 class="margin-bottom">Submission date</h4>
+                <p class="font-size">{{created_at | date: 'dd/MM/yyyy'}}</p>
+            </div>
+            <div fxFlex="0 0 20%">
+
+                <h4 class="margin-bottom">Expiry</h4>
+                <p class="font-size">{{job_expiry | date: 'dd/MM/yyyy'}}</p>
+            </div>
+            <div fxFlex="0 0 20%">
+                <h4 class="margin-bottom">Status</h4>
+                <div *ngIf="active === true">
+                    <span class="label"
+                        [class.success]="active === true">Active</span>
+                </div>
+                <div *ngIf="active === false">
+                    <span class="label"
+                        [class.warning]>Inactive</span>
+                </div>
+
+            </div>
+        </div>
+
+    </mat-card>
+
+    <h2>Applicants</h2>
+    <div class="page-container">
+        <mat-card class="table-wrapper-card">
+            <datatable [data]="applicantList" [columns]="columns" [pagination]="true" [count]="totalCount"
+                [itemsPerPage]="pageSize" (page)="onPageChange($event)" (rowAction)="onRowAction($event)"(cellClick)="onCellClick($event)"[rowActions]="rowActions">
+            </datatable>
+        </mat-card>
+    </div>
+</main>

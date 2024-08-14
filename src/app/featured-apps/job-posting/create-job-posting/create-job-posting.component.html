@@ -1,0 +1,292 @@
+<main id="main">
+    <mat-progress-bar class="page-loader" color="accent" mode="indeterminate" *ngIf="loading"></mat-progress-bar>
+    <div class="page-header" fxLayout="row" fxLayoutAlign="space-between center">
+        <div>
+            <button mat-icon-button aria-label="Go back" class="header-back-arrow" [routerLink]="['/',URLS.jobPosting]">
+                <mat-icon>arrow_back</mat-icon>
+            </button>
+            <h1> Create new Job Posting</h1>
+        </div>
+
+        <div class="header-actions">
+            <a [routerLink]="['/',URLS.jobPosting]" mat-stroked-button color="primary">Cancel</a>
+            <button mat-flat-button color="primary" [disabled]="loading || !createJobPostingForm.valid"(click)="onSubmit()">Save</button>
+        </div>
+    </div>
+
+    <div fxLayout="row">
+        <div fxFlex="0 1 66.66666">
+            <form action="" [formGroup]="createJobPostingForm">
+                <!-- General Information -->
+                <mat-card>
+                    <div fxLayout="row">
+                        <div fxFlex="0 0 50%">
+
+                            <mat-form-field appearance="outline">
+                                <mat-label>Job Title</mat-label>
+                                <input matInput formControlName="job_title" />
+                                <mat-error *ngIf="createJobPostingForm.get('job_title').hasError('required')">Enter job Title.</mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div fxFlex="0 0 50%">
+                            <mat-checkbox formControlName="is_active" >Active</mat-checkbox>
+                        </div>
+                    </div>
+                    <div fxLayout="row">
+                        <div fxFlex="0 0 50%">
+
+                            <mat-form-field appearance="outline">
+                                <mat-label>City</mat-label>
+                                <input matInput formControlName="job_city" />
+                            </mat-form-field>
+                        </div>
+                        <div fxFlex="0 0 50%">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Expiry</mat-label>
+                                <input type="date" matInput formControlName="job_expiry_date" />
+                            </mat-form-field>
+                        </div>
+                      
+                    </div>
+                </mat-card>
+
+                <!-- Details Required -->
+
+                <mat-card>
+                    <h4>Details required for the job</h4>
+                    <div fxLayout="row">
+                        <div fxFlex="0 0 50%">
+
+                            <mat-form-field appearance="outline">
+                                <mat-label>Department</mat-label>
+                                <input matInput formControlName="department" />
+                                <mat-error *ngIf="createJobPostingForm.get('department').hasError('required')">Enter department name.</mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div fxFlex="0 0 50%">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Working hours</mat-label>
+                                <input type="number" matInput  formControlName="working_hours" />
+                                <mat-error *ngIf="createJobPostingForm.get('working_hours').hasError('required')">Working hours field required.</mat-error>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div fxLayout="row">
+                        <div fxFlex="0 0 50%">
+
+                            <mat-form-field appearance="outline">
+                                <mat-label>Qualification</mat-label>
+                                <input matInput formControlName="qualification" />
+                                <mat-error *ngIf="createJobPostingForm.get('qualification').hasError('required')">Qualification field required.</mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div fxFlex="0 0 50%">
+                            <mat-form-field appearance="outline">
+                                <mat-label>No of postitions</mat-label>
+                                <input type="number" matInput formControlName="no_of_positions" />
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div fxLayout="row">
+                        <div fxFlex="0 0 50%">
+
+                            <mat-form-field appearance="outline">
+                                <mat-label>Age limit</mat-label>
+                                <input type="number" matInput formControlName="age_limit" />
+                                <mat-error *ngIf="createJobPostingForm.get('age_limit').hasError('required')">Enter your age.</mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div fxFlex="0 0 50%">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Gender</mat-label>
+                                <mat-select formControlName="gender_preference">
+                                  <mat-option value="Any">Any</mat-option>
+                                  <mat-option value="Male">Male</mat-option>
+                                  <mat-option value="Female">Female</mat-option>
+                                  <mat-option value="Other">Other</mat-option>
+                                </mat-select>
+                              </mat-form-field>
+                        </div>
+                    </div>
+                    <div fxLayout="row">
+                        <div fxFlex="0 0 50%">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Experience</mat-label>
+                                <mat-select formControlName="experience">
+                                  <mat-option value="Entry Level">Entry Level</mat-option>
+                                  <mat-option value="1 year">1 year</mat-option>
+                                  <mat-option value="2 year">2 year</mat-option>
+                                  <mat-option value="3 year">3 year</mat-option>
+                                  <mat-option value="4 year">4 year</mat-option>
+                                  <mat-option value="5 year">5 year</mat-option>
+                                  <mat-option value="6 year">6 year</mat-option>
+                                  <mat-option value="7 year">7 year</mat-option>
+                                  <mat-option value="8 year">8 year</mat-option>
+                                  <mat-option value="9 year">9 year</mat-option>
+                                  <mat-option value="Ten-year">10 + year</mat-option>
+                                </mat-select>
+                              </mat-form-field>
+                        </div>
+                    </div>
+                </mat-card>
+
+                <!-- Requirements -->
+
+                <mat-card>
+                    <h4>Job requirements</h4>
+                    <mat-form-field appearance="outline">
+                        <textarea rows="5" placeholder="Add Requirements" matInput formControlName="requirements"></textarea>
+                         <mat-error *ngIf="createJobPostingForm.get('requirements').hasError('required')">Enter job requirements.</mat-error>
+                    </mat-form-field>
+                </mat-card>
+
+                <!-- Responsibility required for the job -->
+
+                <mat-card>
+                    <h4>Responsibilities required for the job</h4>
+                    <mat-form-field appearance="outline">
+                        <textarea rows="5" placeholder="Add Responsibilities" matInput formControlName="responsibilities"></textarea>
+                    </mat-form-field>
+                </mat-card>
+
+                <!-- Knowledge required for the job -->
+
+                <mat-card>
+                    <h4>Knowledge required for the job</h4>
+                    <mat-form-field appearance="outline">
+                        <textarea rows="5" placeholder="Add Knowledge" matInput formControlName="knowledge_required"></textarea>
+
+                    </mat-form-field>
+                </mat-card>
+
+
+                <mat-card>
+                    <!-- Personal Information -->
+                    <h4 class="margin-bottom">Personal Info</h4>
+                    <p class="font-size">(Note: Check all these additional fields which you want for the job )</p>
+
+                    <div fxLayout="row">
+
+                        <div fxLayout="column">
+                            <mat-checkbox formControlName="middle_name">Middle name</mat-checkbox>
+                            <mat-checkbox formControlName="age">Age</mat-checkbox>
+                            <mat-checkbox formControlName="religion">Religion</mat-checkbox>
+                            <mat-checkbox formControlName="gender">Gender</mat-checkbox>
+                            <mat-checkbox formControlName="country">Country</mat-checkbox>
+                            <mat-checkbox formControlName="zip_code">Zip code</mat-checkbox>
+                            <mat-checkbox formControlName="cnic">CNIC</mat-checkbox>
+                            <mat-checkbox formControlName="issue_date">CNIC issue date</mat-checkbox>
+                        </div>
+                        <div fxLayout="column">
+                            <mat-checkbox formControlName="date_of_birth">Date of birth</mat-checkbox>
+                            <mat-checkbox formControlName="marital_status">Marital status</mat-checkbox>
+                            <mat-checkbox formControlName="title">Title</mat-checkbox>
+                            <mat-checkbox formControlName="address_present">present Address</mat-checkbox>
+                            <mat-checkbox formControlName="city">City</mat-checkbox>
+                            <mat-checkbox formControlName="language">Language</mat-checkbox>
+                            <mat-checkbox formControlName="expiry_date">CNIC expiry date</mat-checkbox>
+
+                        </div>
+                    </div>
+
+                </mat-card>
+
+                <!-- Academic Information -->
+
+                <mat-card>
+                    <h4 class="margin-bottom">Academic Info</h4>
+                    <p class="font-size">(Note: Check all these additional fields which you want for the job )</p>
+
+                    <div fxLayout="row">
+
+                        <div fxLayout="column">
+                            <mat-checkbox formControlName="degree">Degree</mat-checkbox>
+                            <mat-checkbox formControlName="institution">Institution</mat-checkbox>
+                            <mat-checkbox formControlName="grade">Grade</mat-checkbox>
+                        </div>
+                        <div fxLayout="column">
+                            <mat-checkbox formControlName="degree_start">Degree start</mat-checkbox>
+                            <mat-checkbox formControlName="degree_end">Degree end</mat-checkbox>
+
+                        </div>
+                    </div>
+
+                </mat-card>
+                <!-- References -->
+                <mat-card>
+                    <h4 class="margin-bottom">References</h4>
+                    <p class="font-size">(Note: Check all these additional fields which you want for the job )</p>
+                    <div fxLayout="row">
+
+                        <div fxLayout="column">
+                            <mat-checkbox formControlName="reference_name">Reference Name</mat-checkbox>
+                            <mat-checkbox formControlName="relationship_type">Relationship type</mat-checkbox>
+                            <mat-checkbox formControlName="company">Company</mat-checkbox>
+                        </div>
+                        <div fxLayout="column">
+                            <mat-checkbox formControlName="email">Email</mat-checkbox>
+                            <mat-checkbox formControlName="phone">Phone</mat-checkbox>
+
+                        </div>
+                    </div>
+
+                </mat-card>
+
+                <!-- Professional Information -->
+
+                <mat-card>
+                    <h4 class="margin-bottom">Professional Info</h4>
+                    <p class="font-size">(Note: Check all these additional fields which you want for the job )</p>
+
+                    <div fxLayout="row">
+
+                        <div fxLayout="column">
+                            <mat-checkbox formControlName="employer_name">Employer Name</mat-checkbox>
+                            <mat-checkbox formControlName="experience_position">Position</mat-checkbox>
+                        </div>
+                        <div fxLayout="column">
+                            <mat-checkbox formControlName="experience_start">Start</mat-checkbox>
+                            <mat-checkbox formControlName="experience_end">End</mat-checkbox>
+
+                        </div>
+                    </div>
+
+                </mat-card>
+
+                <!-- Certifications -->
+                <mat-card>
+                    <h4 class="margin-bottom">Certifications</h4>
+                    <p class="font-size">(Note: Check all these additional fields which you want for the job )</p>
+
+                    <div fxLayout="row">
+
+                        <div fxLayout="column">
+                            <mat-checkbox formControlName="certification_name"> Name</mat-checkbox>
+                            <mat-checkbox formControlName="certification_start">Start</mat-checkbox>
+                            <mat-checkbox formControlName="certification_end">End</mat-checkbox>
+                        </div>
+                    </div>
+
+                </mat-card>
+            </form>
+        </div>
+
+        <!-- Other Section -->
+        <div fxFlex="0 1 33.33333">
+            <form [formGroup]="createJobPostingForm">
+                <!-- Requirements -->
+                <mat-card>
+                    <mat-form-field appearance="outline">
+                        <mat-label>Comment</mat-label>
+                        <input matInput formControlName="comments" />
+                    </mat-form-field>
+                    <mat-form-field appearance="outline">
+                        <mat-label>Additional Requirements</mat-label>
+                        <textarea rows="5" matInput formControlName="additional_requirements"></textarea>
+                    </mat-form-field>
+                </mat-card>
+
+            </form>
+        </div>
+    </div>
+</main>

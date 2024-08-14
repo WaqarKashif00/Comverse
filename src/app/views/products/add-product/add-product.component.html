@@ -1,0 +1,377 @@
+<main id="main">
+    <mat-progress-bar class="page-loader" color="accent" mode="indeterminate" *ngIf="loading"></mat-progress-bar>
+    <div class="page-header" fxLayout="row" fxLayoutAlign="space-between center">
+        <h1>Add Product</h1>
+
+        <div class="header-actions">
+            <a [routerLink]="['/', URLS.products]" mat-button color="primary">Cancel</a>
+            <button mat-flat-button color="primary" [disabled]="loading || !productForm.valid || !inventoryForm.valid || !variantsForm.valid" (click)="onSubmit()">Save</button>
+        </div>
+    </div>
+
+    <div fxLayout="row">
+        <div fxFlex="0 1 66.66666">
+            <form action="" [formGroup]="productForm">
+                <!-- General Information -->
+                <mat-card>
+                    <h2>General Information</h2>
+                    <mat-form-field appearance="outline">
+                        <mat-label>Product Name</mat-label>
+                        <input matInput formControlName="title" />
+                        <mat-error *ngIf="productForm.get('title').hasError('required')">Enter the name of your product.</mat-error>
+                    </mat-form-field>
+                    <quill-editor [modules]="editorModules" placeholder="Product description" formControlName="description"></quill-editor>
+                </mat-card>
+
+                <!-- Features -->
+                <mat-card>
+                    <h2>Features</h2>
+                    <table class="product-features-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 20%">Field</th>
+                                <th>Value</th>
+                                <th style="width: 50px"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let featureGroup of productForm.get('features')['controls']; let i = index">
+                                <ng-container [formGroup]="featureGroup">
+                                    <td>
+                                        <mat-form-field appearance="outline">
+                                            <input matInput formControlName="feature_title" />
+                                        </mat-form-field>
+                                    </td>
+                                    <td>
+                                        <mat-form-field appearance="outline">
+                                            <input matInput formControlName="feature_details" />
+                                        </mat-form-field>
+                                    </td>
+                                    <td>
+                                        <button mat-icon-button color="warn" (click)="deleteFeature(i)"><mat-icon>delete</mat-icon></button>
+                                    </td>
+                                </ng-container>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="text-right meta-fields-bottom">
+                        <button mat-button color="primary" (click)="addFeature()">Add feature</button>
+                    </div>
+                </mat-card>
+            </form>
+
+            <!-- Media -->
+            <mat-card class="mt-20">
+                <h2>Media</h2>
+
+                <div class="image-previews"
+                    fxLayout="row wrap"
+                    fxLayoutAlign="start"
+                    *ngIf="bannerImages.length"
+                    cdkDropList
+                    cdkDropListOrientation="horizontal"
+                    (cdkDropListDropped)="imageSortChanged($event)"
+                >
+                    <div class="preview-wrapper" *ngFor="let media of bannerImages; let i = index;" cdkDrag>
+                        <img [src]="media.cdn_link" *ngIf="media.type === 'image'" />
+                        <img src="assets/img/play-button.png" class="video-thumbnail" *ngIf="media.type === 'video'" (click)="videoThumbnailClick(media.cdn_link)" />
+                        <button mat-icon-button color="warn" class="remove-preview-image" (click)="removeImage(i)"><mat-icon>close</mat-icon></button>
+                    </div>
+                </div>
+
+                <angular-file-uploader
+                    [config]="afuConfig"
+                    (ApiResponse)="mediaUpload($event)">
+                </angular-file-uploader>
+            </mat-card>
+
+            <!-- Inventory -->
+            <mat-card *ngIf="!productForm.get('has_variants').value" [formGroup]="inventoryForm">
+                <h2>Inventory</h2>
+
+                <div fxLayout="row">
+                    <div fxFlex="0 1 50%">
+                        <mat-form-field appearance="outline">
+                            <mat-label>SKU</mat-label>
+                            <input matInput formControlName="sku" />
+                            <mat-error *ngIf="inventoryForm.get('sku').hasError('required')">SKU is a required field.</mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div fxFlex="0 1 50%">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Barcode</mat-label>
+                            <input matInput formControlName="barcode" />
+                        </mat-form-field>
+                    </div>
+                </div>
+
+                <div fxLayout="row">
+                    <div fxFlex="0 1 50%">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Inventory available</mat-label>
+                            <input matInput type="number" formControlName="inventory_quantity" />
+                        </mat-form-field>
+                    </div>
+                    <div fxFlex="0 1 50%">
+                        <mat-checkbox formControlName="track_inventory">Track inventory</mat-checkbox>
+                    </div>
+                </div>
+            </mat-card>
+
+            <!-- Variants -->
+            <mat-card>
+                <h2>Variants</h2>
+                <div [formGroup]="productForm">
+                    <mat-checkbox formControlName="has_variants" (change)="onHasVariantChange($event)">This product has multiple options like size, color etc.</mat-checkbox>
+                </div>
+
+                <div *ngIf="productForm.get('has_variants').value">
+                    <table class="product-options-table">
+                        <tbody>
+                            <ng-container *ngFor="let option of options; let i = index;">
+                                <tr>
+                                    <td style="width: 200px">
+                                        <mat-form-field appearance="outline">
+                                            <mat-label>Name</mat-label>
+                                            <input matInput [(ngModel)]="option.name" />
+                                        </mat-form-field>
+                                    </td>
+                                    <td>
+                                        <tags-input
+                                            [(value)]="option.values"
+                                            (change)="makeVariantsFromOptions()"
+                                            placeholder="New option..."
+                                            label="Option"></tags-input>
+                                    </td>
+                                    <td style="width: 50px">
+                                        <button mat-icon-button color="warn" (click)="deleteOption(i)" *ngIf="options.length > 1"><mat-icon>delete</mat-icon></button>
+                                    </td>
+                                </tr>
+                            </ng-container>
+                        </tbody>
+                    </table>
+
+                    <div class="add-option">
+                        <button mat-button color="primary" (click)="addOption()" *ngIf="options.length < 3">Add option</button>
+                    </div>
+
+                    <mat-divider></mat-divider>
+
+                    <div class="product-variants-table-wrapper">
+                        <table class="product-variants-table">
+                            <thead>
+                                <tr>
+                                    <th>Variant</th>
+                                    <th>Price</th>
+                                    <th>Quantity</th>
+                                    <th>SKU</th>
+                                    <th>Barcode</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let variantGroup of variantsForm.get('variants')['controls']; let i = index">
+                                    <ng-container [formGroup]="variantGroup">
+                                        <td>{{variantGroup.get('title').value}}</td>
+                                        <td>
+                                            <mat-form-field appearance="outline">
+                                                <input matInput type="number" formControlName="price" />
+                                            </mat-form-field>
+                                        </td>
+                                        <td>
+                                            <mat-form-field appearance="outline">
+                                                <input matInput type="number" formControlName="inventory_quantity" />
+                                            </mat-form-field>
+                                        </td>
+                                        <td>
+                                            <mat-form-field appearance="outline">
+                                                <input matInput formControlName="sku" />
+                                                <mat-error *ngIf="variantGroup.get('sku').hasError('required')">SKU is a required field.</mat-error>
+                                            </mat-form-field>
+                                        </td>
+                                        <td>
+                                            <mat-form-field appearance="outline">
+                                                <input matInput formControlName="barcode" />
+                                            </mat-form-field>
+                                        </td>
+                                        <td>
+                                            <button color="warn" mat-icon-button (click)="removeVariant(i)"><mat-icon>delete</mat-icon></button>
+                                        </td>
+                                    </ng-container>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </mat-card>
+            <mat-card [formGroup]="productForm">
+                <h2>Search Engine customization</h2>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>Handle</mat-label>
+                    <input matInput formControlName="handle" />
+                    <mat-hint>If empty, the preview shows what will be auto generated.</mat-hint>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>SEO title</mat-label>
+                    <input matInput formControlName="seo_title" />
+                    <mat-hint>If empty, the preview shows what will be auto generated.</mat-hint>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>SEO description</mat-label>
+                    <textarea matInput formControlName="seo_description"></textarea>
+                    <mat-hint>If empty, the preview shows what will be auto generated.</mat-hint>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>SEO keywords</mat-label>
+                    <input matInput formControlName="seo_keywords" />
+                    <mat-hint>If empty, the preview shows what will be auto generated.</mat-hint>
+                </mat-form-field>
+            </mat-card>
+        </div>
+
+        <div fxFlex="0 1 33.33333">
+            <form [formGroup]="productForm">
+                <!-- Availability -->
+                <mat-card>
+                    <h2>Availability</h2>
+                    <div fxLayout="column" class="verticle-checkbox">
+                        <mat-checkbox formControlName="is_active">Active</mat-checkbox>
+                        <mat-checkbox formControlName="whatsapp">Allow order on WhatAapp</mat-checkbox>
+                        <mat-checkbox formControlName="hide_out_of_stock">Hide when out of stock</mat-checkbox>
+                        <p class="form-error" *ngIf="!productForm.get('product_group').value">To make your product available on live store, assign it to any product group.</p>
+                    </div>
+                </mat-card>
+
+                <!-- Organization -->
+                <mat-card class="mt-20">
+                    <h2>Organization</h2>
+
+                    <mat-form-field *ngIf="!is_vendor" appearance="outline">
+                        <mat-label>Vendor</mat-label>
+                        <mat-select formControlName="vendor" (selectionChange)="onVendorChange()">
+                            <mat-option [value]="vendor.id" *ngFor="let vendor of vendors">{{vendor.name}}</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="productForm.get('vendor').hasError('required')">Select the vendor of this product.</mat-error>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Product type</mat-label>
+                        <input matInput formControlName="product_type" />
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Product group</mat-label>
+                        <mat-select formControlName="product_group" (selectionChange)="onProductGroupChange()">
+                            <mat-option value="">None</mat-option>
+                            <mat-option [value]="group.id" *ngFor="let group of productGroups">{{group.title}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Collections</mat-label>
+                        <mat-select multiple formControlName="collection">
+                            <mat-option [value]="collection.id" *ngFor="let collection of collections">{{collection.title}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Brand</mat-label>
+                        <mat-select formControlName="product_brand">
+                            <mat-option [value]="brand.id" *ngFor="let brand of brands">{{brand.name}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </mat-card>
+
+                <!-- Price -->
+                <mat-card *ngIf="!productForm.get('has_variants').value" [formGroup]="priceForm">
+                    <h2>Price</h2>
+                    <mat-form-field appearance="outline">
+                        <mat-label>Price</mat-label>
+                        <input matInput type="number" formControlName="price" />
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Compare at price</mat-label>
+                        <input matInput type="number" formControlName="compare_at_price" />
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Cost per item</mat-label>
+                        <input matInput type="number" formControlName="cost_per_item" />
+                    </mat-form-field>
+                </mat-card>
+
+
+                     <!-- Sizechart -->
+                     <mat-card>
+                        <h2>Sizecharts</h2>
+                        <mat-form-field appearance="outline">
+                            <mat-label>Sizechart</mat-label>
+                            <mat-select multiple formControlName="sizechart">
+                                <mat-option [value]=sizeChart.id *ngFor="let sizeChart of sizeCharts">
+                                    {{sizeChart.title}}</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </mat-card>
+                <!-- commission -->
+                <mat-card>
+                    <h2>Commission</h2>
+                    <mat-form-field appearance="outline">
+                        <mat-label>Commission</mat-label>
+                        <mat-select formControlName="commission">
+                            <mat-option [value]=commission.id *ngFor="let commission of commissionList">
+                                {{commission.title}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </mat-card>
+
+                <!-- Shipping and Tax -->
+                <mat-card class="mt-20" [formGroup]="inventoryForm">
+                    <h2>Shipping</h2>
+                    <div fxLayout="column" class="verticle-checkbox">
+                        <mat-checkbox formControlName="is_physical" (change)="onPhysicalProductChange($event)">Is a physical product.</mat-checkbox>
+                        <div *ngIf="inventoryForm.get('is_physical').value">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Weight</mat-label>
+                                <input matInput formControlName="weight" type="number" (change)="onWeightChange()" />
+                                <mat-error *ngIf="inventoryForm.get('weight').hasError('required')">Enter the weight of the product.</mat-error>
+                                <mat-error *ngIf="inventoryForm.get('weight').hasError('min')">A physical product weight can not be 0.</mat-error>
+                            </mat-form-field>
+                        </div>
+                    </div>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Shipped By</mat-label>
+                        <mat-select formControlName="shipped_by">
+                          <mat-option value="market_place">Market Place</mat-option>
+                          <mat-option value="vendor">Vendor</mat-option>
+                          <mat-option value="via_market_place">Via Market Place</mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                </mat-card>
+
+                <!-- Warranty -->
+                <mat-card class="mt-20" [formGroup]="productForm">
+                    <h2>Warranty</h2>
+
+                    <mat-form-field appearance="outline">
+                        <input matInput type="text" formControlName="warranty" />
+                    </mat-form-field>
+                </mat-card>
+
+                <!-- Tags -->
+                <mat-card>
+                    <h2>Tags</h2>
+                    <tags-input
+                        label="Tags"
+                        [showRemove]="true"
+                        [(value)]="productTags">
+                    </tags-input>
+                </mat-card>
+            </form>
+        </div>
+    </div>
+</main>

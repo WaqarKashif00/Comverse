@@ -1,0 +1,42 @@
+<main id="main">
+    <mat-progress-bar class="page-loader" color="accent" mode="indeterminate" *ngIf="loading"></mat-progress-bar>
+    <div class="page-header" fxLayout="row" fxLayoutAlign="space-between center">
+        <div>
+            <button mat-icon-button aria-label="Go back" class="header-back-arrow"
+                (click)="back()">
+                <mat-icon>arrow_back</mat-icon>
+            </button>
+            <h1>Applicant Detail</h1>
+        </div>
+        <div class="header-actions">
+            <a (click)="back()" mat-stroked-button color="primary">Cancel</a>
+        </div>
+    </div>
+
+
+    <mat-card class="card-bottom-space">
+        <div fxLayout="row">
+            <div fxFlex="0 0 20%">
+
+                <h4 class="margin-bottom">Name</h4>
+                <p class="font-size">{{name}}</p>
+            </div>
+            <div fxFlex="0 0 25%">
+
+                <h4 class="margin-bottom">Email</h4>
+                <p class="font-size">{{email}}</p>
+            </div>
+            <div fxFlex="0 0 20%">
+
+                <h4 class="margin-bottom">City</h4>
+                <p class="font-size">{{city}}</p>
+            </div>
+            <div fxFlex="0 0 20%">
+
+                <h4 class="margin-bottom">Phone Number</h4>
+                <p class="font-size">{{phone}}</p>
+            </div>
+        </div>
+
+    </mat-card>
+</main>

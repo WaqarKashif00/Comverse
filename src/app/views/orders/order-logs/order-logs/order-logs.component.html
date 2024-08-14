@@ -1,0 +1,29 @@
+<main id="main">
+    <mat-progress-bar class="page-loader" color="accent" mode="indeterminate" *ngIf="loading"></mat-progress-bar>
+    <div class="page-header" fxLayout="row" fxLayoutAlign="space-between center">
+        <h1>ERP Order Logs</h1>
+
+        <div class="header-actions">
+            <!-- <a [routerLink]="['/', URLS.orders, URLS.add]" mat-flat-button color="primary">Create new</a> -->
+        </div>
+    </div>
+    <div class="page-container">
+        <mat-card class="table-wrapper-card">
+          <mat-tab-group>
+            <mat-tab label="Order Posting Queue">
+              <datatable [data]="orderPostingQueue" [columns]="columns" [pagination]="true"
+              [count]="totalCount"
+              [itemsPerPage]="pageNumber" [rowActions]="rowActions" (page)="onPageChange($event)">
+              </datatable>
+            </mat-tab>
+    
+            <mat-tab label="Order Posting">
+                
+              <datatable [data]="orderPosting" [columns]="columnsTable" [pagination]="true"
+                [itemsPerPage]="pageSizeTable" [count]="totalTableCount" (page)="onPageTable($event)">
+              </datatable>
+            </mat-tab>
+          </mat-tab-group>
+        </mat-card>
+      </div>
+</main>

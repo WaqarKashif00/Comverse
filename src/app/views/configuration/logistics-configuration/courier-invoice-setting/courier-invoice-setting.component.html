@@ -1,0 +1,189 @@
+<main id="main">
+
+    <mat-progress-bar class="page-loader" mode="indeterminate" *ngIf="loading"></mat-progress-bar>
+
+    <div class="page-header" fxLayout="row" fxLayoutAlign="space-between center">
+        <div>
+            <button mat-icon-button aria-label="Go back" class="header-back-arrow"
+                [routerLink]="['/',URLS.logisticConfiguration]">
+                <mat-icon>arrow_back</mat-icon>
+            </button>
+            <h1>Invoice Configuration</h1>
+        </div>
+
+        <div class="header-actions">
+            <a [routerLink]="['/',URLS.logisticConfiguration]" mat-button color="primary">Back</a>
+            <button mat-flat-button color="primary" (click)="saveInvoiceSettings()">Save</button>
+        </div>
+
+    </div>
+    <!-- Consignee Information Card -->
+    <form [formGroup]="invoiceForm">
+        <div fxLayout="row">
+            <div fxFlex="0 1 66.666666%">
+                <mat-card>
+                    <h4>Consignee Information</h4>
+                    <div class="space" fxLayout="row">
+                        <div fxFlex="0 1 50%">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Name</mat-label>
+                                <input matInput="text" type="text" formControlName="name">
+                            </mat-form-field>
+                        </div>
+                        <div fxFlex="0 1 50%">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Email</mat-label>
+                                <input matInput="email" type="email" formControlName="email">
+                            </mat-form-field>
+                        </div>
+                    </div>
+
+                    <div fxLayout="row">
+                        <div fxFlex="0 1 50%">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Phone Number</mat-label>
+                                <input matInput="text" type="text" formControlName="phone">
+                            </mat-form-field>
+                        </div>
+                        <div fxFlex="0 1 50%">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Shop Address</mat-label>
+                                <input matInput="text" type="text" formControlName="shop_address">
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </mat-card>
+
+                <mat-card>
+                    <h4>Cutomization</h4>
+                    <div fxLayout="row">
+                        <div fxFlex="0 1 50%">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Invoice Title</mat-label>
+                                <input matInput="text" type="text" formControlName="invoice_title">
+                            </mat-form-field>
+                        </div>
+                        <div fxFlex="0 1 50%">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Invoice Footer</mat-label>
+                                <input matInput="email" type="email" formControlName="invoice_footer">
+                            </mat-form-field>
+                        </div>
+                    </div>
+
+                    <div fxLayout="row">
+                        <div fxFlex="0 1 50%">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Invoice Footer</mat-label>
+                                <mat-select formControlName="invoice_footer">
+                                    <mat-option *ngFor='let option of ["Order Number", "CN Number", "Both"]'
+                                        [value]="option">
+                                        {{option}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                        <div fxFlex="0 1 50%">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Logo Url</mat-label>
+                                <input matInput="text" type="text" formControlName="logo_url">
+                            </mat-form-field>
+                        </div>
+                    </div>
+
+
+                    <div fxLayout="row">
+                        <div fxFlex="0 1 50%">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Facebook Page Url</mat-label>
+                                <input matInput="text" type="text" formControlName="facebook_page_url">
+                            </mat-form-field>
+                        </div>
+                        <div fxFlex="0 1 50%">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Facebook Page Name</mat-label>
+                                <input matInput="email" type="email" formControlName="facebook_page_name">
+                            </mat-form-field>
+                        </div>
+                    </div>
+
+
+                    <div fxLayout="row">
+                        <div fxFlex="0 1 50%">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Instagram Account Url</mat-label>
+                                <input matInput="text" type="text" formControlName="instagram_account_url">
+                            </mat-form-field>
+                        </div>
+                        <div fxFlex="0 1 50%">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Instagram Account Name</mat-label>
+                                <input matInput="text" type="text" formControlName="instagram_account_name">
+                            </mat-form-field>
+                        </div>
+                    </div>
+
+                </mat-card>
+
+
+
+                <mat-card>
+                    <h4>Invoice Print Settings</h4>
+
+                    <ng-container *ngFor="let invoice of invoiceForm.get('invoice_print_setting')['controls']; let i = index;">
+                    <ng-container [formGroup]="invoice">
+
+                    <div fxLayout="row">
+                        <div fxFlex="0 1 15%">
+                            <h4>{{invoice.value.courier_name}}</h4>
+                        </div>
+
+                        <div fxFlex="0 1 50%">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Shop Invoice Count</mat-label>
+                                <input type="number" min="1" max="10"  matInput
+                                    formControlName="store_invoice_count">
+                            </mat-form-field>
+                        </div>
+
+                        <div fxFlex="0 1 50%">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Courier Invoice Count</mat-label>
+                                <input type="number" min="1" max="10"  matInput
+                                    formControlName="courier_invoice_count">
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </ng-container>
+
+                </ng-container>
+                </mat-card>
+
+            </div>
+
+            <div fxFlex="0 1 33.333333%">
+                <mat-card>
+                    <h4>Advanced Cutomization</h4>
+                    <div fxLayout="row">
+                        <div fxLayout="column">
+                            <mat-checkbox formControlName="show_compare_price">Show Compare Price</mat-checkbox>
+                            <mat-checkbox formControlName="show_product_type">Show Product Type</mat-checkbox>
+                            <mat-checkbox formControlName="show_sku">Show Sku</mat-checkbox>
+                            <mat-checkbox formControlName="print_sku_as_barcode">Print Sku as Barcode</mat-checkbox>
+                            <mat-checkbox formControlName="tax_implementation">Tax Implementation</mat-checkbox>
+                            <mat-checkbox formControlName="bin_number">Bin Number</mat-checkbox>
+                            <mat-checkbox formControlName="show_order_number_per_row">Show Order Number Per Row </mat-checkbox>
+                            <mat-checkbox formControlName="show_barcode">Show Barcode</mat-checkbox>
+                            <mat-checkbox formControlName="print_barcode">Print Barcode</mat-checkbox>
+                            <mat-checkbox [(ngModel)]="showReturnForm" formControlName="show_return_form">Show Return Form</mat-checkbox>
+                        </div>
+                    </div>
+                    <mat-form-field class="space" *ngIf="showReturnForm" appearance="outline">
+                        <mat-label>Return Form</mat-label>
+                        <input matInput formControlName="return_form_text">
+                    </mat-form-field>
+                </mat-card>
+            </div>
+        </div>
+    </form>
+</main>

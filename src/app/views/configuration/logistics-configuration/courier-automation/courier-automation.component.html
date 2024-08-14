@@ -1,0 +1,151 @@
+<main id="main">
+    <mat-progress-bar class="page-loader" color="accent" mode="indeterminate" *ngIf="loading"></mat-progress-bar>
+    <div class="page-header" fxLayout="row" fxLayoutAlign="space-between center">
+        <div>
+            <button mat-icon-button aria-label="Go back" class="header-back-arrow"
+                [routerLink]="['/',URLS.logisticConfiguration]">
+                <mat-icon>arrow_back</mat-icon>
+            </button>
+            <h1>Courier Automation</h1>
+        </div>
+
+        <div class="header-actions">
+            <a [routerLink]="['/',URLS.logisticConfiguration]" mat-button color="primary">Back</a>
+            <button mat-flat-button color="primary" (click)="onSave()">Save</button>
+        </div>
+
+    </div>
+
+    <div fxLayout="row">
+        <div fxFlex="0 1 66.66666">
+            <form [formGroup]="courierAutomationForm">
+                <mat-card>
+                    <h4>Smart CN Generation</h4>
+                    <div  fxLayout="row">
+                        <div fxFlex="0 1 50%">
+                            <mat-checkbox class="space-checkbox" formControlName="is_active"> Enable</mat-checkbox>
+                        </div>
+
+                        <div fxFlex="0 1 50%">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Order Status for CN Generation</mat-label>
+                                <mat-select formControlName="order_status" >
+                                    <mat-option value="open">Open</mat-option>
+                                    <mat-option value="accepted">Accepted</mat-option>
+                                    <mat-option value="in_process">In Process</mat-option>
+                                    <mat-option value="shipped">Shipped</mat-option>
+                                    <mat-option value="partial_shipped">Partial shipped</mat-option>
+                                    <mat-option value="delivered">Delivered</mat-option>
+                                    <mat-option value="returned">Returned</mat-option>
+                                    <mat-option value="cancelled">Cancelled</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+
+                    </div>
+
+                    <div class="space" fxLayout="row">
+                        <div fxFlex="0 1 50%">
+                            <mat-checkbox formControlName="is_paid"> Mark as paid on delivered</mat-checkbox>
+                        </div>
+                        <div  fxFlex="0 1 50%">
+                            <mat-checkbox  formControlName="is_tag"> Add tag on CN generation</mat-checkbox>
+                        </div>
+
+
+                    </div>
+
+
+                    <h4>Excluded Locations</h4>
+                    <div fxLayout="row">
+   
+                        <div fxFlex="0 1 50%">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Location</mat-label>
+                                <mat-select formControlName="location" (selectionChange)="onLocationSelect($event)">
+                                    <mat-option [value]="location.id" *ngFor="let location of locations">{{location.title}}</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+
+                        <div fxFlex="0 1 50%">
+                            <mat-form-field  appearance="outline">
+                                <mat-label>Sub Location</mat-label>
+                                <mat-select formControlName="sub_location" multiple >
+                                    <mat-option [value]="sub_location.id" *ngFor="let sub_location of sub_locations">{{sub_location.title}}</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                    </div>
+
+                    <div fxLayout="row">
+                        <div fxFlex="0 1 50%">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Excluded Vendors</mat-label>
+                                <mat-select formControlName="vendor" multiple (selectionChange)="selectVendor($event)">
+                                    <mat-option [value]="vendor.id" *ngFor="let vendor of vendors">{{vendor.name}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+
+                        <div *ngIf="courierAutomationForm.get('is_tag').value == true" fxFlex="0 1 50%">
+                            <tags-input label="Tags" [showRemove]="true" [(value)]="tags"></tags-input>
+                        </div>
+                    </div>
+
+
+                </mat-card>
+
+                <!-- <mat-card>
+                    <h4>Exclude Locations</h4>
+                    <ng-container
+                        *ngFor="let excludedLocation of courierAutomationForm.get('excluded_locations')['controls']; let i = index;">
+                        <ng-container [formGroup]="excludedLocation">
+                            <div fxLayout="row">
+                                <div fxFlex="0 1 50%">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Location</mat-label>
+                                        <mat-select formControlName="locations" multiple>
+                                            <mat-option value="percentage">Lahore</mat-option>
+                                            <mat-option value="some">Karachi</mat-option>
+
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+
+                                <div fxFlex="0 1 50%">
+                                    <mat-form-field *ngIf="excludedLocation.get('locations').value.length ==1 "
+                                        appearance="outline">
+                                        <mat-label>Sub Location</mat-label>
+                                        <mat-select formControlName="sub_locations" multiple>
+                                            <mat-option value="percentage">Lahore</mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                                <div>
+                                    <button mat-icon-button class="delete-commission-btn" color="warn"
+                                        (click)=removeExcludedLocation(i)>
+                                        <mat-icon>close</mat-icon>
+                                    </button>
+                                </div>
+                            </div>
+                        </ng-container>
+                    </ng-container>
+                    <button class="button-space" mat-stroked-button color="primary" (click)="addExcludeLocations()">+
+                        Add Location</button>
+                </mat-card> -->
+
+
+
+
+
+
+
+
+            </form>
+        </div>
+
+
+    </div>
+</main>

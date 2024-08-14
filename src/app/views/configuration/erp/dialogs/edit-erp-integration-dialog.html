@@ -1,0 +1,110 @@
+<button mat-icon-button mat-dialog-close class="dialog-close"><mat-icon>close</mat-icon></button>
+<h2 mat-dialog-title>Edit Integration</h2>
+<mat-dialog-content class="mat-typography">
+    <form [formGroup]="createIntegrationForm">
+        <div  fxLayout="row">
+            <div fxFlex="0 1 50%">
+                <mat-form-field appearance="outline">
+                    <mat-label>Title</mat-label>
+                    <input matInput name="title" formControlName="title"
+                         />
+                </mat-form-field>
+            </div>
+            <div fxFlex="0 1 50%">
+                <mat-form-field appearance="outline">
+                    <mat-label>Type</mat-label>
+                    <mat-select formControlName="type" [compareWith]="compareType" (selectionChange)="onTypeSelect($event)">
+                        <mat-option value="Candela">Candela</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+        </div>
+        <ng-container [formGroup]="createIntegrationForm.get('credentials')" >
+
+            <div [ngSwitch]="item.type" *ngFor="let item of typeField" >
+              <mat-form-field *ngSwitchCase="'text'"   appearance="outline">
+                <mat-label>{{item.label}}</mat-label>
+                <input matInput formControlName={{item.name}} />
+              </mat-form-field>
+            <div *ngSwitchCase="'boolean'" > 
+              <mat-checkbox class="dynamic-checkbox" formControlName={{item.name}} >{{item.label}}</mat-checkbox>
+          </div>
+        </div>
+          </ng-container>
+        <div  fxLayout="row">
+            <div fxFlex="0 1 50%">
+                <mat-form-field appearance="outline">
+                    <mat-label>Inventory percentage</mat-label>
+                    <input matInput type="number" min="0" formControlName="inventory_percentage" />
+                    <span matSuffix>%</span>
+                  </mat-form-field>
+            </div>
+            <div fxFlex="0 1 50%">
+                <mat-form-field appearance="outline">
+                    <mat-label>Locations</mat-label>
+                    <mat-select (selectionChange)="getSubLocations()" [compareWith]="compareData"  formControlName="location">
+                        <mat-option  [value]="location.id" *ngFor="let location of locations">{{location.title}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+        </div>
+        <div  fxLayout="row">
+            <div fxFlex="0 1 50%">
+                <mat-form-field  appearance="outline">
+                    <mat-label>Venders</mat-label>
+                    <mat-select multiple formControlName="vendor">
+                        <mat-option  [value]="vendor.id" *ngFor="let vendor of vendors">
+                            {{vendor.name}}</mat-option>
+                        <div fxLayout="row" fxLayoutAlign="center">
+                            <button mat-stroked-button color="primary" class="load-more" (click)="loadMore()">Load more</button>
+                        </div>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div fxFlex="0 1 50%">
+                <mat-form-field appearance="outline">
+                    <mat-label>Unique Identifier</mat-label>
+                    <mat-select formControlName="unique_identifier">
+                        <mat-option value="Bar Code">Bar Code</mat-option>
+                        <mat-option value="SKU">SKU</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+        </div>
+        <div  fxLayout="row">
+            <ng-container *ngIf="createIntegrationForm.get('location').value !== ''">
+                <div fxFlex="0 1 50%">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Sub Locations</mat-label>
+                        <mat-select multiple formControlName="sub_location">
+                            <mat-option [value]="sublocation.id" *ngFor="let sublocation of subLocations">{{sublocation.title}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </ng-container>
+        </div>
+        <div  fxLayout="row">
+            <div fxFlex="0 1 50%">
+                <mat-checkbox class="bold" formControlName="sync_zero_inventory">Sync for zero inventory</mat-checkbox>
+            </div>
+            <div fxFlex="0 1 50%">
+                <mat-checkbox class="bold" formControlName="auto_schedule">Auto schedule</mat-checkbox>
+
+            </div>
+        </div>
+        <div  fxLayout="row">
+            <div fxFlex="0 1 50%">
+                <mat-checkbox class="bold" formControlName="order_posting">Order Posting</mat-checkbox>
+            </div>
+            <ng-container *ngIf="createIntegrationForm.get('order_posting').value == true">
+                <div fxFlex="0 1 50%">
+                    <mat-checkbox class="bold" formControlName="add_hash">Add Order Hash</mat-checkbox>
+                </div>
+            </ng-container>
+        </div>
+    </form>
+</mat-dialog-content>
+<div mat-dialog-actions>
+    <button mat-stroked-button color="primary" mat-dialog-close>Cancel</button>
+    <button mat-flat-button color="primary" [disabled]="loading || !createIntegrationForm.valid " (click)="onSubmit()">Save</button>
+</div>

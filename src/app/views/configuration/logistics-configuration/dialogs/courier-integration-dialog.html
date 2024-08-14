@@ -1,0 +1,58 @@
+<button mat-icon-button mat-dialog-close class="dialog-close">
+    <mat-icon>close</mat-icon>
+</button>
+<h2 mat-dialog-title>Courier Integration of {{data.name? data.name: data.courier}}</h2>
+<mat-dialog-content class="mat-typography">
+
+
+    <mat-form-field *ngIf="!is_vendor"  appearance="outline">
+        <mat-label>Vendors</mat-label>
+    <mat-select [(ngModel)]="vendor" [compareWith]="compareData" (selectionChange)="selectVendor($event)" >
+            <mat-option [value]="vendor" *ngFor="let vendor of vendors">{{vendor.name}}</mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <mat-form-field  appearance="outline">
+        <mat-label>Location</mat-label>
+    <mat-select [(ngModel)]="location"  (selectionChange)="onLocationSelect($event)" >
+            <mat-option [value]="item" *ngFor="let item of location_list">{{item.title}}</mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <mat-form-field  appearance="outline">
+        <mat-label>Sub Location</mat-label>
+        <mat-select [(ngModel)]="sub_locations" multiple>
+            <mat-option [value]="item" *ngFor="let item of sub_location_list">{{item.title}}</mat-option>
+        </mat-select>
+    </mat-form-field>
+
+
+    <form [formGroup]="courierIntegrationForm">
+
+
+
+
+        <ng-container [formGroup]="courierIntegrationForm.get('credentials')">
+
+            <div [ngSwitch]="item.type" *ngFor="let item of fields">
+                <mat-form-field *ngSwitchCase="'text'" appearance="outline">
+                    <mat-label>{{item.label}}</mat-label>
+                    <input matInput formControlName={{item.name}} />
+                </mat-form-field>
+                <div *ngSwitchCase="'boolean'">
+                    <mat-checkbox class="dynamic-checkbox" formControlName={{item.name}}>{{item.label}}</mat-checkbox>
+                </div>
+                <mat-form-field *ngSwitchCase="'choice'" appearance="outline">
+                    <mat-label>{{item.label}}</mat-label>
+                    <mat-select formControlName={{item.name}}>
+                        <mat-option [value]="option.value" *ngFor="let option of item.choice_data">{{option.label}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+        </ng-container>
+    </form>
+</mat-dialog-content>
+<div mat-dialog-actions>
+    <button mat-stroked-button color="primary" mat-dialog-close>Cancel</button>
+    <button mat-flat-button color="primary" [disabled]="loading || !courierIntegrationForm.valid" (click)="onSave()">Save</button>
+</div>

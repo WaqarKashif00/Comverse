@@ -1,0 +1,60 @@
+@import "src/scss/variables";
+
+
+#main {
+    .category-title-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 4px 8px;
+        max-width: 600px;
+        cursor: pointer;
+        box-shadow: none;
+        border: 1px solid #cdcdcd;
+    
+        &:hover {
+            background-color: $primaryHighlight;
+         }
+    
+        .cat-drag-handle {
+            margin-right: 10px;
+            color: rgba(0,0,0,0.25);
+            vertical-align: middle;
+            cursor: grab;
+        }
+    
+        & + .category-title-wrapper {
+            margin-top: 14px;
+        }
+    }
+}
+
+.sub-categories {
+    margin-top: 14px;
+    padding-left: 34px;
+    max-width: 634px;
+
+    & + .category-title-wrapper {
+        margin-top: 14px;
+    }
+}
+
+.sub-categories-wrapper {
+    .sub-categories {
+        min-width: 668px;
+    }
+}
+.add-category-button {
+    margin-top: 14px;
+    display: block;
+    width: 600px;
+    padding: 6px 15px;
+}
+
+// mat-checkbox{
+//     margin-top: 5px;
+//     margin-bottom: 5px;
+// }
+.full{
+    padding: 10px;
+}

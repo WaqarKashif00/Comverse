@@ -1,0 +1,52 @@
+<main id="main">
+    <mat-progress-bar class="page-loader" color="accent" mode="indeterminate" *ngIf="loading"></mat-progress-bar>
+    <div class="page-header" fxLayout="row" fxLayoutAlign="space-between center">
+        <div>
+            <button mat-icon-button aria-label="Go back" class="header-back-arrow"
+                [routerLink]="['/', URLS.logisticConfiguration, URLS.courierIntegration]">
+                <mat-icon>arrow_back</mat-icon>
+            </button>
+            <h1>Couriers</h1>
+        </div>
+
+        <!-- <div class="header-actions">
+            <a [routerLink]="['/', URLS.logisticConfiguration, URLS.courierIntegration]" mat-button color="primary">Back</a>
+        </div> -->
+    </div>
+
+    <div fxLayout="row">
+        <div fxFlex="0 1 100%">
+            <mat-card>
+                <div class="space">
+                    <h4>Local Couriers</h4>
+                    <div fxLayout="row wrap" fxLayoutAlign="space-between">
+                        <ng-container *ngFor="let item of localCouriers">
+                            <div fxFlex="0 1 200px">
+                                <div fxLayout="column" fxLayoutAlign="center center">
+                                    <img class="space-with-logo" [width]="80" [src]="item.courier_logo" />
+                                    <button class="space-with-logo" mat-button color="primary"
+                                        (click)="onCourierClick(item)">{{item.name}}</button>
+                                </div>
+                            </div>
+                        </ng-container>
+                    </div>
+                </div>
+
+                <div class="space">
+                    <h4>International Couriers</h4>
+                    <div fxLayout="row wrap" fxLayoutAlign="space-between">
+                        <ng-container *ngFor="let item of InternationalCouriers">
+                            <div fxFlex="0 1 200px">
+                                <div fxLayout="column" fxLayoutAlign="center center">
+                                    <img class="space-with-logo" [width]="80" [src]="item.courier_logo" />
+                                    <button class="space-with-logo" mat-button color="primary"
+                                        (click)="onCourierClick(item)">{{item.name}}</button>
+                                </div>
+                            </div>
+                        </ng-container>
+                    </div>
+                </div>
+            </mat-card>
+        </div>
+    </div>
+</main>

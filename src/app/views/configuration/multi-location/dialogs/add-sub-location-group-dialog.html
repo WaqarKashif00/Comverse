@@ -1,0 +1,27 @@
+<button mat-icon-button mat-dialog-close class="dialog-close"><mat-icon>close</mat-icon></button>
+<h2 mat-dialog-title>Add Sub Location Group</h2>
+<mat-dialog-content class="mat-typography">
+    <form [formGroup]="subLocationGroupForm" >
+        <div fxLayout="row">
+            <div fxFlex="0 1 50%">
+                <mat-form-field  appearance="outline">
+                    <mat-label>Name</mat-label>
+                    <input matInput name="description" formControlName="title" />
+                </mat-form-field>
+            </div>
+            <!-- <div fxFlex="0 1 50%" class="hidden">
+                <mat-form-field appearance="outline">
+                    <mat-label>Location</mat-label>
+                    <mat-select formControlName="location">
+                        <mat-option [value]="location.id" *ngFor="let location of locationList">{{location.title}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+            </div> -->
+        </div>
+           </form>
+
+</mat-dialog-content>
+<div mat-dialog-actions>
+    <button mat-stroked-button color="primary" mat-dialog-close>Cancel</button>
+    <button mat-flat-button color="primary" (click)="onSubmit()" [disabled]="!subLocationGroupForm.valid || loading" >Save</button>
+</div>

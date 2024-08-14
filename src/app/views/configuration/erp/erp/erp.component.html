@@ -1,0 +1,131 @@
+<main id="main">
+    <mat-progress-bar class="page-loader" color="accent" mode="indeterminate" *ngIf="loading"></mat-progress-bar>
+    <div class="page-header" fxLayout="row" fxLayoutAlign="space-between center">
+        <div>
+            <button mat-icon-button aria-label="Go back" class="header-back-arrow"
+                [routerLink]="['/',URLS.configuration]">
+                <mat-icon>arrow_back</mat-icon>
+            </button>
+            <h1>ERP Configuration</h1>
+        </div>
+    </div>
+
+    <div class="page-container">
+        <mat-card class="table-wrapper-card">
+            <mat-tab-group>
+                <mat-tab label="Default Settings">
+                    <form [formGroup]="createSettingForm">
+                        <div fxLayout="row">
+                            <div fxFlex="0 1 50%">
+                                <h4>Inventory Sync</h4>
+                            </div>
+                        </div>
+                        <div fxLayout="row">
+                            <div fxFlex="0 1 50%">
+                                <mat-checkbox formControlName="update_hold_quantity">Update holded quantity
+                                </mat-checkbox>
+                            </div>
+                            <div fxFlex="0 1 50%">
+                                <mat-checkbox formControlName="scheduler_sync">Schedule sync</mat-checkbox>
+                            </div>
+                        </div>
+                        <ng-container *ngIf="createSettingForm.get('scheduler_sync').value == true">
+                            <div fxLayout="row">
+                                <div fxFlex="0 1 50%">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Schedule Type</mat-label>
+                                        <mat-select formControlName="scheduler_type">
+                                            <mat-option value="today">Today </mat-option>
+                                            <mat-option value="weekly">Weekly</mat-option>
+                                            <mat-option value="monthly">Monthly</mat-option>
+                                            <mat-option value="annually">Annually</mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                                <div fxFlex="0 1 50%">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Start Time</mat-label>
+                                        <input matInput type="time" formControlName="scheduler_duration" />
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </ng-container>
+                        <div fxLayout="row">
+                            <div fxFlex="0 1 50%">
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Restricted tag items</mat-label>
+                                    <input matInput type="text" formControlName="restricted_tag_items" />
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <ng-container *ngIf="createSettingForm.get('triggers').value" class="space">
+                            <h4 class="trggers-margin">Triggers </h4>
+                            <ng-container *ngFor="let trigger of createSettingForm.get('triggers')['controls']; let i = index;">
+                                <div [formGroup]="trigger">
+                                    <div fxLayout="row">
+                                        <div fxFlex="0 1 33.333333%">
+                                            <mat-form-field appearance="outline">
+                                                <mat-label>Type</mat-label>
+                                                <mat-select formControlName="type">
+                                                  <mat-option value="order_creation">Order Creation</mat-option>
+                                                  <mat-option value="CN_genration">CN Genration</mat-option>
+                                                  <mat-option value="order_cancellation">Order Cancellation</mat-option>
+                                                </mat-select>
+                                              </mat-form-field>
+                                        </div>
+                                        <ng-container *ngIf="trigger.get('type').value !== ''">
+                                            <div fxFlex="0 1 33.333333%">
+                                                <mat-checkbox class="example-margin" formControlName="is_active">Enable</mat-checkbox>
+                                            </div>
+                                            <div fxFlex="0 1 35.333333%">
+                                                <mat-checkbox class="example-margin" formControlName="is_tag">Add Tags</mat-checkbox>
+                                            </div>
+                                            <div fxFlex="0 1 33.333333%">
+                                                <mat-form-field appearance="outline">
+                                                    <mat-label>Tags</mat-label>
+                                                    <input matInput type="text" formControlName="tags" />
+                                                </mat-form-field>
+                                            </div>
+                                            <div>
+                                                <button mat-icon-button class="delete-commission-btn" color="warn" (click)="removeTriggers(i,trigger.get('id'))">
+                                                    <mat-icon>close</mat-icon>
+                                                </button>
+                                            </div>
+                                        </ng-container>
+                                    </div>
+                                </div>
+                            </ng-container>
+                        </ng-container>
+                        <div fxLayout="row">
+                            <div class="save-button">
+                                <button class="space" mat-stroked-button color="primary" (click)="addTriggers()">+ Add Trigger</button>
+                            </div>
+                        </div>
+                    </form>
+                    <div>
+                        <div class="save-button" fxLayoutAlign="end">
+                            <a mat-flat-button [disabled]="loading || !createSettingForm.valid" (click)="onDefaultSettingSubmit()"
+                                color="primary">Save</a>
+                        </div>
+                    </div>
+                </mat-tab>
+
+                <mat-tab label="Integrations">
+                    <div>
+                    </div>
+                    <div class="button-style" fxLayoutAlign="end">
+                        <a mat-stroked-button color="primary" (click)="PopUpForIntegration()">
+                            Add Integration</a>
+                    </div>
+                    <datatable [data]="erpList" [columns]="columns" [pagination]="true" [count]="totalCount"
+                        [itemsPerPage]="pageSize" (page)="onPageChange($event)" [rowActions]="rowActions"
+                        (rowAction)="onRowAction($event)" (cellClick)="onCellClick($event)">
+                    </datatable>
+                </mat-tab>
+                <mat-tab label="Inventory Sync Log">
+                    <app-erp-logs></app-erp-logs>
+                </mat-tab>
+            </mat-tab-group>
+        </mat-card>
+    </div>
+</main>

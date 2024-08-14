@@ -1,0 +1,24 @@
+<button mat-icon-button mat-dialog-close class="dialog-close">
+  <mat-icon>close</mat-icon>
+</button>
+<h2 mat-dialog-title>Change Order Status</h2>
+<mat-dialog-content class="mat-typography">
+  <p>Are you sure you want to change Order Status: {{data.orderReturn.order_no}}?</p>
+</mat-dialog-content>
+<ng-container *ngIf="data.status ==='Disapprove'">
+
+  <form [formGroup]="statusAddCommentForm">
+    <mat-form-field appearance="outline">
+        <mat-label>Add Comment</mat-label>
+        <input matInput name="description" formControlName="comment"/>
+        <mat-error *ngIf="statusAddCommentForm.get('comment').hasError('required')">This field is
+          required.</mat-error>
+    </mat-form-field>
+</form>
+
+</ng-container>
+<div mat-dialog-actions>
+  <button mat-stroked-button color="primary" mat-dialog-close>Cancel</button>
+  <button *ngIf="data.status =='Approve'" mat-flat-button color="primary" [disabled]="loading" (click)="changeStatus()">Approved</button>
+  <button *ngIf="data.status ==='Disapprove'" mat-flat-button color="warn" [disabled]="!statusAddCommentForm.valid || loading" (click)="changeStatus()">Disapprove</button>
+</div>

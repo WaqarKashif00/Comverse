@@ -1,0 +1,217 @@
+<main id="main">
+    <mat-progress-bar class="page-loader" color="accent" mode="indeterminate" *ngIf="loading"></mat-progress-bar>
+    <div class="page-header" fxLayout="row" fxLayoutAlign="space-between center">
+        <h1>Edit order {{orderTitle}}</h1>
+
+        <div class="header-actions">
+            <a [routerLink]="is_vendor ? ['/', URLS.orders]:['/', URLS.orders, URLS.editMainOrder, this.mainOrderID]"
+                mat-stroked-button color="primary">Cancel</a>
+            <button mat-stroked-button color="primary" [matMenuTriggerFor]="actionsMenu">More actions</button>
+            <button mat-flat-button color="primary" (click)="onSubmit()">Save</button>
+        </div>
+    </div>
+
+    <div fxLayout="row">
+        <div fxFlex="0 1 60%">
+            <mat-card class="order-details">
+                <div flexLayout="row" fxLayoutAlign="space-between">
+                    <div>
+                        <h3>Order details</h3>
+                    </div>
+
+                    <variant-selector *ngIf="orderStatus !== 'Cancelled'" [vendor]="vendorID"
+                        (addItems)="onAddItems($event)"></variant-selector>
+                    <div *ngIf="orderStatus == 'Cancelled'">
+                        <span
+                            [class]="'label ' + (orderStatus === 'Cancelled' ? 'success' : 'warning')">{{orderStatus}}</span>
+                    </div>
+
+                </div>
+
+                <div class="order-lineitems">
+                    <div class="lineitem-wrapper" [class.deleted]="lineitemGroup.get('deleted').value"
+                        *ngFor="let lineitemGroup of lineitemsFormArray['controls']; let i = index">
+                        <ng-container [formGroup]="lineitemGroup">
+                            <div class="lineitem-productdata">
+                                <img
+                                    [src]="lineitemGroup.get('product_image').value ? lineitemGroup.get('product_image').value : '/assets/img/placeholder-image.png'" />
+                                <div>
+                                    <span class="product-name">{{lineitemGroup.get('product_title').value}}</span>
+                                    <span class="variant_info">{{lineitemGroup.get('variant_title').value !== "Default
+                                        Title" ? lineitemGroup.get('variant_title').value : ""}}</span>
+                                </div>
+                            </div>
+                            <div *ngIf="orderStatus !== 'Cancelled'" class="lineitem-price-qty">
+                                <span>{{lineitemGroup.get('price').value}} {{storeCurrency}} X</span>
+                                <input type="number" class="lineitem-qty" min="1" formControlName="quantity"
+                                    *ngIf="!lineitemGroup.get('deleted').value" (keydown)="onQtyKeydown($event)"
+                                    (change)="onQtyChange()" />
+
+                                <span *ngIf="lineitemGroup.get('deleted').value" class="lineitem-qty"> x {{
+                                    lineitemGroup.get('quantity').value }}</span>
+                            </div>
+
+
+                            <div *ngIf="orderStatus !== 'Cancelled'" class="lineitem-subtotal">
+                                <span>{{lineitemGroup.get('subtotal').value}} {{storeCurrency}}</span>
+                                <div class="shipping-container" *ngIf="!lineitemGroup.get('deleted').value">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Shipping</mat-label>
+                                        <input matInput placeholder="shipping" type="number" (change)="updateTotals()"
+                                            formControlName="shipping_amount" />
+                                    </mat-form-field>
+                                </div>
+                                <div *ngIf="lineitemGroup.get('deleted').value">Shipping
+                                    {{lineitemGroup.get('shipping_amount').value}}</div>
+                            </div>
+                            <div *ngIf="orderStatus !== 'Cancelled'">
+                                <button mat-icon-button color="warn" *ngIf="!lineitemGroup.get('deleted').value"
+                                    (click)="removeLineItem(i)">
+                                    <mat-icon>delete</mat-icon>
+                                </button>
+                            </div>
+
+                            <div *ngIf="orderStatus == 'Cancelled'" class="lineitem-price-qty">
+                                {{lineitemGroup.get('price').value}} {{storeCurrency}} x
+                                {{lineitemGroup.get('quantity').value}}
+                            </div>
+                            <div *ngIf="orderStatus == 'Cancelled'" class="lineitem-subtotal">
+                                <span>{{lineitemGroup.get('subtotal').value}} {{storeCurrency}}</span>
+                                <div> Shipping: {{lineitemGroup.get('shipping_amount').value}}</div>
+                            </div>
+                        </ng-container>
+                    </div>
+                </div>
+                <div class="fulfillent-status">
+                    <div fxLayout="row" fxLayoutAlign="space-between">
+                        <div>
+                            <span
+                                [class]="'label ' + (fulfillmentStatus === 'Fulfilled' ? 'success' : 'warning')">{{fulfillmentStatus}}</span>
+                        </div>
+                        <div *ngIf="orderStatus !== 'Cancelled'">
+                            <button mat-flat-button color="primary" (click)="fullfilmentStatus('Fulfilled')"
+                                *ngIf="fulfillmentStatus === 'Unfulfilled'">Mark as Fulfilled</button>
+                            <button mat-stroked-button color="primary" (click)="fullfilmentStatus('Unfulfilled')"
+                                *ngIf="fulfillmentStatus === 'Fulfilled'">Mark as Unfulfilled</button>
+                        </div>
+                    </div>
+                </div>
+            </mat-card>
+
+            <mat-card class="order-financial-details">
+                <div fxLayout="row" fxLayoutAlign="space-between">
+                    <div>
+                        <span>Subtotal</span>
+                    </div>
+                    <div>
+                        <span>{{subTotal}} {{storeCurrency}}</span>
+                    </div>
+                </div>
+                <div fxLayout="row" fxLayoutAlign="space-between">
+                    <div>
+                        <span>Shipping</span>
+                    </div>
+                    <div>
+                        <span>{{totalShipping}} {{storeCurrency}}</span>
+                    </div>
+                </div>
+                <div fxLayout="row" fxLayoutAlign="space-between" class="lineitems-total-row">
+                    <div>
+                        <span>Total</span>
+                    </div>
+                    <div>
+                        <span>{{grandTotal}} {{storeCurrency}}</span>
+                    </div>
+                </div>
+                <div fxLayout="row" fxLayoutAlign="space-between" *ngIf="paidAmount > 0">
+                    <div>
+                        <span>Paid amount</span>
+                    </div>
+                    <div>
+                        <span>{{paidAmount}} {{storeCurrency}}</span>
+                    </div>
+                </div>
+                <div class="payment-status">
+                    <div fxLayout="row" fxLayoutAlign="space-between">
+                        <div>
+                            <span [class]="'label ' + (paymentStatus === 'Paid' ? 'success' : 'warning')">Payment:
+                                {{paymentStatus}}</span>
+                        </div>
+                        <div *ngIf="orderStatus !== 'Cancelled'">
+                            <button mat-flat-button color="primary" (click)="paymentStatusCheck('Paid')"
+                                *ngIf="paymentStatus !== 'Paid'">Mark as Paid</button>
+                        </div>
+                    </div>
+                </div>
+            </mat-card>
+
+            <order-timeline [childOrderId]="orderID"></order-timeline>
+        </div>
+        <div fxFlex="0 1 40%">
+            <mat-card>
+                <div class="card-section">
+                    <h3>Customer detail</h3>
+
+                    <a *ngIf="!is_vendor" [routerLink]="['/', URLS.customers, URLS.edit, customer.id]"
+                        target="_blank">{{customer.name}}</a>
+                    <p *ngIf="is_vendor">{{customer.name}}</p>
+                </div>
+                <div class="card-section">
+                    <h3>Contact information</h3>
+
+                    <p><a href="mailto: {{customer.email}}">{{customer.email}}</a></p>
+                    <p>{{customer.phone}}</p>
+                </div>
+                <div class="card-section">
+                    <div fxLayout="row" fxLayoutAlign="space-between">
+                        <div>
+                            <h3>Shipping Address</h3>
+                        </div>
+                    </div>
+
+                    <p *ngIf="!shippingAddress">No address assigned.</p>
+                    <div *ngIf="shippingAddress">
+                        <p>{{shippingAddress.first_name}} {{shippingAddress.last_name}}</p>
+                        <p>{{shippingAddress.apartment ? shippingAddress.apartment + ", " :
+                            ""}}{{shippingAddress.address}}</p>
+                        <p>{{shippingAddress.city}} {{shippingAddress.postal_code}}, {{shippingAddress.country}}</p>
+                        <p>{{shippingAddress.phone}}</p>
+                    </div>
+                </div>
+                <div class="card-section">
+                    <div fxLayout="row" fxLayoutAlign="space-between">
+                        <div>
+                            <h3>Billing Address</h3>
+                        </div>
+                    </div>
+
+                    <p *ngIf="!billingAddress">No address assigned.</p>
+                    <div *ngIf="billingAddress">
+                        <p>{{billingAddress.first_name}} {{billingAddress.last_name}}</p>
+                        <p>{{billingAddress.apartment ? billingAddress.apartment + ", " : ""}}{{billingAddress.address}}
+                        </p>
+                        <p>{{billingAddress.city}} {{billingAddress.postal_code}}, {{billingAddress.country}}</p>
+                        <p>{{billingAddress.phone}}</p>
+                    </div>
+                </div>
+            </mat-card>
+            <mat-card>
+                <h3>Notes</h3>
+                <mat-form-field appearance="outline">
+                    <textarea rows="4" matInput placeholder="Add note" [(ngModel)]="notes"></textarea>
+                </mat-form-field>
+            </mat-card>
+
+            <mat-card>
+                <h3>Tags</h3>
+                <tags-input [(value)]="tags"></tags-input>
+            </mat-card>
+        </div>
+    </div>
+
+    <mat-menu #actionsMenu="matMenu">
+        <button mat-menu-item (click)="downloadInvoice()">Download invoice</button>
+        <button mat-menu-item (click)="refundOrder()" *ngIf="paidAmount > grandTotal">Refund</button>
+        <button mat-menu-item *ngIf="orderStatus !== 'Cancelled'" (click)="onCancelOrder()">Cancel order</button>
+    </mat-menu>
+</main>

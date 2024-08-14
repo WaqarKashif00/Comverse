@@ -1,0 +1,25 @@
+<main id="main">
+    <mat-progress-bar class="page-loader" color="accent" mode="indeterminate" *ngIf="loading"></mat-progress-bar>
+    <div class="page-header" fxLayout="row" fxLayoutAlign="space-between center">
+        <h1>Draft orders</h1>
+
+        <div class="header-actions">
+            <!-- <a [routerLink]="['/', URLS.orders, URLS.add]" mat-flat-button color="primary">Create new</a> -->
+        </div>
+    </div>
+
+    <mat-card class="table-wrapper-card">
+        <datatable 
+            [data]="orders"
+            [columns]="displayedColumns"
+            [pagination]="true"
+            [itemsPerPage]="pageSize"
+            [count]="totalCount"
+            [searchable]="true"
+
+            (search)="onSearch($event)"
+            (cellClick)="onCellClick($event)"
+            (page)="onPage($event)">
+        </datatable>
+    </mat-card>
+</main>

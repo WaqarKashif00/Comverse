@@ -1,0 +1,67 @@
+<main id="main">
+    <mat-progress-bar class="page-loader" color="accent" mode="indeterminate" *ngIf="loading"></mat-progress-bar>
+    <div class="page-header" fxLayout="row" fxLayoutAlign="space-between center">
+        <div>
+            <button mat-icon-button aria-label="Go back" class="header-back-arrow"
+                [routerLink]="['/',URLS.pushNotification]">
+                <mat-icon>arrow_back</mat-icon>
+            </button>
+            <h1> Edit notification</h1>
+        </div>
+
+        <div class="header-actions">
+            <a [routerLink]="['/',URLS.pushNotification]" mat-stroked-button color="primary">Cancel</a>
+            <button mat-flat-button color="primary" [matMenuTriggerFor]="saveMenu"
+                [disabled]="loading || !sendNotificationForm.valid">Save notification <mat-icon>expand_more</mat-icon>
+            </button>
+        </div>
+    </div>
+
+    <form [formGroup]="sendNotificationForm">
+        <div fxLayout="row">
+            <div fxFlex="0 1 66.66666%">
+                <mat-card>
+                    <div fxLayout="row">
+                        <div fxFlex="0 1 50%">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Title</mat-label>
+                                <input type="text" matInput formControlName="message_title" />
+                                <mat-error *ngIf="sendNotificationForm.get('message_title').hasError('required')">Enter
+                                    title for notification.</mat-error>
+                                    <mat-error *ngIf="sendNotificationForm.get('message_title').hasError('pattern')">Special characters can not be used.</mat-error>
+                            </mat-form-field>
+                        </div>
+
+                        <div fxFlex="0 1 50%">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Link</mat-label>
+                                <input type="text" matInput formControlName="redirect_url" />
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div>
+                        <mat-form-field appearance="outline">
+                            <mat-label>Message</mat-label>
+                            <textarea rows="5" matInput placeholder="Write your message"
+                                formControlName="message_description"></textarea>
+                            <mat-error *ngIf="sendNotificationForm.get('message_description').hasError('required')">
+                                Enter message for notification.</mat-error>
+                        </mat-form-field>
+                    </div>
+                </mat-card>
+            </div>
+
+            <div fxFlex="0 1 33.33333%">
+                <mat-card>
+                    <image-selector [(files)]="imageUrl" [multiple]="false" formats=".jpg,.jpeg,.png" valueType="url"
+                        (filesChange)=onImageChange($event)></image-selector>
+                </mat-card>
+            </div>
+        </div>
+    </form>
+
+    <mat-menu #saveMenu="matMenu">
+        <button mat-menu-item (click)="onSubmit(false)">Save notification</button>
+        <button mat-menu-item (click)="onSubmit(true)">Save and Send now</button>
+    </mat-menu>
+</main>

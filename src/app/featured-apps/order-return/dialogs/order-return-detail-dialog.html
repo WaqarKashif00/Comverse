@@ -1,0 +1,48 @@
+<button mat-icon-button mat-dialog-close class="dialog-close">
+  <mat-icon>close</mat-icon>
+</button>
+<h2 mat-dialog-title>Order Return Detail</h2>
+
+<div fxLayout="row">
+  <div fxFlex="0 1 50%">
+    <h4 class="font-style">{{orderNumber}}</h4>
+  </div>
+</div>
+
+<div fxLayout="row">
+    <div fxFlex="0 1 50%">
+
+    <h4 class="font-style">Product Name</h4>
+    <p class="opacity">{{productName}}</p>
+  </div>
+  <div fxFlex="0 1 50%">
+    <h4 class="font-style">SKU</h4>
+    <p class="opacity">{{productSKU}}</p>
+  </div>
+  
+</div>
+<div fxLayout="row">
+  <div fxFlex="0 1 50%">
+    <h4 class="font-style">Product Price</h4>
+    <p class="opacity">{{productPrice}}</p>
+  </div>
+  <div fxFlex="0 1 50%">
+    <h4 class="font-style">Product Quantity</h4>
+    <p class="opacity">{{productQuantity}}</p>
+  </div>
+</div>
+<div fxLayout="row">
+  <div fxFlex="0 1 50%">
+    <h4 class="font-style">Reason For Change</h4>
+    <p class="opacity">{{resonForChange}}</p>
+  </div>
+</div>
+<div fxLayout="row">
+  <div fxFlex="0 1 50%">
+    <h4 class="font-style">Comment</h4>
+    <p class="opacity">{{comment}}</p>
+  </div>
+</div>
+<div mat-dialog-actions>
+  <button mat-stroked-button color="primary" mat-dialog-close>Close</button>
+</div>

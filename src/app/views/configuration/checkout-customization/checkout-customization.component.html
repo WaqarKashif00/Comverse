@@ -1,0 +1,144 @@
+<main id="main">
+    <mat-progress-bar class="page-loader" color="accent" mode="indeterminate" *ngIf="loading"></mat-progress-bar>
+    <div class="page-header" fxLayout="row" fxLayoutAlign="space-between center">
+        <div>
+            <button mat-icon-button aria-label="Go back" class="header-back-arrow"
+                [routerLink]="['/',URLS.configuration]">
+                <mat-icon>arrow_back</mat-icon>
+            </button>
+            <h1> Checkout settings</h1>
+        </div>
+        <div class="header-actions">
+            <a [routerLink]="['/', URLS.configuration]" mat-stroked-button color="primary">Cancel</a>
+            <button mat-flat-button color="primary" [disabled]="loading || !checkoutCustomizationForm.valid"
+                (click)="onSubmit()">Save</button>
+        </div>
+    </div>
+
+    <form class="page-container" [formGroup]="checkoutCustomizationForm">
+        <div class="settings-section">
+            <div fxLayout="row">
+                <div fxFlex="0 1 33.333333%">
+                    <h2>Customer accounts</h2>
+                    <p>Choose if you want to prompt your customer to create an account when they check out. </p>
+                </div>
+                <div fxFlex="1 1 auto">
+                    <mat-card>
+                        <mat-radio-group formControlName="customer_accounts" fxLayout="row">
+                            <div fxLayout="column">
+                                <mat-radio-button class="radio-space" value="optional">Accounts are optional
+                                </mat-radio-button>
+                                <h5>Customer will be able to check out with a customer account or as guests</h5>
+
+                                <mat-radio-button class="radio-space" value="required">Accounts are required
+                                </mat-radio-button>
+                                <h5>Customer will only be able to check out as if they have customer account</h5>
+                            </div>
+                        </mat-radio-group>
+                    </mat-card>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="settings-section">
+            <div fxLayout="row">
+                <div fxFlex="0 1 33.333333%">
+                    <h2>Customer contact</h2>
+                    <p>Choose which contact method your customer can use to check out and recieve updates. </p>
+                </div>
+                <div fxFlex="1 1 auto">
+                    <mat-card>
+                        <mat-radio-group class="collection-type-radio" formControlName="customer_contacts"
+                            fxLayout="row">
+                            <div fxLayout="column">
+                                <mat-radio-button value="both">Customer can check out using either their phone number or
+                                    email</mat-radio-button>
+                                <h5>Customer will only be able to check out as guests</h5>
+
+                                <mat-radio-button class="radio-space" value="email">Customer can check out using email
+                                </mat-radio-button>
+                                <h5>Customer will be able to check out with a customer account or as guests</h5>
+                            </div>
+                        </mat-radio-group>
+                    </mat-card>
+                </div>
+            </div>
+        </div>
+
+        <div class="settings-section">
+            <div fxLayout="row">
+                <div fxFlex="0 1 33.333333%">
+                    <h2>Payment options</h2>
+                    <p>Choose if you want to enable wallet payment method for your customer to pay for the order and
+                        check out. </p>
+                </div>
+                <div fxFlex="1 1 auto">
+                    <mat-card>
+                        <div fxLayout="column">
+                            <div>
+                                <mat-checkbox formControlName="is_wallet">Show Pay by Wallet</mat-checkbox>
+                            </div>
+                        </div>
+                    </mat-card>
+                </div>
+            </div>
+        </div>
+
+        <div class="settings-section">
+            <div fxLayout="row">
+                <div fxFlex="0 1 33.333333%">
+                    <h2>Form options</h2>
+                    <p>Choose whether your checkout form requires extra information from your customer. </p>
+                </div>
+                <div fxFlex="1 1 auto">
+                    <mat-card>
+                        <div class="form-options">
+                            <h4 class="address-option">Full name</h4>
+                            <mat-radio-group formControlName="full_name" class="collection-type-radio" fxLayout="row">
+                                <div fxLayout="column">
+                                    <mat-radio-button value="first_name">Require first name only</mat-radio-button>
+                                    <mat-radio-button value="both">Require first name and last name</mat-radio-button>
+                                </div>
+                            </mat-radio-group>
+                        </div>
+
+                        <div class="form-options">
+                            <h4 class="address-option">Address second line</h4>
+                            <mat-radio-group class="collection-type-radio" formControlName="address_second_line"
+                                fxLayout="row">
+                                <div fxLayout="column">
+                                    <mat-radio-button value="hidden">Hidden</mat-radio-button>
+                                    <mat-radio-button value="optional">Optional</mat-radio-button>
+                                    <mat-radio-button value="required">Required</mat-radio-button>
+                                </div>
+                            </mat-radio-group>
+
+                        </div>
+                        <div class="form-options">
+                            <h4 class="address-option">Postal code</h4>
+                            <mat-radio-group class="collection-type-radio" formControlName="postal_code" fxLayout="row">
+                                <div fxLayout="column">
+                                    <mat-radio-button value="hidden">Hidden</mat-radio-button>
+                                    <mat-radio-button value="optional">Optional</mat-radio-button>
+                                    <mat-radio-button value="required">Required</mat-radio-button>
+                                </div>
+                            </mat-radio-group>
+                        </div>
+
+                        <div class="form-options">
+                            <h4 class="address-option">Promo code</h4>
+                            <mat-radio-group class="collection-type-radio" formControlName="promo_code" fxLayout="row">
+                                <div class="options" fxLayout="column">
+                                    <mat-radio-button value="hidden">Hidden</mat-radio-button>
+                                    <mat-radio-button value="optional">Optional</mat-radio-button>
+                                    <mat-radio-button value="required">Required</mat-radio-button>
+                                </div>
+                            </mat-radio-group>
+                        </div>
+                    </mat-card>
+                </div>
+            </div>
+        </div>
+    </form>
+</main>
